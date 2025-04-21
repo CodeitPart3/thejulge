@@ -8,7 +8,7 @@ import tsPathsConfig from "./tsconfig.paths.json";
 
 const aliases = Object.entries(tsPathsConfig.compilerOptions.paths).map(
   ([key, [value]]) => ({
-    find: key.replace("*", ""),
+    find: key.replace("/*", ""),
     replacement: path.resolve(__dirname, value.replace("/*", "")),
   }),
 );
