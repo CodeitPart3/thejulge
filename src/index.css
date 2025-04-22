@@ -1,1 +1,4 @@
+@import url("https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@2.1.2/css/SpoqaHanSansNeo.css");
+@import "./styles/theme.css";
 @import "tailwindcss";
+@import "./styles/base.css";

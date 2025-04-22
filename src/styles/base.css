@@ -1,0 +1,5 @@
+@layer base {
+  html {
+    font-family: var(--font-body);
+  }
+}
