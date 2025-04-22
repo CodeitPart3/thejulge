@@ -13,6 +13,8 @@ const aliases = Object.entries(tsPathsConfig.compilerOptions.paths).map(
   }),
 );
 
+console.log(aliases);
+
 //* https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],

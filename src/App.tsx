@@ -1,4 +1,8 @@
+import { RouterProvider } from "react-router-dom";
+
+import { router } from "./Router";
+
 function App() {
-  return <div className="text-4xl">Hello TheJulge</div>;
+  return <RouterProvider router={router} />;
 }
 export default App;
