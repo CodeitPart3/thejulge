@@ -1,0 +1,27 @@
+@theme {
+  /* Font */
+  --font-body: "Spoqa Han Sans Neo", sans-serif;
+
+  /* Colors */
+  --color-gray-5: #fafafa;
+  --color-gray-10: #f2f2f3;
+  --color-gray-20: #e5e4e7;
+  --color-gray-30: #cbc9cf;
+  --color-gray-40: #a4a1aa;
+  --color-gray-50: #7d7986;
+  --color-black: #111322;
+  --color-white: #ffffff;
+
+  --color-red-10: #ffebe7;
+  --color-red-20: #ffaf9b;
+  --color-red-30: #fb8d72;
+  --color-red-40: #ff4040;
+
+  --color-blue-10: #cce6ff;
+  --color-blue-20: #0080ff;
+
+  --color-green-10: #d4f7d4;
+  --color-green-20: #20a81e;
+
+  --color-kakao: #fee500;
+}
