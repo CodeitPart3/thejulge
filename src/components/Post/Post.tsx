@@ -21,7 +21,7 @@ const getPayRateText = (
   return { rawRate, displayRate, rateText };
 };
 
-interface PostListItemProps {
+interface PostProps {
   hourlyPay: number;
   startsAt: string;
   workhour: number;
@@ -35,13 +35,13 @@ interface PostListItemProps {
   };
 }
 
-export default function PostListItem({
+export default function Post({
   hourlyPay,
   startsAt,
   workhour,
   closed,
   shop,
-}: PostListItemProps) {
+}: PostProps) {
   const { name, address1, imageUrl, originalHourlyPay, link } = shop;
 
   const timeRange = formatTimeRange(startsAt, workhour);
