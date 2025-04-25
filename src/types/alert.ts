@@ -1,5 +1,5 @@
 import type { ApplicationStatus } from "./application";
-import type { ApiWrapper, ApiPaged } from "./common";
+import type { ApiWrapper, ApiPaged, ApiWithHref, LinkItem } from "./common";
 import type { NoticeSummary } from "./notice";
 import type { ShopSummary } from "./shop";
 
@@ -15,10 +15,16 @@ export interface AlertItem {
   createdAt: string;
   result: AlertResult;
   read: boolean;
-  application: ApiWrapper<ApplicationMini>;
-  shop: ApiWrapper<ShopSummary>;
-  notice: ApiWrapper<NoticeSummary>;
+  application: ApiWithHref<ApplicationMini>;
+  shop: ApiWithHref<ShopSummary>;
+  notice: ApiWithHref<NoticeSummary>;
 }
 
 export type AlertResponse = ApiWrapper<AlertItem>;
 export type AlertListResponse = ApiPaged<AlertItem>;
+export interface AlertReadListResponse {
+  offset: number;
+  limit: number;
+  items: ApiWrapper<AlertItem>[];
+  links: LinkItem[];
+}

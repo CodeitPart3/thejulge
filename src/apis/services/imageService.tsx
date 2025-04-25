@@ -8,30 +8,31 @@ interface PresignedItem {
 }
 type PresignedResponse = ApiWrapper<PresignedItem>;
 
-class ImageService {
-  async postImage(name: string): Promise<string> {
-    const res: AxiosResponse<PresignedResponse> = await requestor.post(
-      "/images",
-      { name },
-    );
-    return res.data.item.url;
-  }
+/* Presigned URL 생성 */
+export const postImage = async (name: string): Promise<string> => {
+  const res: AxiosResponse<PresignedResponse> = await requestor.post(
+    "/images",
+    { name },
+  );
+  return res.data.item.url;
+};
 
-  async putImage(
-    presignedURL: string,
-    file: File | Blob,
-  ): Promise<AxiosResponse<void>> {
-    return axios.put(presignedURL, file, {
-      headers: { "Content-Type": file.type || "application/octet-stream" },
-    });
-  }
+/* S3로 이미지 업로드 */
+export const putImage = async (
+  presignedURL: string,
+  file: File | Blob,
+): Promise<AxiosResponse<void>> => {
+  return axios.put(presignedURL, file, {
+    headers: { "Content-Type": file.type || "application/octet-stream" },
+  });
+};
 
-  getPublicURL(presignedURL: string) {
-    return presignedURL.split("?")[0];
-  }
-  getImage(publicURL: string): Promise<AxiosResponse<Blob>> {
-    return axios.get(publicURL, { responseType: "blob" });
-  }
-}
+/* Presigned URL 조회 */
+export const getPublicURL = (presignedURL: string) => {
+  return presignedURL.split("?")[0];
+};
 
-export default new ImageService();
+/* 이미지 조회 */
+export const getImage = (publicURL: string): Promise<AxiosResponse<Blob>> => {
+  return axios.get(publicURL, { responseType: "blob" });
+};

@@ -1,7 +1,12 @@
-import type { ApiWrapper, SeoulDistrict, ShopCategory } from "./common";
+import type {
+  ApiWithHref,
+  ApiWrapper,
+  SeoulDistrict,
+  ShopCategory,
+} from "./common";
 import type { UserSummary } from "./user";
 
-export interface ShopItem {
+export interface ShopSummary {
   id: string;
   name: string;
   category: ShopCategory;
@@ -10,8 +15,9 @@ export interface ShopItem {
   description: string;
   imageUrl: string;
   originalHourlyPay: number;
-  user?: ApiWrapper<UserSummary>;
 }
+
+export type ShopItem = ShopSummary & { user?: ApiWithHref<UserSummary> };
 
 export interface ShopPayload {
   name: string;
@@ -22,17 +28,5 @@ export interface ShopPayload {
   imageUrl: string;
   originalHourlyPay: number;
 }
-
-export type ShopSummary = Pick<
-  ShopItem,
-  | "id"
-  | "name"
-  | "category"
-  | "address1"
-  | "address2"
-  | "description"
-  | "imageUrl"
-  | "originalHourlyPay"
->;
 
 export type ShopResponse = ApiWrapper<ShopItem>;

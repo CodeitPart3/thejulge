@@ -1,5 +1,6 @@
 import type { ApiWrapper } from "./common";
 import type { SeoulDistrict } from "./common";
+import { ShopSummary } from "./shop";
 
 export type UserType = "employee" | "employer";
 
@@ -11,6 +12,7 @@ export interface UserItem {
   phone?: string;
   address?: SeoulDistrict;
   bio?: string;
+  shop?: ApiWrapper<ShopSummary> | null;
 }
 
 export type UserSummary = Pick<

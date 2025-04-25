@@ -1,57 +1,52 @@
 import type { AxiosResponse } from "axios";
 import {
-  NoticeListResponse,
   NoticeResponse,
-  SortKey,
   NoticePayload,
+  GetNoticesParams,
+  NoticeListResponseWithoutUserApplication,
 } from "src/types";
 
 import requestor from "../client/requestor";
 
-class NoticeService {
-  getNotices(params?: {
-    offset?: number;
-    limit?: number;
-    address?: string;
-    keyword?: string;
-    startsAtGte?: string;
-    hourlyPayGte?: number;
-    sort?: SortKey;
-  }): Promise<AxiosResponse<NoticeListResponse>> {
-    return requestor.get("/notices", { params });
-  }
+/* 공고 조회 */
+export const getNotices = (
+  params?: GetNoticesParams,
+): Promise<AxiosResponse<NoticeListResponseWithoutUserApplication>> => {
+  return requestor.get("/notices", { params });
+};
 
-  getShopNotices(
-    shopId: string,
-    offset?: number,
-    limit?: number,
-  ): Promise<AxiosResponse<NoticeListResponse>> {
-    return requestor.get(`/shops/${shopId}/notices`, {
-      params: { offset, limit },
-    });
-  }
+/* 가게의 공고 목록 조회 */
+export const getShopNotices = (
+  shopId: string,
+  offset?: number,
+  limit?: number,
+): Promise<AxiosResponse<NoticeListResponseWithoutUserApplication>> => {
+  return requestor.get(`/shops/${shopId}/notices`, {
+    params: { offset, limit },
+  });
+};
 
-  postNotice(
-    shopId: string,
-    payload: NoticePayload,
-  ): Promise<AxiosResponse<NoticeResponse>> {
-    return requestor.post(`/shops/${shopId}/notices`, payload);
-  }
+/* 가게 공고 등록 */
+export const postNotice = (
+  shopId: string,
+  payload: NoticePayload,
+): Promise<AxiosResponse<NoticeResponse>> => {
+  return requestor.post(`/shops/${shopId}/notices`, payload);
+};
 
-  getNotice(
-    shopId: string,
-    noticeId: string,
-  ): Promise<AxiosResponse<NoticeResponse>> {
-    return requestor.get(`/shops/${shopId}/notices/${noticeId}`);
-  }
+/* 가게의 특정 공고 조회 */
+export const getNotice = (
+  shopId: string,
+  noticeId: string,
+): Promise<AxiosResponse<NoticeResponse>> => {
+  return requestor.get(`/shops/${shopId}/notices/${noticeId}`);
+};
 
-  putNotice(
-    shopId: string,
-    noticeId: string,
-    payload: NoticePayload,
-  ): Promise<AxiosResponse<NoticeResponse>> {
-    return requestor.put(`/shops/${shopId}/notices/${noticeId}`, payload);
-  }
-}
-
-export default new NoticeService();
+/* 가게의 특정 공고 수정 */
+export const putNotice = (
+  shopId: string,
+  noticeId: string,
+  payload: NoticePayload,
+): Promise<AxiosResponse<NoticeResponse>> => {
+  return requestor.put(`/shops/${shopId}/notices/${noticeId}`, payload);
+};

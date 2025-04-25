@@ -3,21 +3,24 @@ import { ShopPayload, ShopResponse } from "src/types";
 
 import requestor from "../client/requestor";
 
-class ShopService {
-  postShop(payload: ShopPayload): Promise<AxiosResponse<ShopResponse>> {
-    return requestor.post("/shops", payload);
-  }
+/* 가게 등록 */
+export const postShop = (
+  payload: ShopPayload,
+): Promise<AxiosResponse<ShopResponse>> => {
+  return requestor.post("/shops", payload);
+};
 
-  getShop(shopId: string): Promise<AxiosResponse<ShopResponse>> {
-    return requestor.get(`/shops/${shopId}`);
-  }
+/* 가게 정보 조회 */
+export const getShop = (
+  shopId: string,
+): Promise<AxiosResponse<ShopResponse>> => {
+  return requestor.get(`/shops/${shopId}`);
+};
 
-  putShop(
-    shopId: string,
-    payload: ShopPayload,
-  ): Promise<AxiosResponse<ShopResponse>> {
-    return requestor.put(`/shops/${shopId}`, payload);
-  }
-}
-
-export default new ShopService();
+/* 가게 정보 수정 */
+export const putShop = (
+  shopId: string,
+  payload: ShopPayload,
+): Promise<AxiosResponse<ShopResponse>> => {
+  return requestor.put(`/shops/${shopId}`, payload);
+};

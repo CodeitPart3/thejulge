@@ -11,8 +11,8 @@ const requestor: AxiosInstance = axios.create({
   },
 });
 
-requestor.interceptors.request.use(requestInterceptor, (error: AxiosError) =>
-  Promise.reject(error),
-);
+requestor.interceptors.request.use(requestInterceptor, (error: AxiosError) => {
+  return Promise.reject(error);
+});
 
 export default requestor;

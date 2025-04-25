@@ -1,6 +1,18 @@
+export interface LinkItem {
+  rel: string;
+  description: string;
+  method: string;
+  href: string;
+}
+
 export interface ApiWrapper<T> {
   item: T;
-  links: unknown[];
+  links: LinkItem[];
+}
+
+export interface ApiWithHref<T> {
+  item: T;
+  href: string;
 }
 
 export interface ApiPaged<T> {
@@ -9,7 +21,7 @@ export interface ApiPaged<T> {
   count: number;
   hasNext: boolean;
   items: ApiWrapper<T>[];
-  links: unknown[];
+  links: LinkItem[];
 }
 
 export const SeoulDistricts = [
