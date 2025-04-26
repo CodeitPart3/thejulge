@@ -22,28 +22,28 @@ const getPayRateText = (
 };
 
 interface PostProps {
+  name: string;
+  imageUrl: string;
+  address1: string;
+  originalHourlyPay: number;
+  link: string;
   hourlyPay: number;
   startsAt: string;
   workhour: number;
   closed: boolean;
-  shop: {
-    name: string;
-    imageUrl: string;
-    address1: string;
-    originalHourlyPay: number;
-    link: string;
-  };
 }
 
 export default function Post({
+  name,
+  imageUrl,
+  address1,
+  originalHourlyPay,
+  link,
   hourlyPay,
   startsAt,
   workhour,
   closed,
-  shop,
 }: PostProps) {
-  const { name, address1, imageUrl, originalHourlyPay, link } = shop;
-
   const timeRange = formatTimeRange(startsAt, workhour);
   const isPast = isPastDate(startsAt, workhour);
   const isDimmed = closed || isPast;
