@@ -8,14 +8,14 @@ interface PaginationProps {
   count: number;
   /** 한 페이지에 보여줄 아이템 개수 */
   itemCountPerPage: number;
-  /** 노출할 페이지 버튼 개수 (기본 5) – 홀수를 권장 */
+  /** 노출할 페이지 버튼 개수 (기본 7) – 홀수를 권장 */
   limit?: number;
 }
 
 export default function Pagination({
   count,
   itemCountPerPage,
-  limit = 5,
+  limit = 7,
 }: PaginationProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
