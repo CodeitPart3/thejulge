@@ -7,7 +7,7 @@ import { ROUTES } from "./constants/router";
 const SignupPage = lazy(() => import("@/pages/SignupPage"));
 const SigninPage = lazy(() => import("@/pages/SigninPage"));
 
-const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
+const ProfilePage = lazy(() => import("@/pages/ProfilePage/ProfilePage"));
 const ProfileRegisterPage = lazy(() => import("@/pages/ProfileRegisterPage"));
 const ProfileEditPage = lazy(() => import("@/pages/ProfileEditPage"));
 
