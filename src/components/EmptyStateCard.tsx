@@ -14,9 +14,12 @@ function EmptyStateCard({
   onClick,
 }: EmptyStateCardProps) {
   return (
-    <div className="flex flex-col items-center gap-6 w-full py-[3.75rem] border-[1px] border-gray-20 rounded-xl text-black">
-      <p className="leading-[1.625rem]">{description}</p>
-      <Button onClick={onClick} className="py-3.5 px-[6.875rem] cursor-pointer">
+    <div className="flex flex-col items-center gap-4 md:gap-6 w-full py-[3.75rem] border-[1px] border-gray-20 rounded-xl text-black">
+      <p className="leading-[1.625rem] text-sm md:text-[1rem]">{description}</p>
+      <Button
+        onClick={onClick}
+        className="py-2.5 px-5 md:py-3.5 md:px-[6.875rem] text-sm md:text-[1rem] cursor-pointer"
+      >
         {buttonName}
       </Button>
     </div>
