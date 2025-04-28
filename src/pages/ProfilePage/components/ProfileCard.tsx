@@ -17,31 +17,31 @@ function ProfileCard({
   onClick,
 }: ProfileCardProps) {
   return (
-    <div className="p-8 bg-red-10 rounded-xl text-black">
-      <div className="flex mb-3">
+    <div className="p-5 md:p-8 bg-red-10 rounded-xl text-black">
+      <div className="flex mb-2 md:mb-3">
         <div className="flex-1">
-          <span className="inline-block font-bold leading-5 text-red-40">
+          <span className="text-sm md:text-[1rem] inline-block font-bold leading-5 text-red-40">
             이름
           </span>
-          <p className="font-bold text-[1.75rem]">{name}</p>
+          <p className="font-bold text-2xl md:text-[1.75rem]">{name}</p>
         </div>
         <div>
           <Button
             variant="white"
-            className="py-3.5 px-[3.5rem] cursor-pointer"
+            className="py-2.5 md:py-3.5 px-7 md:px-[3.5rem] cursor-pointer"
             onClick={onClick}
           >
             편집하기
           </Button>
         </div>
       </div>
-      <div className="mb-3 flex items-center gap-1.5 text-gray-50">
-        <Phone /> {phone}
+      <div className="mb-2 md:mb-3 flex items-center gap-1.5 text-sm md:text-[1rem] text-gray-50">
+        <Phone className="w-4 md:w-5 h-4 md:h-5" /> {phone}
       </div>
-      <div className="mb-7 flex items-center gap-1.5 text-gray-50">
-        <Location /> 선호 지역: {address}
+      <div className="mb-5 md:mb-7 flex items-center gap-1.5 text-sm md:text-[1rem] text-gray-50">
+        <Location className="w-4 md:w-5 h-4 md:h-5" /> 선호 지역: {address}
       </div>
-      <p>{bio}</p>
+      <p className="text-sm md:text-[1rem]">{bio}</p>
     </div>
   );
 }
