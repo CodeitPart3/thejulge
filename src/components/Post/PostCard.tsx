@@ -1,18 +1,7 @@
 import { cn } from "@/utils/cn";
 import { formatTimeRange } from "@/utils/datetime";
-import IconLocation from "@/assets/icon/location.svg?react";
-import IconTime from "@/assets/icon/time.svg?react";
-import IconArrow from "@/assets/icon/arrow-up.svg?react";
-
-const getPayRateText = (hourlyPay?: number, originalPay?: number): string => {
-  if (hourlyPay === undefined || originalPay === undefined) {
-    return "";
-  }
-
-  const rawRate = ((hourlyPay - originalPay) / originalPay) * 100;
-  const displayRate = Math.min(Math.round(rawRate), 100);
-  return `기존 시급보다 ${displayRate}%`;
-};
+import { getPayRateText } from "@/utils/payRate";
+import { Location, Time, ArrowUp } from "@/assets/icon";
 
 interface PostCardProps {
   name: string;
@@ -25,7 +14,7 @@ interface PostCardProps {
   workhour?: number;
   isShopInfo?: boolean;
   backgroundColor?: string;
-  children?: React.ReactNode;
+  buttons?: React.ReactNode;
 }
 
 export default function PostCard({
@@ -39,9 +28,9 @@ export default function PostCard({
   workhour,
   isShopInfo = false,
   backgroundColor = "#ffffff",
-  children = null,
+  buttons = null,
 }: PostCardProps) {
-  const rateText = getPayRateText(hourlyPay, originalHourlyPay);
+  const { rateText } = getPayRateText(hourlyPay, originalHourlyPay);
 
   const timeRange =
     startsAt && workhour !== undefined
@@ -75,12 +64,12 @@ export default function PostCard({
                   </h2>
                   <span className="inline-flex items-center gap-[2px] rounded-[20px] bg-primary px-3 py-1 text-[12px] font-normal leading-[16px] text-white md:body2-bold">
                     {rateText}
-                    <IconArrow className="w-4 h-4 md:w-5 md:h-5" />
+                    <ArrowUp className="w-4 h-4 md:w-5 md:h-5" />
                   </span>
                 </div>
               </div>
               <div className="flex items-center gap-[6px] text-gray-50 body2-regular md:body1-regular">
-                <IconTime className="w-4 h-4 md:w-5 md:h-5" />
+                <Time className="w-4 h-4 md:w-5 md:h-5" />
                 {timeRange}
               </div>
             </>
@@ -89,14 +78,14 @@ export default function PostCard({
           )}
           {isShopInfo && <h2 className="text-[28px] font-bold">{name}</h2>}
           <div className="flex items-center gap-[6px] text-gray-50 body2-regular md:body1-regular">
-            <IconLocation className="w-4 h-4 md:w-5 md:h-5" />
+            <Location className="w-4 h-4 md:w-5 md:h-5" />
             {address1}
           </div>
           <p className="text-black body2-regular md:body1-regular">
             {description}
           </p>
         </div>
-        {children && <div className="flex gap-2 mt-3">{children}</div>}
+        {buttons && <div className="flex gap-2 mt-3">{buttons}</div>}
       </div>
     </article>
   );
