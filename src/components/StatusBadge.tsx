@@ -2,7 +2,7 @@ import { ApplicationStatus } from "../types";
 
 import { cn } from "@/utils/cn";
 
-interface ApplicationStatusBadgeProps {
+interface StatusBadgeProps {
   status: ApplicationStatus;
 }
 
@@ -15,7 +15,7 @@ const statusMap: {
   rejected: { text: "거절", className: "bg-red-40 text-red-10" },
 } as const;
 
-function ApplicationStatusBadge({ status }: ApplicationStatusBadgeProps) {
+function StatusBadge({ status }: StatusBadgeProps) {
   return (
     <span
       className={cn(
@@ -28,4 +28,4 @@ function ApplicationStatusBadge({ status }: ApplicationStatusBadgeProps) {
   );
 }
 
-export default ApplicationStatusBadge;
+export default StatusBadge;

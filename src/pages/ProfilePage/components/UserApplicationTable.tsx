@@ -1,5 +1,5 @@
-import ApplicationStatusBadge from "@/components/ApplicationStatusBadge";
 import Pagination from "@/components/Pagination";
+import StatusBadge from "@/components/StatusBadge";
 import Table from "@/components/Table";
 import { ApplicationItem } from "@/types/application";
 import { formatTimeRange } from "@/utils/datetime";
@@ -41,7 +41,7 @@ function UserApplicationTable({
           </Table.Td>
           <Table.Td>{numberCommaFormatter(notice.item.hourlyPay)}원</Table.Td>
           <Table.Td>
-            <ApplicationStatusBadge status={status} />
+            <StatusBadge status={status} />
           </Table.Td>
         </Table.Tr>
       )}
