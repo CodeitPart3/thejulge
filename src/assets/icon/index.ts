@@ -1,21 +1,23 @@
-import Active from "./active.svg";
-import ArrowLeft from "./arrow-left.svg";
-import ArrowRight from "./arrow-right.svg";
-import ArrowUp from "./arrow-up.svg";
-import Camera from "./camera.svg";
-import Check from "./check.svg";
-import Close from "./close.svg";
-import DropdownDown from "./dropdown-down.svg";
-import DropdownUp from "./dropdown-up.svg";
-import Inactive from "./inactive.svg";
-import Location from "./location.svg";
-import Notice from "./notice.svg";
-import Phone from "./phone.svg";
-import Search from "./search.svg";
-import Time from "./time.svg";
+import Active from "./active.svg?react";
+import ArrowLeft from "./arrow-left.svg?react";
+import ArrowRight from "./arrow-right.svg?react";
+import ArrowUp from "./arrow-up.svg?react";
+import ArrowUpBold from "./arrow-up-bold.svg?react";
+import Camera from "./camera.svg?react";
+import Check from "./check.svg?react";
+import Close from "./close.svg?react";
+import DropdownDown from "./dropdown-down.svg?react";
+import DropdownUp from "./dropdown-up.svg?react";
+import Inactive from "./inactive.svg?react";
+import Location from "./location.svg?react";
+import Notice from "./notice.svg?react";
+import Phone from "./phone.svg?react";
+import Search from "./search.svg?react";
+import Time from "./time.svg?react";
 
 export {
   ArrowUp,
+  ArrowUpBold,
   ArrowLeft,
   ArrowRight,
   Close,
