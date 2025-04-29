@@ -4,6 +4,7 @@ import {
   useRef,
   ReactNode,
   SelectHTMLAttributes,
+  useMemo,
 } from "react";
 
 import { DropdownDown, DropdownUp } from "@/assets/icon";
@@ -32,7 +33,6 @@ interface SelectProps
   placeholder?: string;
   size?: keyof typeof sizeMap;
   fullWidth?: boolean;
-  width?: number | string;
   className?: string;
   wrapperClassName?: string;
 }
@@ -68,7 +68,6 @@ function Select({
   placeholder = "선택",
   size = "lg",
   fullWidth,
-  width,
   className,
   wrapperClassName,
   ...rest
@@ -76,10 +75,12 @@ function Select({
   const [open, setOpen] = useState(false);
   const [buttonWidth, setButtonWidth] = useState<number>(0);
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLUListElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const selectedOption = options.find((option) => option.value === value);
+  const selectedOption = useMemo(() => {
+    return options.find((option) => option.value === value);
+  }, [options, value]);
 
   const wrapperClassNames = cn(
     "relative",
@@ -90,18 +91,19 @@ function Select({
   );
 
   const buttonClassNames = cn(
-    "flex items-center justify-between rounded-[0.375rem]",
+    "flex items-center justify-between rounded-[0.375rem] cursor-pointer",
     {
       "w-full": fullWidth,
-      "bg-white placeholder:text-gray-40 border border-gray-30": size === "lg",
+      "bg-white border border-gray-30": size === "lg",
       "bg-gray-10 font-bold": size === "sm",
     },
+    value ? "text-black" : "text-gray-40",
     sizeMap[size],
     className,
   );
 
   const listClassNames = cn(
-    "absolute top-full left-0 mt-1 border rounded-[0.375rem] bg-white border-gray-30 shadow-lg z-10 max-h-48 overflow-y-auto",
+    "absolute top-full left-0 mt-1 border rounded-[0.375rem] bg-white border-gray-30 text-black shadow-lg z-10 max-h-48 overflow-y-auto",
   );
 
   const handleSelect = (selectedValue: string) => {
@@ -112,9 +114,10 @@ function Select({
   // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
       if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
+        !buttonRef.current?.contains(target) &&
+        !wrapperRef.current?.contains(target)
       ) {
         setOpen(false);
       }
@@ -136,19 +139,16 @@ function Select({
 
   return (
     <Field id={id} label={label}>
-      <div className={wrapperClassNames} ref={wrapperRef}>
+      <div className={wrapperClassNames}>
         <button
           id={id}
           type="button"
           ref={buttonRef}
           onClick={() => setOpen((prev) => !prev)}
           className={buttonClassNames}
-          style={width ? { width } : undefined}
           {...rest}
         >
-          <span className={cn(value ? "" : "text-gray-40")}>
-            {selectedOption?.label || placeholder}
-          </span>
+          {selectedOption?.label || placeholder}
           {open ? (
             <DropdownUp className="ml-2" />
           ) : (
@@ -158,9 +158,10 @@ function Select({
 
         {open && (
           <ul
+            ref={wrapperRef}
             className={listClassNames}
             style={{
-              width: width || buttonWidth,
+              width: buttonWidth,
             }}
           >
             {options.map((option) => (
@@ -171,7 +172,7 @@ function Select({
                 <button
                   type="button"
                   className={cn(
-                    "w-full text-center hover:bg-gray-10",
+                    "w-full text-center hover:bg-gray-10 cursor-pointer",
                     size === "sm"
                       ? "px-3 py-2 text-sm"
                       : "px-5 py-3 text-[1rem]",
