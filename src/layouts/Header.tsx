@@ -6,13 +6,13 @@ import SearchIcon from "../assets/icon/search.svg";
 import Logo from "../assets/logo/thejulge.svg";
 interface HeaderProps {
   isLoggedIn: boolean;
-  userNavLabel?: string; // "내 가게" or "내 프로필"
+  userNavLabel?: "내 가게" | "내 프로필";
   hasAlarm?: boolean;
   onLogout?: () => void;
   onToggleAlarm?: () => void;
 }
 
-function Header({
+export default function Header({
   isLoggedIn,
   userNavLabel,
   hasAlarm,
@@ -23,12 +23,72 @@ function Header({
   const alarmIcon = hasAlarm ? ActiveAlarmIcon : InActiveAlarmIcon;
 
   return (
-    <header className="w-full flex  justify-between items-center h-[4.375rem] bg-[var(--color-white)]] sm:py-0">
-      <div className="flex items-center gap-[3.125rem]">
-        <Link to="/">
-          <img src={Logo} alt="thejulge" />
-        </Link>
-        <div className="relative w-full sm:w-[28.125rem] order-1 sm:order-none bg-[var(--color-gray-10)] border border-transparent rounded-[0.625rem]">
+    <header className="w-full px-4 py-2">
+      <div className="hidden md:flex max-w-screen-xl mx-auto w-full items-center justify-between">
+        <div className="flex items-center gap-[1.5rem]">
+          <Link to="/">
+            <img src={Logo} alt="thejulge" className="w-[7rem] h-[2.625rem]" />
+          </Link>
+          <div className="relative w-[28.125rem]">
+            <img
+              src={SearchIcon}
+              alt="SearchIcon"
+              className="absolute inset-y-2.5 left-3 flex items-center"
+            />
+            <input
+              type="text"
+              placeholder="가게 이름으로 찾아보세요"
+              className="pl-10 w-full h-[2.5rem] rounded-[0.625rem] p-[0.625rem] bg-gray-10 border border-transparent placeholder:text-gray-40 placeholder:text-sm"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-8 text-sm font-bold">
+          {isLoggedIn ? (
+            <>
+              <Link to={userPath}>{userNavLabel}</Link>
+              <button onClick={onLogout} className="cursor-pointer">
+                로그아웃
+              </button>
+              <button className="cursor-pointer" onClick={onToggleAlarm}>
+                <img src={alarmIcon} alt="AlertIcon" className="h-4" />
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/signin">로그인</Link>
+              <Link to="/signup">회원가입</Link>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2 md:hidden max-w-screen-xl mx-auto w-full">
+        <div className="flex items-center justify-between">
+          <Link to="/">
+            <img src={Logo} alt="thejulge" className="w-[7rem] h-[2.625rem]" />
+          </Link>
+          <div className="flex items-center gap-4 text-sm font-bold">
+            {isLoggedIn ? (
+              <>
+                <Link to={userPath}>{userNavLabel}</Link>
+                <button onClick={onLogout} className="cursor-pointer">
+                  로그아웃
+                </button>
+                <button className="cursor-pointer" onClick={onToggleAlarm}>
+                  <img src={alarmIcon} alt="AlertIcon" className="h-4" />
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/signin">로그인</Link>
+                <Link to="/signup">회원가입</Link>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="relative w-full">
           <img
             src={SearchIcon}
             alt="SearchIcon"
@@ -37,31 +97,10 @@ function Header({
           <input
             type="text"
             placeholder="가게 이름으로 찾아보세요"
-            className="pl-10 w-[28.125rem] h-[2.5rem] gap-[0.625rem] rounded-[0.625rem] p-[0.625rem] bg-[var(--color-gray-10)] placeholder:font-normal placeholder:text-[0.875rem] placeholder:leading-[1.375rem] placeholder:tracking-[0%] placeholder:align-middle placeholder:text-[var(--color-gray-40)]"
+            className="pl-10 w-full h-[2.5rem] rounded-[0.625rem] p-[0.625rem] bg-gray-10 border border-transparent placeholder:text-gray-40 placeholder:text-sm"
           />
         </div>
-      </div>
-
-      <div className="w-[13.1875rem] h-[1.5rem] flex items-center gap-[2.5rem] font-bold text-[1rem] leading-[1.25rem] tracking-[0%] text-right align-middle text-[var(--color-black)]]">
-        {isLoggedIn ? (
-          <>
-            <Link to={userPath}>{userNavLabel}</Link>
-            <button onClick={onLogout} className="cursor-pointer">
-              로그아웃
-            </button>
-            <button className="cursor-pointer" onClick={onToggleAlarm}>
-              <img src={alarmIcon} alt="AlertIcon" />
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/signin">로그인</Link>
-            <Link to="/signup">회원가입</Link>
-          </>
-        )}
       </div>
     </header>
   );
 }
-
-export default Header;
