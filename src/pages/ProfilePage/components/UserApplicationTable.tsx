@@ -3,6 +3,7 @@ import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import { ApplicationItem } from "@/types/application";
 import { formatTimeRange } from "@/utils/datetime";
+import { numberCommaFormatter } from "@/utils/number";
 
 interface UserApplicationTableProps {
   data: ApplicationItem[];
@@ -38,12 +39,7 @@ function UserApplicationTable({
           <Table.Td>
             {formatTimeRange(notice.item.startsAt, notice.item.workhour)}
           </Table.Td>
-          <Table.Td>
-            {Intl.NumberFormat("ko-kr", { compactDisplay: "long" }).format(
-              Number(notice.item.hourlyPay),
-            )}
-            원
-          </Table.Td>
+          <Table.Td>{numberCommaFormatter(notice.item.hourlyPay)}원</Table.Td>
           <Table.Td>
             <ApplicationStatusBadge status={status} />
           </Table.Td>
