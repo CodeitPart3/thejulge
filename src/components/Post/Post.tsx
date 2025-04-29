@@ -1,25 +1,8 @@
 import { cn } from "@/utils/cn";
 import { Link } from "react-router-dom";
 import { formatTimeRange, isPastDate } from "@/utils/datetime";
-import IconTime from "@/assets/icon/time.svg?react";
-import IconLocation from "@/assets/icon/location.svg?react";
-import IconArrow from "@/assets/icon/arrow-up.svg?react";
-import IconArrowBold from "@/assets/icon/arrow-up-bold.svg?react";
-
-const getPayRateText = (
-  hourlyPay: number,
-  originalPay: number,
-): {
-  rawRate: number;
-  displayRate: number;
-  rateText: string;
-} => {
-  const rawRate = ((hourlyPay - originalPay) / originalPay) * 100;
-  const displayRate = Math.min(Math.round(rawRate), 100);
-  const rateText = `기존 시급보다 ${displayRate}%`;
-
-  return { rawRate, displayRate, rateText };
-};
+import { getPayRateText } from "@/utils/payRate";
+import { Location, Time, ArrowUp, ArrowUpBold } from "@/assets/icon";
 
 interface PostProps {
   name: string;
@@ -76,11 +59,11 @@ export default function Post({
           <div className="mt-3 flex flex-col gap-2 md:mt-5">
             <h3 className="text-base md:text-xl">{name}</h3>
             <p className="flex items-start gap-[6px] text-xs font-normal text-gray-50 md:text-[14px] md:leading-[22px]">
-              <IconTime className="h-4 w-4 md:h-5 md:w-5" />
+              <Time className="h-4 w-4 md:h-5 md:w-5" />
               {timeRange}
             </p>
             <p className="flex items-start gap-[6px] text-xs font-normal text-gray-50 md:text-[14px] md:leading-[22px]">
-              <IconLocation className="h-4 w-4 md:h-5 md:w-5" />
+              <Location className="h-4 w-4 md:h-5 md:w-5" />
               {address1}
             </p>
           </div>
@@ -102,8 +85,8 @@ export default function Post({
                 )}
               >
                 {rateText}
-                <IconArrow className="hidden h-5 w-5 md:block" />
-                <IconArrowBold className="h-4 w-4 md:hidden" />
+                <ArrowUp className="hidden h-5 w-5 md:block" />
+                <ArrowUpBold className="h-4 w-4 md:hidden" />
               </span>
             )}
           </div>
