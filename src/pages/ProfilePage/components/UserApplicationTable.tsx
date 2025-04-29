@@ -6,9 +6,17 @@ import { formatTimeRange } from "@/utils/datetime";
 
 interface UserApplicationTableProps {
   data: ApplicationItem[];
+  pageCount: number;
+  pageLimit: number;
+  itemCountPerPage?: number;
 }
 
-function UserApplicationTable({ data }: UserApplicationTableProps) {
+function UserApplicationTable({
+  data,
+  pageCount,
+  pageLimit,
+  itemCountPerPage = 5,
+}: UserApplicationTableProps) {
   return (
     <Table
       data={data}
@@ -44,7 +52,11 @@ function UserApplicationTable({ data }: UserApplicationTableProps) {
       footerRow={() => (
         <Table.Tr className="flex justify-center">
           <Table.Td colSpan={3}>
-            <Pagination count={100} limit={7} itemCountPerPage={5} />
+            <Pagination
+              count={pageCount}
+              limit={pageLimit}
+              itemCountPerPage={itemCountPerPage}
+            />
           </Table.Td>
         </Table.Tr>
       )}
