@@ -7,16 +7,15 @@ export default function ToastContainer() {
 
   return (
     <ToastPortal>
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none">
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-y-2 pointer-events-none">
         {toasts.map((toast) => (
-          <div
+          <Toast
             key={toast.id}
+            label={toast.label}
             className={`transition-opacity duration-500 ${
               toast.isVisible ? "opacity-100" : "opacity-0"
             }`}
-          >
-            <Toast label={toast.label} />
-          </div>
+          />
         ))}
       </div>
     </ToastPortal>
