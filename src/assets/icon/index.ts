@@ -2,6 +2,7 @@ import Active from "./active.svg?react";
 import ArrowLeft from "./arrow-left.svg?react";
 import ArrowRight from "./arrow-right.svg?react";
 import ArrowUp from "./arrow-up.svg?react";
+import ArrowUpBold from "./arrow-up-bold.svg?react";
 import Camera from "./camera.svg?react";
 import Check from "./check.svg?react";
 import Close from "./close.svg?react";
@@ -16,6 +17,7 @@ import Time from "./time.svg?react";
 
 export {
   ArrowUp,
+  ArrowUpBold,
   ArrowLeft,
   ArrowRight,
   Close,
