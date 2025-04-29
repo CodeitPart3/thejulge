@@ -8,14 +8,7 @@ interface ProfileCardProps extends UserSummary {
   onClick?: (e: MouseEvent) => void;
 }
 
-function ProfileCard({
-  // id,
-  name,
-  phone,
-  address,
-  bio,
-  onClick,
-}: ProfileCardProps) {
+function ProfileCard({ name, phone, address, bio, onClick }: ProfileCardProps) {
   return (
     <div className="p-5 md:p-8 bg-red-10 rounded-xl text-black">
       <div className="flex mb-2 md:mb-3">
