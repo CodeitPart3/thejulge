@@ -52,7 +52,7 @@ export default function Pagination({
   const isLastPage = currentPage === totalPages;
 
   return (
-    <ul className="flex items-center md:gap-1 sm:gap-0.5 select-none text-black">
+    <ul className="flex items-center md:gap-1 gap-0.5 select-none text-black">
       {isTotalPagesMoreThanLimit && (
         <li className="flex items-center mr-4">
           <button
@@ -80,7 +80,7 @@ export default function Pagination({
               disabled={isActive}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "md:w-10 md:h-10 sm:w-8 sm:h-8 grid place-content-center rounded-sm md:text-sm sm:text-xs",
+                "md:w-10 md:h-10 w-8 h-8 grid place-content-center rounded-sm md:text-sm text-xs",
                 "cursor-pointer disabled:cursor-default transition-colors duration-150 active:scale-95",
                 isActive ? "bg-red-30 text-white" : "hover:bg-gray-100",
               )}
