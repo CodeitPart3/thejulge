@@ -9,10 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "postinstall": "node scripts/setup-git-hooks.cjs",
-    "prepare": "husky"
+    "prepare": "husky install"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": [
+    "**/*.{ts,tsx,js.jsx}": [
       "eslint --fix",
       "prettier --write"
     ],
