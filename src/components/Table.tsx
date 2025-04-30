@@ -23,7 +23,7 @@ function Table<T>({
   ...props
 }: TableProps<T>) {
   return (
-    <div className="rounded-lg border-[1px] border-gray-200 text-black overflow-hidden">
+    <div className="bg-white rounded-lg border-[1px] border-gray-200 text-black overflow-hidden">
       {/* ───── 스크롤이 필요한 영역 ───── */}
       <div className="overflow-x-auto">
         <table
