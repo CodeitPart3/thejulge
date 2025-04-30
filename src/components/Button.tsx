@@ -1,7 +1,6 @@
 import React from "react";
 
-import clsx from "clsx";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/utils/cn";
 
 type ButtonVariant = "primary" | "white";
 type ButtonTextSize = "lg" | "md" | "sm";
@@ -38,14 +37,12 @@ export default function Button({
 }: ButtonProps) {
   const baseClasses = "rounded-md";
 
-  const mergedClasses = twMerge(
-    clsx(
-      baseClasses,
-      textSizeClassMap[textSize],
-      disabled ? disabledClass : variantClassMap[variant],
-      fullWidth && "w-full",
-      className,
-    ),
+  const mergedClasses = cn(
+    baseClasses,
+    textSizeClassMap[textSize],
+    disabled ? disabledClass : variantClassMap[variant],
+    fullWidth && "w-full",
+    className,
   );
 
   return (
