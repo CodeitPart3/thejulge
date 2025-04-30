@@ -1,50 +1,25 @@
-import { useEffect, useState } from "react";
-
-import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 import ProfileCard from "./components/ProfileCard";
 import UserApplicationTable from "./components/UserApplicationTable";
+import useUserApplications from "./hooks/useUserApplications";
 
-import { getUserApplications } from "@/apis/services/applicationService";
 import EmptyStateCard from "@/components/EmptyStateCard";
 import { ROUTES } from "@/constants/router";
 import { UserApplicationList } from "@/types/application";
 import { UserItem } from "@/types/user";
 
-const OFFSET = 5;
 const LIMIT = 5;
 const PAGE_LIMIT = 7;
 
 export default function ProfilePage() {
+  const { userInfo } = useLoaderData<{
+    userInfo: UserItem;
+    count: number;
+    userApplications: UserApplicationList[];
+  }>();
   const navigate = useNavigate();
-  const userInfo = useLoaderData<UserItem>();
-
-  const [searchParams] = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [userApplications, setUserApplications] = useState<
-    UserApplicationList[]
-  >([]);
-  const page = Number(searchParams.get("page")) || 1;
-
-  const fetchUserApplication = async () => {
-    setIsLoading(true);
-    const userApplications = await getUserApplications(
-      "42859259-b879-408c-8edd-bbaa3a79c674",
-      (page - 1) * OFFSET,
-      LIMIT,
-    );
-    const nextUserApplications = userApplications.data.items.map(
-      ({ item }) => item,
-    );
-    setTotalCount(userApplications.data.count);
-    setUserApplications(nextUserApplications);
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    fetchUserApplication();
-  }, [page]);
+  const { isLoading, totalCount, userApplications } = useUserApplications();
 
   return (
     <>

@@ -2,7 +2,8 @@ import { lazy } from "react";
 
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
-import { getUser } from "./apis/services/userService";
+import profileLoader from "./pages/ProfilePage/loader/profileLoader";
+
 import { ROUTES } from "./constants/router";
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
@@ -54,13 +55,7 @@ const profileRoutes: RouteObject[] = [
   {
     path: ROUTES.PROFILE.ROOT,
     Component: ProfilePage,
-    loader: async () => {
-      const user = await getUser("42859259-b879-408c-8edd-bbaa3a79c674");
-
-      if (user.status === 200) {
-        return user.data.item;
-      }
-    },
+    loader: profileLoader,
   },
   {
     path: ROUTES.PROFILE.REGISTER,
