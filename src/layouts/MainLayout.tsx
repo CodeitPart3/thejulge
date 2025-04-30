@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
 interface MainLayoutProps {
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
   userNavLabel?: "내 가게" | "내 프로필";
   hasAlarm?: boolean;
   onLogout?: () => void;
@@ -11,7 +11,7 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({
-  isLoggedIn,
+  isLoggedIn = false,
   userNavLabel,
   hasAlarm,
   onLogout,

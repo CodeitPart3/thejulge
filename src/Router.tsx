@@ -1,9 +1,11 @@
 import { lazy } from "react";
 
-import { createBrowserRouter, Outlet, RouteObject } from "react-router-dom";
+import { createBrowserRouter, RouteObject } from "react-router-dom";
 
 import { getUser } from "./apis/services/userService";
 import { ROUTES } from "./constants/router";
+import AuthLayout from "./layouts/AuthLayout";
+import MainLayout from "./layouts/MainLayout";
 
 const SignupPage = lazy(() => import("@/pages/SignupPage"));
 const SigninPage = lazy(() => import("@/pages/SigninPage"));
@@ -101,11 +103,11 @@ const appRoutes: RouteObject[] = [
 
 export const router = createBrowserRouter([
   {
-    Component: Outlet,
+    Component: AuthLayout,
     children: authRoutes,
   },
   {
-    Component: Outlet,
+    Component: MainLayout,
     children: appRoutes,
   },
 ]);
