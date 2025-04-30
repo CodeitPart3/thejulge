@@ -3,14 +3,28 @@ import { MouseEvent } from "react";
 import { Location, Phone } from "@/assets/icon";
 import Button from "@/components/Button";
 import { UserSummary } from "@/types/user";
+import { cn } from "@/utils/cn";
 
 interface ProfileCardProps extends UserSummary {
   onClick?: (e: MouseEvent) => void;
+  className?: string;
 }
 
-function ProfileCard({ name, phone, address, bio, onClick }: ProfileCardProps) {
+function ProfileCard({
+  name,
+  phone,
+  address,
+  bio,
+  className,
+  onClick,
+}: ProfileCardProps) {
   return (
-    <div className="p-5 md:p-8 bg-red-10 rounded-xl text-black">
+    <div
+      className={cn(
+        "flex-1 p-5 md:p-8 bg-red-10 rounded-xl text-black",
+        className,
+      )}
+    >
       <div className="flex mb-2 md:mb-3">
         <div className="flex-1">
           <span className="text-sm md:text-[1rem] inline-block font-bold leading-5 text-red-40">

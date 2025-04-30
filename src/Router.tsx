@@ -2,6 +2,7 @@ import { lazy } from "react";
 
 import { createBrowserRouter, Outlet, RouteObject } from "react-router-dom";
 
+import { getUser } from "./apis/services/userService";
 import { ROUTES } from "./constants/router";
 
 const SignupPage = lazy(() => import("@/pages/SignupPage"));
@@ -51,6 +52,13 @@ const profileRoutes: RouteObject[] = [
   {
     path: ROUTES.PROFILE.ROOT,
     Component: ProfilePage,
+    loader: async () => {
+      const user = await getUser("42859259-b879-408c-8edd-bbaa3a79c674");
+
+      if (user.status === 200) {
+        return user.data.item;
+      }
+    },
   },
   {
     path: ROUTES.PROFILE.REGISTER,
