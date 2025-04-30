@@ -19,4 +19,32 @@
     font-size: 0.875rem; /* 14px */
     line-height: 1;
   }
+
+  @keyframes skeleton {
+    0% {
+      opacity: 1;
+      background-position: 200% 0;
+    }
+    50% {
+      opacity: 0.5;
+      background-position: 0% 0;
+    }
+    100% {
+      opacity: 1;
+      background-position: -200% 0;
+    }
+  }
+
+  .animate-skeleton {
+    background-image: linear-gradient(
+      90deg,
+      var(--color-gray-20) 35%,
+      var(--color-white) 50%,
+      var(--color-gray-20) 65%
+    );
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: skeleton 1.2s linear infinite;
+    background-color: var(--color-gray-20);
+  }
 }

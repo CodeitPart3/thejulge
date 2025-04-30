@@ -2,6 +2,7 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 
 import ProfileCard from "./components/ProfileCard";
 import UserApplicationTable from "./components/UserApplicationTable";
+import UserApplicationTableSkeleton from "./components/UserApplicationTableSkeleton";
 import useUserApplications from "./hooks/useUserApplications";
 
 import EmptyStateCard from "@/components/EmptyStateCard";
@@ -50,7 +51,7 @@ export default function ProfilePage() {
           <div className="xl:w-[60.25rem] mx-auto px-6 pt-[3.75rem]">
             <h3 className="mb-8 text-[1.75rem] font-bold">신청 내역</h3>
 
-            {isLoading && <div>로딩 중... </div>}
+            {isLoading && <UserApplicationTableSkeleton />}
 
             {!isLoading && userApplications.length === 0 && (
               <EmptyStateCard
