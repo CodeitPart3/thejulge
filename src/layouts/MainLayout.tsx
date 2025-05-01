@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
 interface MainLayoutProps {
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
   userNavLabel?: "내 가게" | "내 프로필";
   hasAlarm?: boolean;
   onLogout?: () => void;
@@ -11,7 +11,7 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({
-  isLoggedIn,
+  isLoggedIn = false,
   userNavLabel,
   hasAlarm,
   onLogout,
@@ -19,19 +19,17 @@ export default function MainLayout({
 }: MainLayoutProps) {
   return (
     <div className="w-full min-h-screen flex flex-col">
-      <div className="w-full max-w-[90rem] mx-auto flex-1 px-4 tablet:px-10 pc:px-20">
-        <Header
-          isLoggedIn={isLoggedIn}
-          userNavLabel={userNavLabel}
-          hasAlarm={hasAlarm}
-          onLogout={onLogout}
-          onToggleAlarm={onToggleAlarm}
-        />
+      <Header
+        isLoggedIn={isLoggedIn}
+        userNavLabel={userNavLabel}
+        hasAlarm={hasAlarm}
+        onLogout={onLogout}
+        onToggleAlarm={onToggleAlarm}
+      />
 
-        <main className="flex-1">
-          <Outlet />
-        </main>
-      </div>
+      <main className="flex flex-col flex-1">
+        <Outlet />
+      </main>
 
       <Footer />
     </div>

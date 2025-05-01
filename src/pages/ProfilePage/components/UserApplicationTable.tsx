@@ -1,12 +1,12 @@
 import Pagination from "@/components/Pagination";
 import StatusBadge from "@/components/StatusBadge";
 import Table from "@/components/Table";
-import { ApplicationItem } from "@/types/application";
+import { UserApplicationList } from "@/types/application";
 import { formatTimeRange } from "@/utils/datetime";
 import { numberCommaFormatter } from "@/utils/number";
 
 interface UserApplicationTableProps {
-  data: ApplicationItem[];
+  data: UserApplicationList[];
   pageCount: number;
   pageLimit: number;
   itemCountPerPage?: number;
