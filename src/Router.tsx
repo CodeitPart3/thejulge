@@ -2,6 +2,7 @@ import { lazy } from "react";
 
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
+import noticeEmployeeLoader from "./pages/NoticeEmployeePage/loader/noticeEmployeeLoader";
 import profileLoader from "./pages/ProfilePage/loader/profileLoader";
 
 import { ROUTES } from "./constants/router";
@@ -89,6 +90,7 @@ const noticeRoutes: RouteObject[] = [
   {
     path: ROUTES.NOTICE.NOTICE_ID.EMPLOYEE,
     Component: NoticeEmployeePage,
+    loader: noticeEmployeeLoader,
   },
 ];
 
