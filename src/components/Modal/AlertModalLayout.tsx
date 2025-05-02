@@ -1,5 +1,7 @@
 import Button from "../Button";
 
+import { Check, Notice } from "@/assets/icon";
+
 interface ModalButton {
   label: string;
   style: "primary" | "white";
@@ -7,39 +9,43 @@ interface ModalButton {
 }
 
 interface Props {
+  iconType?: "check" | "warning" | "none";
   message: string;
-  buttons: ModalButton[];
+  button: ModalButton;
   onClose: () => void;
 }
 
+const ICONS = {
+  check: Check,
+  warning: Notice,
+};
+
 export default function AlertModalLayout({
-  message = "",
-  buttons = [],
+  iconType = "none",
+  message,
+  button,
+  onClose,
 }: Props) {
+  const Icon = iconType !== "none" ? ICONS[iconType] : null;
+
   return (
     <div
-      className="relative bg-white rounded-lg p-5 
-        w-[20.625rem] h-[13.75rem] md:w-[33.75rem] md:h-[15.625rem]"
+      className="bg-white p-7 rounded-lg text-center w-[18.625rem] h-[11.5rem] flex flex-col justify-between items-center"
       onClick={(e) => e.stopPropagation()}
     >
-      <p
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-        text-black font-normal text-center whitespace-nowrap
-        text-[1rem] md:text-[1.125rem]"
+      {Icon && <Icon className="w-6 h-6 mb-3" />}
+      <p className="text-base text-black font-normal mb-5">{message}</p>
+      <Button
+        variant={button.style}
+        onClick={() => {
+          button.onClick();
+          onClose();
+        }}
+        textSize="sm"
+        className="py-2 px-4 cursor-pointer"
       >
-        {message}
-      </p>
-
-      <div className="absolute bottom-6 left-1/2 md:left-auto md:right-6 md:translate-x-0 -translate-x-1/2">
-        <Button
-          onClick={buttons[0]?.onClick}
-          variant="primary"
-          textSize="md"
-          className="py-2 px-4 w-[8.625rem] h-[2.625rem] md:w-[7.5rem] md:h-[3rem] cursor-pointer"
-        >
-          {buttons[0]?.label}
-        </Button>
-      </div>
+        {button.label}
+      </Button>
     </div>
   );
 }

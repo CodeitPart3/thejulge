@@ -1,42 +1,53 @@
 import AlertModalLayout from "./AlertModalLayout";
 import ConfirmModalLayout from "./ConfirmModalLayout";
 
-interface ModalButton {
-  label: string;
-  style: "primary" | "white"; // "primary" -> "filledRed", "white" -> "outlinedRed"
-  onClick: () => void;
-}
+import { useModalStore } from "@/store/useModalStore";
 
-interface ModalProps {
-  message: string;
-  iconType?: "check" | "warning" | "none";
-  buttons: ModalButton[];
-  onClose: () => void;
-}
+export default function Modal() {
+  const { isOpen, options, closeModal } = useModalStore();
 
-export default function Modal({
-  message = "",
-  iconType = "none",
-  buttons = [],
-  onClose,
-}: ModalProps) {
+  if (!isOpen || !options) return null;
+
+  const handleClose = () => {
+    options.onClose?.();
+    closeModal();
+  };
+
   return (
-    <div
-      className="fixed inset-0 bg-black/70  flex justify-center items-center z-50"
-      onClick={onClose}
-    >
-      {iconType === "none" ? (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
+      {options.type === "alert" && (
         <AlertModalLayout
-          message={message}
-          buttons={buttons}
-          onClose={onClose}
+          message={options.message}
+          onClose={handleClose}
+          iconType={options.iconType ?? "none"}
+          button={{
+            label: "확인",
+            style: "primary",
+            onClick: handleClose,
+          }}
         />
-      ) : (
+      )}
+
+      {options.type === "confirm" && (
         <ConfirmModalLayout
-          iconType={iconType}
-          message={message}
-          buttons={buttons}
-          onClose={onClose}
+          message={options.message}
+          onClose={handleClose}
+          onConfirm={() => {
+            options.onConfirm?.();
+            closeModal();
+          }}
+        />
+      )}
+
+      {options.type === "message" && (
+        <AlertModalLayout
+          message={options.message}
+          onClose={handleClose}
+          button={{
+            label: "확인",
+            style: "primary",
+            onClick: handleClose,
+          }}
         />
       )}
     </div>
