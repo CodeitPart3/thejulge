@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 import IconCheck from "../assets/icon/check.svg?react";
 import Logo from "../assets/logo/thejulge.svg?react";
-import { useSignupForm } from "../hooks/useSignupForm";
+import { useAuthForm } from "../hooks/useAuthForm";
 
 import { postAuthentication } from "@/apis/services/authenticationService";
 import { postUser } from "@/apis/services/userService";
@@ -24,7 +24,7 @@ export default function SignupPage() {
     handleChange,
     setFormData,
     resetForm,
-  } = useSignupForm();
+  } = useAuthForm("signup");
   //Alert 사용시
   // const [alertMessage, setAlertMessage] = useState("");
   // const [nextRoute, setNextRoute] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export default function SignupPage() {
       const response = await postUser({
         email: formData.email,
         password: formData.password,
-        type: formData.userType,
+        type: formData.userType!,
       });
 
       if (response.status === 201) {
@@ -109,7 +109,7 @@ export default function SignupPage() {
           label="비밀번호 확인"
           type="password"
           placeholder="입력"
-          value={formData.confirmPassword}
+          value={formData.confirmPassword || ""}
           onChange={handleChange("confirmPassword")}
           fullWidth
           validateMessage={errors.confirmPassword}

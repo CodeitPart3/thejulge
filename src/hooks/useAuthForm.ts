@@ -1,12 +1,13 @@
 import { useState, useMemo } from "react";
 
+type Mode = "signup" | "signin";
 type UserType = "employee" | "employer";
 
 type FormData = {
   email: string;
   password: string;
-  confirmPassword: string;
-  userType: UserType;
+  confirmPassword?: string;
+  userType?: UserType;
 };
 
 type FormErrors = {
@@ -15,26 +16,26 @@ type FormErrors = {
   confirmPassword?: string;
 };
 
-export function useSignupForm() {
+export function useAuthForm(mode: Mode) {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
-    confirmPassword: "",
-    userType: "employee",
+    ...(mode === "signup" && { confirmPassword: "", userType: "employee" }),
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
 
   const isFormValid = useMemo(() => {
-    return (
-      formData.email &&
-      formData.password &&
-      formData.confirmPassword &&
-      !errors.email &&
-      !errors.password &&
-      !errors.confirmPassword
-    );
-  }, [formData, errors]);
+    if (!formData.email || !formData.password) return false;
+    if (errors.email || errors.password) return false;
+
+    if (mode === "signup") {
+      if (!formData.confirmPassword || !formData.userType) return false;
+      if (errors.confirmPassword) return false;
+    }
+
+    return true;
+  }, [formData, errors, mode]);
 
   const handleChange =
     (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,22 +49,27 @@ export function useSignupForm() {
           email: isValidEmail ? undefined : "올바른 이메일 형식이 아닙니다.",
         }));
       }
+
       if (field === "password") {
         setErrors((prev) => ({
           ...prev,
           password:
             value.length >= 8 ? undefined : "비밀번호는 8자 이상이어야 합니다.",
-          confirmPassword:
-            formData.confirmPassword && value !== formData.confirmPassword
-              ? "비밀번호가 일치하지 않습니다."
-              : undefined,
+          ...(mode === "signup" &&
+            formData.confirmPassword && {
+              confirmPassword:
+                value !== formData.confirmPassword
+                  ? "비밀번호가 일치하지 않습니다."
+                  : undefined,
+            }),
         }));
       }
-      if (field === "confirmPassword") {
+
+      if (mode === "signup" && field === "confirmPassword") {
         setErrors((prev) => ({
           ...prev,
           confirmPassword:
-            formData.password && value !== formData.password
+            value !== formData.password
               ? "비밀번호가 일치하지 않습니다."
               : undefined,
         }));
@@ -74,8 +80,7 @@ export function useSignupForm() {
     setFormData({
       email: "",
       password: "",
-      confirmPassword: "",
-      userType: "employee",
+      ...(mode === "signup" && { confirmPassword: "", userType: "employee" }),
     });
     setErrors({});
   };
