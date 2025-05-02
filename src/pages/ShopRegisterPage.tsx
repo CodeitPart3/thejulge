@@ -27,6 +27,24 @@ const CATEGORY_OPTIONS = [
   { label: "기타", value: "기타" },
 ];
 
+type FormType = {
+  name: string;
+  category: ShopCategory;
+  address1: SeoulDistrict;
+  address2: string;
+  originalHourlyPay: string;
+  description: string;
+};
+
+const FIELD_LABELS: Record<keyof FormType, string> = {
+  name: "가게 이름",
+  category: "분류",
+  address1: "주소",
+  address2: "상세 주소",
+  originalHourlyPay: "기본 시급",
+  description: "가게 설명",
+};
+
 export default function ShopRegisterPage() {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -34,7 +52,7 @@ export default function ShopRegisterPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<FormType>({
     name: "",
     category: "" as ShopCategory,
     address1: "" as SeoulDistrict,
@@ -79,7 +97,7 @@ export default function ShopRegisterPage() {
     const missingField = requiredFields.find((key) => form[key].trim() === "");
 
     if (missingField) {
-      alert("모든 필수 항목을 입력해 주세요.");
+      alert(`${FIELD_LABELS[missingField]}을(를) 입력해 주세요.`);
       return;
     }
 
@@ -117,7 +135,13 @@ export default function ShopRegisterPage() {
   };
 
   return (
-    <div className="w-full max-w-[964px] mx-auto px-4 py-12">
+    <form
+      className="w-full max-w-[964px] mx-auto px-4 py-12"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+    >
       <div className="flex justify-between items-center mb-8">
         <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
           가게 정보
@@ -197,7 +221,7 @@ export default function ShopRegisterPage() {
           ref={fileInputRef}
           type="file"
           accept="image/*"
-          className="hidden"
+          hidden
           onChange={handleImageUpload}
         />
       </div>
@@ -217,11 +241,11 @@ export default function ShopRegisterPage() {
           textSize="md"
           className="sm:w-[350px] w-full px-34 py-3.5"
           disabled={isSubmitting}
-          onClick={handleSubmit}
+          type="submit"
         >
           등록하기
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
