@@ -16,10 +16,7 @@ interface RouteHandle {
 }
 
 export default function MainLayout({
-  isLoggedIn = false,
-  userNavLabel,
   hasAlarm,
-  onLogout,
   onToggleAlarm,
 }: MainLayoutProps) {
   const matches = useMatches() as Array<{ handle?: RouteHandle }>;
@@ -27,13 +24,7 @@ export default function MainLayout({
 
   return (
     <div className="w-full min-h-screen flex flex-col">
-      <Header
-        isLoggedIn={isLoggedIn}
-        userNavLabel={userNavLabel}
-        hasAlarm={hasAlarm}
-        onLogout={onLogout}
-        onToggleAlarm={onToggleAlarm}
-      />
+      <Header hasAlarm={hasAlarm} onToggleAlarm={onToggleAlarm} />
 
       <main className="flex flex-col flex-1">
         <Outlet />
