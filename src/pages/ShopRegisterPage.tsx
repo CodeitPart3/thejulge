@@ -109,12 +109,8 @@ export default function ShopRegisterPage() {
         imageUrl,
       };
 
-      const res = await postShop(payload);
-      console.log("등록 성공:", res.data);
+      await postShop(payload);
       navigate("/shop");
-    } catch (err) {
-      console.error("등록 실패:", err);
-      alert("가게 등록 중 오류가 발생했습니다.");
     } finally {
       setIsSubmitting(false);
     }
