@@ -38,7 +38,7 @@ export default function SigninPage() {
         user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT,
       );
     } catch (error: unknown) {
-      const axiosError = error as AxiosError<{ message: string }>; // ✅ AxiosError로 타입 캐스팅
+      const axiosError = error as AxiosError<{ message: string }>;
       const status = axiosError.response?.status;
 
       if (status === 404) {
