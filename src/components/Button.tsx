@@ -19,9 +19,10 @@ const textSizeClassMap: Record<ButtonTextSize, string> = {
 };
 
 const variantClassMap: Record<ButtonVariant, string> = {
-  primary: "bg-[#EA3C12] text-white hover:bg-[#ca3f2a] active:bg-[#aa3523]",
+  primary:
+    "bg-[#EA3C12] text-white hover:bg-[#ca3f2a] active:bg-[#aa3523] cursor-pointer",
   white:
-    "bg-white text-[#EA3C12] border border-[#EA3C12] hover:bg-[#fff5f3] active:bg-[#ffe5e0]",
+    "bg-white text-[#EA3C12] border border-[#EA3C12] hover:bg-[#fff5f3] active:bg-[#ffe5e0] cursor-pointer",
 };
 
 const disabledClass = "bg-gray-40 text-white cursor-not-allowed";
