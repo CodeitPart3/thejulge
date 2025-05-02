@@ -1,11 +1,10 @@
-import { useState, useMemo } from "react";
-
 import { AxiosError } from "axios";
 import clsx from "clsx";
 import { useNavigate, Link } from "react-router-dom";
 
 import IconCheck from "../assets/icon/check.svg?react";
 import Logo from "../assets/logo/thejulge.svg?react";
+import { useSignupForm } from "../hooks/useSignupForm";
 
 import { postAuthentication } from "@/apis/services/authenticationService";
 import { postUser } from "@/apis/services/userService";
@@ -14,83 +13,21 @@ import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { useUserStore } from "@/hooks/useUserStore";
 
-type UserType = "employee" | "employer";
-
-type FormData = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  userType: UserType;
-};
-
-type FormErrors = {
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-};
-
 export default function SignupPage() {
   const navigate = useNavigate();
   const { setUserAndToken } = useUserStore();
 
-  const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    userType: "employee",
-  });
-
-  const [errors, setErrors] = useState<FormErrors>({});
+  const {
+    formData,
+    errors,
+    isFormValid,
+    handleChange,
+    setFormData,
+    resetForm,
+  } = useSignupForm();
   //Alert 사용시
   // const [alertMessage, setAlertMessage] = useState("");
   // const [nextRoute, setNextRoute] = useState<string | null>(null);
-
-  const isFormValid = useMemo(() => {
-    return (
-      formData.email &&
-      formData.password &&
-      formData.confirmPassword &&
-      !errors.email &&
-      !errors.password &&
-      !errors.confirmPassword
-    );
-  }, [formData, errors]);
-
-  const handleChange =
-    (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-
-      if (field === "email") {
-        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value);
-        setErrors((prev) => ({
-          ...prev,
-          email: isValidEmail ? undefined : "올바른 이메일 형식이 아닙니다.",
-        }));
-      }
-      if (field === "password") {
-        setErrors((prev) => ({
-          ...prev,
-          password:
-            e.target.value.length >= 8
-              ? undefined
-              : "비밀번호는 8자 이상이어야 합니다.",
-          confirmPassword:
-            formData.confirmPassword &&
-            e.target.value !== formData.confirmPassword
-              ? "비밀번호가 일치하지 않습니다."
-              : undefined,
-        }));
-      }
-      if (field === "confirmPassword") {
-        setErrors((prev) => ({
-          ...prev,
-          confirmPassword:
-            formData.password && e.target.value !== formData.password
-              ? "비밀번호가 일치하지 않습니다."
-              : undefined,
-        }));
-      }
-    };
 
   const handleSubmit = async () => {
     try {
@@ -111,22 +48,14 @@ export default function SignupPage() {
 
         setUserAndToken(user, token);
 
-        setFormData({
-          email: "",
-          password: "",
-          confirmPassword: "",
-          userType: "employee",
-        });
-        setErrors({});
+        resetForm();
 
         navigate(
           user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT,
         );
         //Alert 사용
         // setAlertMessage("가입이 완료되었습니다!");
-        //  setNextRoute(
-        //    user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT,
-        // );
+        // setNextRoute(user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT);
       }
     } catch (error: unknown) {
       const axiosError = error as AxiosError<{ message: string }>;
@@ -146,7 +75,13 @@ export default function SignupPage() {
         <Logo className="mx-auto mb-2 h-[45px] w-[248px]" />
       </Link>
 
-      <form className="mt-[40px] mx-auto flex max-w-sm flex-col gap-[28px]">
+      <form
+        className="mt-[40px] mx-auto flex max-w-sm flex-col gap-[28px]"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <TextField.Input
           id="email"
           label="이메일"
