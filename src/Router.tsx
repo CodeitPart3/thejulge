@@ -2,6 +2,7 @@ import { lazy } from "react";
 
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
+import ShopInfoPostCardSkeleton from "./pages/NoticeEmployeePage/components/ShopInfoPostCardSkeleton";
 import noticeEmployeeLoader from "./pages/NoticeEmployeePage/loader/noticeEmployeeLoader";
 import profileLoader from "./pages/ProfilePage/loader/profileLoader";
 
@@ -91,6 +92,7 @@ const noticeRoutes: RouteObject[] = [
     path: ROUTES.NOTICE.NOTICE_ID.EMPLOYEE,
     Component: NoticeEmployeePage,
     loader: noticeEmployeeLoader,
+    hydrateFallbackElement: <ShopInfoPostCardSkeleton />,
   },
 ];
 
