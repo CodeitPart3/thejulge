@@ -1,3 +1,126 @@
+import { AxiosError } from "axios";
+import { useNavigate, Link } from "react-router-dom";
+
+import Logo from "../assets/logo/thejulge.svg?react";
+import { useAuthForm } from "../hooks/useAuthForm";
+
+import { postAuthentication } from "@/apis/services/authenticationService";
+import Button from "@/components/Button";
+import TextField from "@/components/TextField";
+import { ROUTES } from "@/constants/router";
+import { useUserStore } from "@/hooks/useUserStore";
+
 export default function SigninPage() {
-  return <div>SigninPage</div>;
+  const navigate = useNavigate();
+  const { setUserAndToken } = useUserStore();
+
+  const { formData, errors, isFormValid, handleChange, resetForm } =
+    useAuthForm("signin");
+  //Alert 사용시
+  // const [alertMessage, setAlertMessage] = useState("");
+  // const [nextRoute, setNextRoute] = useState<string | null>(null);
+
+  const handleSubmit = async () => {
+    try {
+      const res = await postAuthentication({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      const token = res.data.item.token;
+      const user = res.data.item.user.item;
+
+      setUserAndToken(user, token);
+
+      resetForm();
+
+      navigate(
+        user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT,
+      );
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>; // ✅ AxiosError로 타입 캐스팅
+      const status = axiosError.response?.status;
+
+      if (status === 404) {
+        alert("비밀번호가 일치하지 않습니다.");
+        //Alert 사용시
+        // setAlertMessage("비밀번호가 일치하지 않습니다.");
+        // setNextRoute(null);
+      } else {
+        alert("로그인 실패! 다시 시도해주세요.");
+        //Alert 사용시
+        // setAlertMessage("로그인 실패! 다시 시도해주세요.");
+        // setNextRoute(null);
+      }
+    }
+  };
+
+  return (
+    <div className="w-full">
+      <Link to={ROUTES.NOTICE.ROOT}>
+        <Logo className="mx-auto mb-2 h-[45px] w-[248px]" />
+      </Link>
+
+      <form
+        className="mt-[40px] mx-auto flex max-w-sm flex-col gap-[28px]"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <TextField.Input
+          id="email"
+          label="이메일"
+          type="email"
+          placeholder="입력"
+          value={formData.email}
+          onChange={handleChange("email")}
+          fullWidth
+          validateMessage={errors.email}
+        />
+
+        <TextField.Input
+          id="password"
+          label="비밀번호"
+          type="password"
+          placeholder="입력"
+          value={formData.password}
+          onChange={handleChange("password")}
+          fullWidth
+          validateMessage={errors.password}
+        />
+
+        <Button
+          type="button"
+          fullWidth
+          className="py-[14px]"
+          onClick={handleSubmit}
+          disabled={!isFormValid}
+        >
+          로그인하기
+        </Button>
+      </form>
+
+      <p className="mt-[16px] text-center text-sm">
+        회원이 아니신가요?{" "}
+        <Link to={ROUTES.AUTH.SIGNUP} className="text-[#5534DA] underline">
+          회원가입하기
+        </Link>
+      </p>
+
+      {/* 임시 Alert */}
+      {/* {alertMessage && (
+        <AlertModal
+          message={alertMessage}
+          onClose={() => {
+            setAlertMessage("");
+            if (nextRoute) {
+              navigate(nextRoute);
+              setNextRoute(null);
+            }
+          }}
+        />
+      )} */}
+    </div>
+  );
 }
