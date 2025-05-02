@@ -23,7 +23,9 @@ const NoticeListPage = lazy(() => import("@/pages/NoticeListPage"));
 const NoticeRegisterPage = lazy(() => import("@/pages/NoticeRegisterPage"));
 const NoticeEditPage = lazy(() => import("@/pages/NoticeEditPage"));
 const NoticeEmployerPage = lazy(() => import("@/pages/NoticeEmployerPage"));
-const NoticeEmployeePage = lazy(() => import("@/pages/NoticeEmployeePage"));
+const NoticeEmployeePage = lazy(
+  () => import("@/pages/NoticeEmployeePage/NoticeEmployeePage"),
+);
 
 const authRoutes: RouteObject[] = [
   {
