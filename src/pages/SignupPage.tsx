@@ -61,11 +61,10 @@ export default function SignupPage() {
       setFormData((prev) => ({ ...prev, [field]: e.target.value }));
 
       if (field === "email") {
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value);
         setErrors((prev) => ({
           ...prev,
-          email: e.target.value.includes("@")
-            ? undefined
-            : "올바른 이메일 형식이 아닙니다.",
+          email: isValidEmail ? undefined : "올바른 이메일 형식이 아닙니다.",
         }));
       }
       if (field === "password") {
@@ -112,6 +111,14 @@ export default function SignupPage() {
 
         setUserAndToken(user, token);
 
+        setFormData({
+          email: "",
+          password: "",
+          confirmPassword: "",
+          userType: "employee",
+        });
+        setErrors({});
+
         navigate(
           user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT,
         );
@@ -130,14 +137,6 @@ export default function SignupPage() {
       //Alert 사용시
       // setAlertMessage(message ?? "회원가입 실패! 다시 시도해주세요.");
       // setNextRoute(null);
-    } finally {
-      setFormData({
-        email: "",
-        password: "",
-        confirmPassword: "",
-        userType: "employee",
-      });
-      setErrors({});
     }
   };
 
