@@ -15,6 +15,8 @@ export interface ModalOptions {
   buttons?: ModalButton[];
   onClose?: () => void;
   onConfirm?: () => void;
+  confirmText?: string;
+  cancelText?: string;
 }
 
 interface ModalState {

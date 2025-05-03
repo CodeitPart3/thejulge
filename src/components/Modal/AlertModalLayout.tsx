@@ -1,6 +1,7 @@
 import Button from "../Button";
 
 import { Check, Notice } from "@/assets/icon";
+import { useModalStore } from "@/store/useModalStore";
 
 interface ModalButton {
   label: string;
@@ -9,10 +10,10 @@ interface ModalButton {
 }
 
 interface Props {
+  type: "alert" | "message";
   iconType?: "check" | "warning" | "none";
   message: string;
   button: ModalButton;
-  onClose: () => void;
 }
 
 const ICONS = {
@@ -21,31 +22,49 @@ const ICONS = {
 };
 
 export default function AlertModalLayout({
+  type,
   iconType = "none",
   message,
   button,
-  onClose,
 }: Props) {
   const Icon = iconType !== "none" ? ICONS[iconType] : null;
-
+  const { closeModal } = useModalStore();
   return (
     <div
-      className="bg-white p-7 rounded-lg text-center w-[18.625rem] h-[11.5rem] flex flex-col justify-between items-center"
+      className={`
+        bg-white rounded-lg text-center relative
+        ${
+          type === "message"
+            ? "w-[20.625rem] h-[13.75rem] md:w-[33.75rem] md:h-[15.625rem]"
+            : "w-[18.625rem] h-[11.5rem] md:w-[18.625rem] md:h-[11.5rem]"
+        }
+        p-6 flex flex-col justify-center items-center
+      `}
       onClick={(e) => e.stopPropagation()}
     >
-      {Icon && <Icon className="w-6 h-6 mb-3" />}
-      <p className="text-base text-black font-normal mb-5">{message}</p>
-      <Button
-        variant={button.style}
-        onClick={() => {
-          button.onClick();
-          onClose();
-        }}
-        textSize="sm"
-        className="py-2 px-4 cursor-pointer"
+      {Icon && <Icon className="w-6 h-6 mb-6 mx-auto" />}{" "}
+      <p className="text-gray-900 text-base md:text-lg mb-[1rem]">{message}</p>
+      <div
+        className={
+          type === "message"
+            ? "absolute bottom-6 right-6 md:right-6 md:bottom-6 mx-auto md:mx-0"
+            : ""
+        }
       >
-        {button.label}
-      </Button>
+        <div>
+          <Button
+            variant={type === "message" ? "primary" : "white"}
+            onClick={() => {
+              button.onClick?.();
+              closeModal();
+            }}
+            textSize="md"
+            className="w-[5rem] h-[2.375rem] cursor-pointer"
+          >
+            {button.label}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

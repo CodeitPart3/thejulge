@@ -1,4 +1,12 @@
+import { Check, Notice } from "@/assets/icon";
+
+const ICONS = {
+  check: Check,
+  warning: Notice,
+};
+
 interface ConfirmModalLayoutProps {
+  iconType?: "check" | "warning" | "none";
   message: string;
   onClose: () => void;
   onConfirm: () => void;
@@ -7,27 +15,31 @@ interface ConfirmModalLayoutProps {
 }
 
 export default function ConfirmModalLayout({
+  iconType = "none",
   message,
   onClose,
   onConfirm,
   confirmText = "예",
   cancelText = "아니오",
 }: ConfirmModalLayoutProps) {
+  const Icon = iconType !== "none" ? ICONS[iconType] : null;
+
   return (
-    <div className="w-[18.625rem] md:w-[18.625rem] bg-white rounded-lg p-6 text-center">
+    <div className="w-[18.625rem] md:w-[18.625rem] h-[11.5rem] bg-white rounded-lg p-6 text-center flex flex-col justify-center items-center">
+      {Icon && <Icon className="w-6 h-6 mb-3" />}
       <p className="text-gray-900 text-base md:text-lg font-normal mb-6">
         {message}
       </p>
       <div className="flex justify-end gap-3">
         <button
           onClick={onClose}
-          className="w-[7.5rem] h-[3rem] border border-red-500 text-red-500 rounded"
+          className="w-[5rem] h-[2.375rem] border border-red-500 text-red-500 rounded-md cursor-pointer"
         >
           {cancelText}
         </button>
         <button
           onClick={onConfirm}
-          className="w-[7.5rem] h-[3rem] bg-red-500 text-white rounded"
+          className="w-[5rem] h-[2.375rem] bg-red-500 text-white rounded-md cursor-pointer"
         >
           {confirmText}
         </button>
