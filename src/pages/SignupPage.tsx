@@ -96,11 +96,11 @@ export default function SignupPage() {
   return (
     <div className="w-full">
       <Link to={ROUTES.NOTICE.ROOT}>
-        <Logo className="mx-auto mb-2 h-[45px] w-[248px]" />
+        <Logo className="mx-auto mb-2 h-[2.8125rem] w-[15.5rem]" />
       </Link>
 
       <form
-        className="mt-[40px] mx-auto flex max-w-sm flex-col gap-[28px]"
+        className="mt-[2.5rem] mx-auto flex max-w-sm flex-col gap-[1.75rem]"
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
@@ -152,7 +152,7 @@ export default function SignupPage() {
                 setFormData((prev) => ({ ...prev, userType: "employee" }))
               }
               className={clsx(
-                "flex items-center justify-center gap-[9px] rounded-[30px] border px-[41px] py-[13px]",
+                "flex items-center justify-center gap-[0.5625rem] rounded-[1.875rem] border px-[2.5625rem] py-[0.8125rem]",
                 formData.userType === "employee"
                   ? "border-primary"
                   : "border-gray-30",
@@ -179,7 +179,7 @@ export default function SignupPage() {
                 setFormData((prev) => ({ ...prev, userType: "employer" }))
               }
               className={clsx(
-                "flex items-center justify-center gap-[9px] rounded-[30px] border px-[41px] py-[13px]",
+                "flex items-center justify-center gap-[0.5625rem] rounded-[1.875rem] border px-[2.5625rem] py-[0.8125rem]",
                 formData.userType === "employer"
                   ? "border-primary"
                   : "border-gray-30",
@@ -203,7 +203,7 @@ export default function SignupPage() {
         <Button
           type="button"
           fullWidth
-          className="py-[14px]"
+          className="py-[0.875rem]"
           onClick={handleSubmit}
           disabled={!isFormValid}
         >
@@ -211,7 +211,7 @@ export default function SignupPage() {
         </Button>
       </form>
 
-      <p className="mt-[16px] text-center text-sm">
+      <p className="mt-[1rem] text-center text-sm">
         이미 가입하셨나요?{" "}
         <Link to={ROUTES.AUTH.SIGNIN} className="text-[#5534DA] underline">
           로그인하기

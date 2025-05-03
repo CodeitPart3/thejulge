@@ -78,11 +78,11 @@ export default function SigninPage() {
   return (
     <div className="w-full">
       <Link to={ROUTES.NOTICE.ROOT}>
-        <Logo className="mx-auto mb-2 h-[45px] w-[248px]" />
+        <Logo className="mx-auto mb-2 h-[2.8125rem] w-[15.5rem]" />
       </Link>
 
       <form
-        className="mt-[40px] mx-auto flex max-w-sm flex-col gap-[28px]"
+        className="mt-[2.5rem] mx-auto flex max-w-sm flex-col gap-[1.75rem]"
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
@@ -113,7 +113,7 @@ export default function SigninPage() {
         <Button
           type="button"
           fullWidth
-          className="py-[14px]"
+          className="py-[0.875rem]"
           onClick={handleSubmit}
           disabled={!isFormValid}
         >
@@ -121,26 +121,12 @@ export default function SigninPage() {
         </Button>
       </form>
 
-      <p className="mt-[16px] text-center text-sm">
+      <p className="mt-[1rem] text-center text-sm">
         회원이 아니신가요?{" "}
         <Link to={ROUTES.AUTH.SIGNUP} className="text-[#5534DA] underline">
           회원가입하기
         </Link>
       </p>
-
-      {/* 임시 Alert */}
-      {/* {alertMessage && (
-        <AlertModal
-          message={alertMessage}
-          onClose={() => {
-            setAlertMessage("");
-            if (nextRoute) {
-              navigate(nextRoute);
-              setNextRoute(null);
-            }
-          }}
-        />
-      )} */}
     </div>
   );
 }
