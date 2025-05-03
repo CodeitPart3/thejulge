@@ -18,8 +18,8 @@ const ROUTES = {
     REGISTER: "/notice/register",
     EDIT: "/notice/edit",
     NOTICE_ID: {
-      EMPLOYER: `/notice/:noticeId/employer`,
-      EMPLOYEE: `/notice/:noticeId/employee`,
+      EMPLOYER: `/notice/:shopId/:noticeId/employer`,
+      EMPLOYEE: `/notice/:shopId/:noticeId/employee`,
     },
   },
 } as const;
