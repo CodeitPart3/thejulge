@@ -31,7 +31,7 @@ export default function ProfileRegisterPage() {
   const { user } = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<FormType>({
     name: "",
     phone: "",
     address: undefined,
@@ -53,7 +53,7 @@ export default function ProfileRegisterPage() {
 
     if (isSubmitting) return;
 
-    const requiredFields: Array<keyof typeof form> = ["name", "phone"];
+    const requiredFields: Array<keyof FormType> = ["name", "phone"];
 
     const missingField = requiredFields.find((key) => {
       const value = form[key];
@@ -106,6 +106,7 @@ export default function ProfileRegisterPage() {
           fullWidth
           value={form.name}
           onChange={(e) => handleChange("name", e.target.value)}
+          maxLength={20}
         />
         <TextField.Input
           label="연락처*"
@@ -113,8 +114,8 @@ export default function ProfileRegisterPage() {
           fullWidth
           value={form.phone}
           onChange={(e) => {
-            autoHyphenFormatter(e.target);
-            handleChange("phone", e.target.value);
+            const formatted = autoHyphenFormatter(e.target.value);
+            handleChange("phone", formatted);
           }}
         />
         <Select
