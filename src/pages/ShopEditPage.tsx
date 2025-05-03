@@ -14,19 +14,10 @@ import { Camera, Close } from "@/assets/icon";
 import Button from "@/components/Button";
 import Select from "@/components/Select";
 import TextField from "@/components/TextField";
+import { ROUTES } from "@/constants/router";
+import { CATEGORY_OPTIONS } from "@/constants/shopCategory";
 import { useUserStore } from "@/hooks/useUserStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
-
-const CATEGORY_OPTIONS = [
-  { label: "한식", value: "한식" },
-  { label: "중식", value: "중식" },
-  { label: "일식", value: "일식" },
-  { label: "양식", value: "양식" },
-  { label: "분식", value: "분식" },
-  { label: "카페", value: "카페" },
-  { label: "편의점", value: "편의점" },
-  { label: "기타", value: "기타" },
-];
 
 type FormType = {
   name: string;
@@ -68,16 +59,24 @@ export default function ShopRegisterPage() {
     async function fetchShop() {
       if (!shopId) return;
       const res = await getShop(shopId);
-      const shop = res.data.item;
+      const {
+        name,
+        category,
+        address1,
+        address2,
+        originalHourlyPay,
+        description,
+        imageUrl,
+      } = res.data.item;
       setForm({
-        name: shop.name,
-        category: shop.category,
-        address1: shop.address1,
-        address2: shop.address2,
-        originalHourlyPay: numberCommaFormatter(shop.originalHourlyPay),
-        description: shop.description,
+        name,
+        category,
+        address1,
+        address2,
+        originalHourlyPay: numberCommaFormatter(originalHourlyPay),
+        description,
       });
-      if (shop.imageUrl) setImagePreview(shop.imageUrl);
+      if (imageUrl) setImagePreview(imageUrl);
     }
     fetchShop();
   }, [shopId]);
@@ -95,19 +94,15 @@ export default function ShopRegisterPage() {
 
     setImageFile(file);
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        setImagePreview(reader.result);
-      }
-    };
-    reader.readAsDataURL(file);
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    const blobUrl = URL.createObjectURL(file);
+    setImagePreview(blobUrl);
   };
 
   const handleSubmit = async () => {
     if (isSubmitting || !shopId) return;
 
-    const requiredFields: Array<keyof typeof form> = [
+    const requiredFields: Array<keyof FormType> = [
       "name",
       "category",
       "address1",
@@ -128,28 +123,28 @@ export default function ShopRegisterPage() {
       return;
     }
 
-    try {
-      setIsSubmitting(true);
+    setIsSubmitting(true);
+    let imageUrl = imagePreview || "";
 
-      let imageUrl = imagePreview || "";
+    const payload = {
+      name: form.name.trim(),
+      category: form.category,
+      address1: form.address1,
+      address2: form.address2.trim(),
+      originalHourlyPay: hourlyPay,
+      description: form.description.trim(),
+      imageUrl,
+    };
+
+    try {
       if (imageFile) {
         const presignedURL = await postImage(imageFile.name);
         await putImage(presignedURL, imageFile);
         imageUrl = getPublicURL(presignedURL);
+        payload.imageUrl = imageUrl;
       }
-
-      const payload = {
-        name: form.name.trim(),
-        category: form.category,
-        address1: form.address1,
-        address2: form.address2.trim(),
-        originalHourlyPay: hourlyPay,
-        description: form.description.trim(),
-        imageUrl,
-      };
-
       await putShop(shopId, payload);
-      navigate("/shop");
+      navigate(ROUTES.SHOP.ROOT);
     } finally {
       setIsSubmitting(false);
     }
