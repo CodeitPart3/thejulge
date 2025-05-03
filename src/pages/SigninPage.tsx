@@ -9,16 +9,15 @@ import Button from "@/components/Button";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { useUserStore } from "@/hooks/useUserStore";
+import { useModalStore } from "@/store/useModalStore";
 
 export default function SigninPage() {
   const navigate = useNavigate();
   const { setUserAndToken } = useUserStore();
+  const { openModal, closeModal } = useModalStore();
 
   const { formData, errors, isFormValid, handleChange, resetForm } =
     useAuthForm("signin");
-  //Alert 사용시
-  // const [alertMessage, setAlertMessage] = useState("");
-  // const [nextRoute, setNextRoute] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     try {
@@ -34,24 +33,45 @@ export default function SigninPage() {
 
       resetForm();
 
-      navigate(
-        user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT,
-      );
+      const route =
+        user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT;
+
+      openModal({
+        type: "message",
+        message: "로그인에 성공했습니다!",
+        iconType: "none",
+        buttons: [
+          {
+            label: "확인",
+            style: "primary",
+            onClick: () => {
+              closeModal();
+            },
+          },
+        ],
+        onClose: () => {
+          navigate(route);
+        },
+      });
     } catch (error: unknown) {
       const axiosError = error as AxiosError<{ message: string }>;
-      const status = axiosError.response?.status;
+      const message =
+        axiosError.response?.data?.message ?? "로그인 실패! 다시 시도해주세요.";
 
-      if (status === 404) {
-        alert("비밀번호가 일치하지 않습니다.");
-        //Alert 사용시
-        // setAlertMessage("비밀번호가 일치하지 않습니다.");
-        // setNextRoute(null);
-      } else {
-        alert("로그인 실패! 다시 시도해주세요.");
-        //Alert 사용시
-        // setAlertMessage("로그인 실패! 다시 시도해주세요.");
-        // setNextRoute(null);
-      }
+      openModal({
+        type: "message",
+        message: message,
+        iconType: "none",
+        buttons: [
+          {
+            label: "확인",
+            style: "primary",
+            onClick: () => {
+              closeModal();
+            },
+          },
+        ],
+      });
     }
   };
 

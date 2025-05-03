@@ -12,10 +12,12 @@ import Button from "@/components/Button";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { useUserStore } from "@/hooks/useUserStore";
+import { useModalStore } from "@/store/useModalStore";
 
 export default function SignupPage() {
   const navigate = useNavigate();
   const { setUserAndToken } = useUserStore();
+  const { openModal, closeModal } = useModalStore();
 
   const {
     formData,
@@ -25,9 +27,6 @@ export default function SignupPage() {
     setFormData,
     resetForm,
   } = useAuthForm("signup");
-  //Alert 사용시
-  // const [alertMessage, setAlertMessage] = useState("");
-  // const [nextRoute, setNextRoute] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     try {
@@ -50,22 +49,47 @@ export default function SignupPage() {
 
         resetForm();
 
-        navigate(
-          user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT,
-        );
-        //Alert 사용
-        // setAlertMessage("가입이 완료되었습니다!");
-        // setNextRoute(user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT);
+        const route =
+          user.type === "employer" ? ROUTES.SHOP.ROOT : ROUTES.PROFILE.ROOT;
+
+        openModal({
+          type: "message",
+          message: "가입이 완료되었습니다!",
+          iconType: "none",
+          buttons: [
+            {
+              label: "확인",
+              style: "primary",
+              onClick: () => {
+                closeModal();
+              },
+            },
+          ],
+          onClose: () => {
+            navigate(route);
+          },
+        });
       }
     } catch (error: unknown) {
       const axiosError = error as AxiosError<{ message: string }>;
       const message =
-        axiosError.response?.data?.message ?? "알 수 없는 에러 발생";
+        axiosError.response?.data?.message ??
+        "회원가입 실패! 다시 시도해주세요.";
 
-      console.log(message);
-      //Alert 사용시
-      // setAlertMessage(message ?? "회원가입 실패! 다시 시도해주세요.");
-      // setNextRoute(null);
+      openModal({
+        type: "message",
+        message,
+        iconType: "none",
+        buttons: [
+          {
+            label: "확인",
+            style: "primary",
+            onClick: () => {
+              closeModal();
+            },
+          },
+        ],
+      });
     }
   };
 
@@ -193,20 +217,6 @@ export default function SignupPage() {
           로그인하기
         </Link>
       </p>
-
-      {/* 임시 Alert */}
-      {/* {alertMessage && (
-        <AlertModal
-          message={alertMessage}
-          onClose={() => {
-            setAlertMessage("");
-            if (nextRoute) {
-              navigate(nextRoute);
-              setNextRoute(null);
-            }
-          }}
-        />
-      )} */}
     </div>
   );
 }
