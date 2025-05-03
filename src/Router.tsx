@@ -2,10 +2,11 @@ import { lazy } from "react";
 
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
-import ShopInfoPostCardSkeleton from "./pages/NoticeEmployeePage/components/ShopInfoPostCardSkeleton";
 import noticeEmployeeLoader from "./pages/NoticeEmployeePage/loader/noticeEmployeeLoader";
+import noticeEmployerLoader from "./pages/NoticeEmployerPage/loader/noticeEmployerLoader";
 import profileLoader from "./pages/ProfilePage/loader/profileLoader";
 
+import NoticeDetailSkeleton from "./components/NoticeDetailSkeleton";
 import { ROUTES } from "./constants/router";
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
@@ -24,7 +25,9 @@ const ShopEditPage = lazy(() => import("@/pages/ShopEditPage"));
 const NoticeListPage = lazy(() => import("@/pages/NoticeListPage"));
 const NoticeRegisterPage = lazy(() => import("@/pages/NoticeRegisterPage"));
 const NoticeEditPage = lazy(() => import("@/pages/NoticeEditPage"));
-const NoticeEmployerPage = lazy(() => import("@/pages/NoticeEmployerPage"));
+const NoticeEmployerPage = lazy(
+  () => import("@/pages/NoticeEmployerPage/NoticeEmployerPage"),
+);
 const NoticeEmployeePage = lazy(
   () => import("@/pages/NoticeEmployeePage/NoticeEmployeePage"),
 );
@@ -88,12 +91,14 @@ const noticeRoutes: RouteObject[] = [
   {
     path: ROUTES.NOTICE.NOTICE_ID.EMPLOYER,
     Component: NoticeEmployerPage,
+    loader: noticeEmployerLoader,
+    hydrateFallbackElement: <NoticeDetailSkeleton />,
   },
   {
     path: ROUTES.NOTICE.NOTICE_ID.EMPLOYEE,
     Component: NoticeEmployeePage,
     loader: noticeEmployeeLoader,
-    hydrateFallbackElement: <ShopInfoPostCardSkeleton />,
+    hydrateFallbackElement: <NoticeDetailSkeleton />,
   },
 ];
 

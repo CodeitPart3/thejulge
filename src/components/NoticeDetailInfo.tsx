@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import {
   postApplication,
   putApplication,
@@ -5,6 +7,7 @@ import {
 import Button from "@/components/Button";
 import PostCard from "@/components/Post/PostCard";
 import { NoticeItem } from "@/types/notice";
+import { UserType } from "@/types/user";
 import { cn } from "@/utils/cn";
 import { isPastDate } from "@/utils/datetime";
 
@@ -12,13 +15,17 @@ interface NoticeDetailInfoProps {
   noticeInfo: NoticeItem;
   shopId: string;
   noticeId: string;
+  type?: UserType;
 }
 
 function NoticeDetailInfo({
   shopId,
   noticeId,
   noticeInfo,
+  type = "employee",
 }: NoticeDetailInfoProps) {
+  const navigate = useNavigate();
+
   const {
     hourlyPay,
     startsAt,
@@ -64,6 +71,8 @@ function NoticeDetailInfo({
     }
   };
 
+  const moveToEditNoticePage = () => navigate("/notice/edit");
+
   return (
     <>
       <div className="flex flex-col gap-2 mb-1 md:mb-0">
@@ -84,27 +93,38 @@ function NoticeDetailInfo({
           workhour={workhour}
           closed={closed}
           buttons={
-            <Button
-              disabled={isDisabledNotice}
-              className={cn("py-[14px]", {
-                "cursor-pointer": !isDisabledNotice,
-              })}
-              fullWidth
-              variant={applicationStatus === "pending" ? "white" : "primary"}
-              onClick={
-                applicationStatus === "pending"
-                  ? cancelApplication
-                  : applyNotice
-              }
-            >
-              {applicationStatus === "pending" && "취소하기"}
-              {applicationStatus === "accepted" && "승낙"}
-              {applicationStatus === "rejected" && "지원 거절"}
-              {applicationStatus === "canceled" &&
-                "이미 취소한 지원 공고 입니다."}
-              {!applicationStatus && isDisabledNotice && "신청 불가"}
-              {!applicationStatus && !closed && !isPast && "지원하기"}
-            </Button>
+            type === "employee" ? (
+              <Button
+                disabled={isDisabledNotice}
+                className={cn("py-[14px]", {
+                  "cursor-pointer": !isDisabledNotice,
+                })}
+                fullWidth
+                variant={applicationStatus === "pending" ? "white" : "primary"}
+                onClick={
+                  applicationStatus === "pending"
+                    ? cancelApplication
+                    : applyNotice
+                }
+              >
+                {applicationStatus === "pending" && "취소하기"}
+                {applicationStatus === "accepted" && "승낙"}
+                {applicationStatus === "rejected" && "지원 거절"}
+                {applicationStatus === "canceled" &&
+                  "이미 취소한 지원 공고 입니다."}
+                {!applicationStatus && isDisabledNotice && "신청 불가"}
+                {!applicationStatus && !closed && !isPast && "지원하기"}
+              </Button>
+            ) : (
+              <Button
+                fullWidth
+                variant="white"
+                className={"py-[14px]"}
+                onClick={moveToEditNoticePage}
+              >
+                공고 편집하기
+              </Button>
+            )
           }
         />
       )}
