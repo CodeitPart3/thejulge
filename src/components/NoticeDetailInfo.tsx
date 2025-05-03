@@ -6,7 +6,9 @@ import {
 } from "@/apis/services/applicationService";
 import Button from "@/components/Button";
 import PostCard from "@/components/Post/PostCard";
+import { useToast } from "@/hooks/useToast";
 import { User } from "@/hooks/useUserStore";
+import { useModalStore } from "@/store/useModalStore";
 import { NoticeItem } from "@/types/notice";
 import { cn } from "@/utils/cn";
 import { isPastDate } from "@/utils/datetime";
@@ -26,6 +28,8 @@ function NoticeDetailInfo({
 }: NoticeDetailInfoProps) {
   const navigate = useNavigate();
   const { revalidate } = useRevalidator();
+  const { openModal } = useModalStore();
+  const { showToast } = useToast();
 
   const {
     hourlyPay,
@@ -57,24 +61,32 @@ function NoticeDetailInfo({
     const result = await postApplication(shopId, noticeId);
 
     if (result.status === 201) {
-      // TODO: Modal 병합 후 모달로 변경 예정
-      alert("신청이 완료 되었습니다.");
       revalidate();
+      showToast("신청 완료!");
     }
   };
 
-  const cancelApplication = async () => {
-    const result = await putApplication(
-      shopId,
-      noticeId,
-      applicationId ?? "",
-      "canceled",
-    );
+  const cancelApplication = () => {
+    openModal({
+      type: "confirm",
+      confirmText: "취소하기",
+      cancelText: "아니오",
+      iconType: "warning",
+      message: "신청을 취소하시겠어요?",
+      onConfirm: async () => {
+        const result = await putApplication(
+          shopId,
+          noticeId,
+          applicationId ?? "",
+          "canceled",
+        );
 
-    if (result.status === 200) {
-      // TODO: Modal 병합 후 모달로 변경 예정
-      alert("취소가 완료 되었습니다.");
-    }
+        if (result.status === 200) {
+          showToast("취소가 완료 되었습니다.");
+          revalidate();
+        }
+      },
+    });
   };
 
   const moveToEditNoticePage = () => {
