@@ -9,6 +9,7 @@ import { postNotice } from "@/apis/services/noticeService";
 import { Close } from "@/assets/icon";
 import Button from "@/components/Button";
 import TextField from "@/components/TextField";
+import { ROUTES } from "@/constants/router";
 import { useUserStore } from "@/hooks/useUserStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
 
@@ -38,10 +39,7 @@ export default function NoticeRegisterPage() {
     description: "",
   });
 
-  const handleChange = (
-    key: keyof typeof form,
-    value: string | null | Date,
-  ) => {
+  const handleChange = (key: keyof FormType, value: string | null | Date) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -88,18 +86,18 @@ export default function NoticeRegisterPage() {
       return;
     }
 
+    setIsSubmitting(true);
+
+    const payload = {
+      hourlyPay: hourlyPay,
+      startsAt: form.startsAt!.toISOString(),
+      workhour: workhour,
+      description: form.description.trim(),
+    };
+
     try {
-      setIsSubmitting(true);
-
-      const payload = {
-        hourlyPay: hourlyPay,
-        startsAt: form.startsAt!.toISOString(),
-        workhour: workhour,
-        description: form.description.trim(),
-      };
-
       await postNotice(user.shopId, payload);
-      navigate("/shop");
+      navigate(ROUTES.SHOP.ROOT);
     } finally {
       setIsSubmitting(false);
     }
@@ -170,6 +168,7 @@ export default function NoticeRegisterPage() {
           placeholder="입력"
           fullWidth
           rows={4}
+          maxLength={500}
           value={form.description}
           onChange={(e) => handleChange("description", e.target.value)}
         />
