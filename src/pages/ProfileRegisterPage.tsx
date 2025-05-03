@@ -9,6 +9,7 @@ import { Close } from "@/assets/icon";
 import Button from "@/components/Button";
 import Select from "@/components/Select";
 import TextField from "@/components/TextField";
+import { ROUTES } from "@/constants/router";
 import { useUserStore } from "@/hooks/useUserStore";
 import { autoHyphenFormatter } from "@/utils/phoneNumber";
 
@@ -38,10 +39,7 @@ export default function ProfileRegisterPage() {
     bio: "",
   });
 
-  const handleChange = (
-    key: keyof typeof form,
-    value: string | SeoulDistrict,
-  ) => {
+  const handleChange = (key: keyof FormType, value: string | SeoulDistrict) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -65,18 +63,17 @@ export default function ProfileRegisterPage() {
       return;
     }
 
+    setIsSubmitting(true);
+    const payload = {
+      name: form.name.trim(),
+      phone: form.phone,
+      address: form.address,
+      bio: form.bio.trim(),
+    };
+
     try {
-      setIsSubmitting(true);
-
-      const payload = {
-        name: form.name.trim(),
-        phone: form.phone,
-        address: form.address,
-        bio: form.bio.trim(),
-      };
-
       await putUser(user.id, payload);
-      navigate("/profile");
+      navigate(ROUTES.PROFILE.ROOT);
     } finally {
       setIsSubmitting(false);
     }
