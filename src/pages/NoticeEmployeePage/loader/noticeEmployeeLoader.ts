@@ -8,10 +8,8 @@ const noticeEmployeeLoader: LoaderFunction = async ({ params }) => {
     noticeId: string;
   };
 
-  const [noticeInfo, recentNotices] = await Promise.all([
-    loadNotice({ shopId, noticeId }),
-    loadRecentNotices(),
-  ]);
+  const [noticeInfo] = await Promise.all([loadNotice({ shopId, noticeId })]);
+  const recentNotices = loadRecentNotices(noticeId);
 
   return { noticeInfo, recentNotices };
 };

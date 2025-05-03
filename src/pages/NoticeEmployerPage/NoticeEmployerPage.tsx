@@ -5,6 +5,7 @@ import NoticeDetailInfo from "../../components/NoticeDetailInfo";
 import NoticeApplicationTableContainer from "./components/NoticeApplicationTableContainer";
 
 import PostList, { PostData } from "@/components/Post/PostList";
+import useUpdateRecentNotices from "@/hooks/useUpdateRecentNotices";
 import { useUserStore } from "@/hooks/useUserStore";
 import { NoticeItem } from "@/types/notice";
 
@@ -20,6 +21,11 @@ export default function NoticeEmployerPage() {
   const { user } = useUserStore();
 
   const isMyShop = user?.shopId === shopId;
+
+  useUpdateRecentNotices({
+    noticeInfo,
+    link: `/notice/${shopId}/${noticeId}/employer`,
+  });
 
   return (
     <>
@@ -40,13 +46,19 @@ export default function NoticeEmployerPage() {
           <h2 className="text-[1.625rem] font-bold">
             {isMyShop ? "신청자 목록" : "최근에 본 공고"}
           </h2>
-          {isMyShop ? (
+          {isMyShop && (
             <NoticeApplicationTableContainer
               shopId={shopId}
               noticeId={noticeId}
             />
-          ) : (
+          )}
+
+          {!isMyShop && recentNotices.length > 0 ? (
             <PostList posts={recentNotices} />
+          ) : (
+            <div className="flex items-center justify-center w-full h-[20rem] text-black">
+              최근에 본 공고가 없습니다.
+            </div>
           )}
         </div>
       </section>

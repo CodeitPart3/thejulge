@@ -1,5 +1,8 @@
 import { getShopApplications } from "../services/applicationService";
-import { getNotice, getNotices } from "../services/noticeService";
+import { getNotice } from "../services/noticeService";
+
+import { PostData } from "@/components/Post/PostList";
+import { getLocalStorageValue } from "@/utils/localStorage";
 
 interface LoadNoticeParams {
   shopId: string;
@@ -14,25 +17,17 @@ export const loadNotice = async ({ shopId, noticeId }: LoadNoticeParams) => {
   }
 };
 
-export const loadRecentNotices = async () => {
-  const recentNoticesResult = await getNotices({ sort: "hour", limit: 6 });
+const MAX_VISIBLE_RECENT_NOTICES = 6;
 
-  if (recentNoticesResult.status === 200) {
-    const recentNotices = recentNoticesResult.data.items.map(({ item }) => ({
-      id: item.id,
-      name: item.shop?.item.name ?? "",
-      imageUrl: item.shop?.item.imageUrl ?? "",
-      address1: item.shop?.item.address1 ?? "",
-      originalHourlyPay: item.shop?.item.originalHourlyPay ?? 0,
-      link: `/notice/${item.shop?.item.id}/${item.id}/employee`,
-      hourlyPay: item.hourlyPay,
-      startsAt: item.startsAt,
-      workhour: item.workhour,
-      closed: item.closed,
-    }));
+export const loadRecentNotices = async (noticeId: string) => {
+  const allRecentNotices =
+    getLocalStorageValue<PostData[]>("recentNotices") ?? [];
 
-    return recentNotices;
-  }
+  const recentNotices = allRecentNotices
+    .filter(({ id }) => id !== noticeId)
+    .slice(0, MAX_VISIBLE_RECENT_NOTICES);
+
+  return recentNotices;
 };
 
 interface LoadNoticeApplicationsParams {
