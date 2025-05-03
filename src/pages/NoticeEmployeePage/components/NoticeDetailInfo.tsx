@@ -100,7 +100,8 @@ function NoticeDetailInfo({
               {applicationStatus === "pending" && "취소하기"}
               {applicationStatus === "accepted" && "승낙"}
               {applicationStatus === "rejected" && "지원 거절"}
-              {applicationStatus === "canceled" && "지원 취소"}
+              {applicationStatus === "canceled" &&
+                "이미 취소한 지원 공고 입니다."}
               {!applicationStatus && isDisabledNotice && "신청 불가"}
               {!applicationStatus && !closed && !isPast && "지원하기"}
             </Button>
