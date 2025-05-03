@@ -1,6 +1,6 @@
 import Post from "./Post";
 
-export interface PostData {
+interface PostData {
   id: string;
   name: string;
   imageUrl: string;
