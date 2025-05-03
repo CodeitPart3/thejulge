@@ -12,10 +12,23 @@ import TextField from "@/components/TextField";
 import { useUserStore } from "@/hooks/useUserStore";
 import { autoHyphenFormatter } from "@/utils/phoneNumber";
 
+type FormType = {
+  name: string;
+  phone: string;
+  address: SeoulDistrict | undefined;
+  bio: string;
+};
+
+const FIELD_LABELS: Record<keyof FormType, string> = {
+  name: "이름",
+  phone: "연락처",
+  address: "선호 지역",
+  bio: "소개",
+};
+
 export default function ProfileRegisterPage() {
   const navigate = useNavigate();
-  const { user, token, isLoggedIn } = useUserStore();
-  console.log("🧪 상태 확인:", { user, token, isLoggedIn });
+  const { user } = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
@@ -48,7 +61,7 @@ export default function ProfileRegisterPage() {
     });
 
     if (missingField) {
-      alert("모든 필수 항목을 입력해 주세요.");
+      alert(`${FIELD_LABELS[missingField]}을(를) 입력해 주세요.`);
       return;
     }
 
@@ -70,7 +83,13 @@ export default function ProfileRegisterPage() {
   };
 
   return (
-    <div className="w-full max-w-[964px] mx-auto px-4 py-12">
+    <form
+      className="w-full max-w-[964px] mx-auto px-4 py-12"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+    >
       <div className="flex justify-between items-center mb-8">
         <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
           내 프로필
@@ -123,11 +142,11 @@ export default function ProfileRegisterPage() {
           textSize="md"
           className="sm:w-[350px] w-full px-34 py-3.5"
           disabled={isSubmitting}
-          onClick={handleSubmit}
+          type="submit"
         >
           등록하기
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
