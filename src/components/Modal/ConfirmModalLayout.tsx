@@ -2,12 +2,16 @@ interface ConfirmModalLayoutProps {
   message: string;
   onClose: () => void;
   onConfirm: () => void;
+  confirmText?: string;
+  cancelText?: string;
 }
 
 export default function ConfirmModalLayout({
   message,
   onClose,
   onConfirm,
+  confirmText = "예",
+  cancelText = "아니오",
 }: ConfirmModalLayoutProps) {
   return (
     <div className="w-[18.625rem] md:w-[18.625rem] bg-white rounded-lg p-6 text-center">
@@ -19,13 +23,13 @@ export default function ConfirmModalLayout({
           onClick={onClose}
           className="w-[7.5rem] h-[3rem] border border-red-500 text-red-500 rounded"
         >
-          아니오
+          {cancelText}
         </button>
         <button
           onClick={onConfirm}
           className="w-[7.5rem] h-[3rem] bg-red-500 text-white rounded"
         >
-          예
+          {confirmText}
         </button>
       </div>
     </div>
