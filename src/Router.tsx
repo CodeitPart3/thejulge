@@ -48,6 +48,7 @@ const shopRoutes: RouteObject[] = [
   {
     path: ROUTES.SHOP.REGISTER,
     Component: ShopRegisterPage,
+    handle: { hideFooter: true },
   },
   {
     path: ROUTES.SHOP.EDIT,

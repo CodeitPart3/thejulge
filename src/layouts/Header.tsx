@@ -1,26 +1,30 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import ActiveAlarmIcon from "../assets/icon/active.svg";
 import InActiveAlarmIcon from "../assets/icon/inactive.svg";
 import SearchIcon from "../assets/icon/search.svg";
 import Logo from "../assets/logo/thejulge.svg";
+
+import { useUserStore } from "@/hooks/useUserStore";
+
 interface HeaderProps {
-  isLoggedIn: boolean;
-  userNavLabel?: "내 가게" | "내 프로필";
   hasAlarm?: boolean;
-  onLogout?: () => void;
   onToggleAlarm?: () => void;
 }
 
-export default function Header({
-  isLoggedIn,
-  userNavLabel,
-  hasAlarm,
-  onLogout,
-  onToggleAlarm,
-}: HeaderProps) {
-  const userPath = userNavLabel === "내 가게" ? "/shop" : "/profile";
+export default function Header({ hasAlarm, onToggleAlarm }: HeaderProps) {
+  const navigate = useNavigate();
+  const { user, isLoggedIn, clearUser } = useUserStore();
+
+  const userNavLabel = user?.type === "employer" ? "내 가게" : "내 프로필";
+  const userPath = user?.type === "employer" ? "/shop" : "/profile";
+
   const alarmIcon = hasAlarm ? ActiveAlarmIcon : InActiveAlarmIcon;
+
+  const handleLogout = () => {
+    clearUser();
+    navigate("/");
+  };
 
   return (
     <header className="w-full px-4 py-2">
@@ -47,7 +51,7 @@ export default function Header({
           {isLoggedIn ? (
             <>
               <Link to={userPath}>{userNavLabel}</Link>
-              <button onClick={onLogout} className="cursor-pointer">
+              <button onClick={handleLogout} className="cursor-pointer">
                 로그아웃
               </button>
               <button className="cursor-pointer" onClick={onToggleAlarm}>
@@ -72,7 +76,7 @@ export default function Header({
             {isLoggedIn ? (
               <>
                 <Link to={userPath}>{userNavLabel}</Link>
-                <button onClick={onLogout} className="cursor-pointer">
+                <button onClick={handleLogout} className="cursor-pointer">
                   로그아웃
                 </button>
                 <button className="cursor-pointer" onClick={onToggleAlarm}>
