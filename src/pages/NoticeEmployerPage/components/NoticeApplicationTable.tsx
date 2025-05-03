@@ -3,13 +3,27 @@ import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
 import StatusBadge from "@/components/StatusBadge";
 import Table from "@/components/Table";
+import { useToast } from "@/hooks/useToast";
+import { useModalStore } from "@/store/useModalStore";
 import { ApplicationItem, ApplicationStatus } from "@/types/application";
 
-const changeApplicationStatusSuccessMessageMap: {
-  [key in Exclude<ApplicationStatus, "pending" | "canceled">]: string;
+const applicationStatusMessageMap: {
+  [key in Exclude<ApplicationStatus, "pending" | "canceled">]: {
+    inquiry: string;
+    success: string;
+    iconType: "check" | "warning";
+  };
 } = {
-  accepted: "승인이 완료되었습니다.",
-  rejected: "거절이 완료되었습니다.",
+  accepted: {
+    inquiry: "신청을 승인하시겠어요?",
+    success: "승인 완료!",
+    iconType: "check",
+  },
+  rejected: {
+    inquiry: "신청을 거절하시겠어요?",
+    success: "거절했어요.",
+    iconType: "warning",
+  },
 };
 
 interface NoticeApplicationChangeStatusParams {
@@ -22,38 +36,48 @@ interface NoticeApplicationChangeStatusParams {
 interface NoticeApplicationTableProps {
   data: ApplicationItem[];
   totalCount: number;
-  pageLimit: number;
   itemCountPerPage?: number;
+  pageLimit?: number;
   refetch: () => void;
 }
 
 function NoticeApplicationTable({
   data,
   totalCount,
-  pageLimit,
   itemCountPerPage = 5,
+  pageLimit = 5,
   refetch,
 }: NoticeApplicationTableProps) {
+  const { showToast } = useToast();
+  const { openModal } = useModalStore();
+
   const changeApplicationStatus = async ({
     shopId,
     noticeId,
     applicationId,
     status,
   }: NoticeApplicationChangeStatusParams) => {
-    const changeApplicationResult = await putApplication(
-      shopId,
-      noticeId,
-      applicationId,
-      status,
-    );
+    const { iconType, inquiry, success } = applicationStatusMessageMap[status];
 
-    if (changeApplicationResult.status === 200) {
-      // TODO: 모달 병합 후 모달로 적용 예정
-      alert(changeApplicationStatusSuccessMessageMap[status]);
-      refetch();
-    }
+    openModal({
+      type: "confirm",
+      iconType: iconType,
+      message: inquiry,
+      onConfirm: async () => {
+        const changeApplicationResult = await putApplication(
+          shopId,
+          noticeId,
+          applicationId,
+          status,
+        );
+
+        if (changeApplicationResult.status === 200) {
+          showToast(success);
+          refetch();
+        }
+      },
+    });
   };
-
   return (
     <Table
       data={data}

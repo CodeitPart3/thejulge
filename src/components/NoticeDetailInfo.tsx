@@ -18,13 +18,15 @@ interface NoticeDetailInfoProps {
   shopId: string;
   noticeId: string;
   user?: User | null;
+  isEmployerPage?: boolean;
 }
 
 function NoticeDetailInfo({
   shopId,
   noticeId,
   noticeInfo,
-  user = null,
+  user,
+  isEmployerPage,
 }: NoticeDetailInfoProps) {
   const navigate = useNavigate();
   const { revalidate } = useRevalidator();
@@ -48,7 +50,7 @@ function NoticeDetailInfo({
     description: shopDescription,
   } = noticeInfo.shop!.item;
 
-  const applicationId = currentUserApplication?.item.id;
+  const applicationId = currentUserApplication?.item.id ?? "";
   const applicationStatus = currentUserApplication?.item.status;
   const isPast = isPastDate(startsAt, workhour);
   const isDisabledNotice =
@@ -77,7 +79,7 @@ function NoticeDetailInfo({
         const result = await putApplication(
           shopId,
           noticeId,
-          applicationId ?? "",
+          applicationId,
           "canceled",
         );
 
@@ -90,7 +92,7 @@ function NoticeDetailInfo({
   };
 
   const moveToEditNoticePage = () => {
-    if (user?.type === "employer") {
+    if (user) {
       navigate(`/notice/edit/${user.shopId}`);
     }
   };
@@ -115,12 +117,13 @@ function NoticeDetailInfo({
           workhour={workhour}
           closed={closed}
           buttons={
-            user?.type === "employer" ? (
+            isEmployerPage ? (
               <Button
                 fullWidth
                 variant="white"
                 className={"py-[14px]"}
                 onClick={moveToEditNoticePage}
+                disabled={user?.shopId !== shopId}
               >
                 공고 편집하기
               </Button>

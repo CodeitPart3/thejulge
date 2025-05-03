@@ -1,36 +1,25 @@
-import { Navigate, useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 
 import NoticeDetailInfo from "../../components/NoticeDetailInfo";
 
-import NoticeApplicationTable from "./components/NoticeApplicationTable";
-import useShopApplications from "./hooks/useShopApplications";
+import NoticeApplicationTableContainer from "./components/NoticeApplicationTableContainer";
 
+import PostList, { PostData } from "@/components/Post/PostList";
 import { useUserStore } from "@/hooks/useUserStore";
 import { NoticeItem } from "@/types/notice";
 
-const PAGE_LIMIT = 7;
-
 export default function NoticeEmployerPage() {
-  const { noticeInfo } = useLoaderData<{
+  const { noticeInfo, recentNotices } = useLoaderData<{
     noticeInfo: NoticeItem;
+    recentNotices: PostData[];
   }>();
   const { shopId, noticeId } = useParams() as {
     shopId: string;
     noticeId: string;
   };
-  const {
-    refetch: refetchShopApplications,
-    shopApplications,
-    totalCount,
-  } = useShopApplications({
-    shopId,
-    noticeId,
-  });
   const { user } = useUserStore();
 
-  if (user?.type !== "employer") {
-    return <Navigate to={`/notice/${shopId}/${noticeId}/employee`} />;
-  }
+  const isMyShop = user?.shopId === shopId;
 
   return (
     <>
@@ -41,19 +30,24 @@ export default function NoticeEmployerPage() {
             noticeId={noticeId}
             noticeInfo={noticeInfo}
             user={user}
+            isEmployerPage
           />
         </div>
       </section>
 
       <section>
         <div className="flex flex-col gap-8 xl:w-[60.25rem] mx-auto mb-[3.75rem] px-3 md:px-8 py-10 md:py-[3.75rem]">
-          <h2 className="text-[1.625rem] font-bold">신청자 목록</h2>
-          <NoticeApplicationTable
-            data={shopApplications}
-            totalCount={totalCount}
-            pageLimit={PAGE_LIMIT}
-            refetch={refetchShopApplications}
-          />
+          <h2 className="text-[1.625rem] font-bold">
+            {isMyShop ? "신청자 목록" : "최근에 본 공고"}
+          </h2>
+          {isMyShop ? (
+            <NoticeApplicationTableContainer
+              shopId={shopId}
+              noticeId={noticeId}
+            />
+          ) : (
+            <PostList posts={recentNotices} />
+          )}
         </div>
       </section>
     </>
