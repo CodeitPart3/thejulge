@@ -58,7 +58,7 @@ export default function NoticeRegisterPage() {
 
     if (isSubmitting) return;
 
-    const requiredFields: Array<keyof typeof form> = [
+    const requiredFields: Array<keyof FormType> = [
       "hourlyPay",
       "startsAt",
       "workhour",
