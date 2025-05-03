@@ -1,3 +1,4 @@
+import { getShopApplications } from "../services/applicationService";
 import { getNotice, getNotices } from "../services/noticeService";
 
 interface LoadNoticeParams {
@@ -31,5 +32,30 @@ export const loadRecentNotices = async () => {
     }));
 
     return recentNotices;
+  }
+};
+
+interface LoadNoticeApplicationsParams {
+  shopId: string;
+  noticeId: string;
+  offset?: number;
+  limit?: number;
+}
+
+export const loadNoticeApplications = async ({
+  shopId,
+  noticeId,
+  offset,
+  limit,
+}: LoadNoticeApplicationsParams) => {
+  const noticeApplicationsResult = await getShopApplications(
+    shopId,
+    noticeId,
+    offset,
+    limit,
+  );
+
+  if (noticeApplicationsResult.status === 200) {
+    return noticeApplicationsResult.data;
   }
 };

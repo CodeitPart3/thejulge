@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRevalidator } from "react-router-dom";
 
 import {
   postApplication,
@@ -6,8 +6,8 @@ import {
 } from "@/apis/services/applicationService";
 import Button from "@/components/Button";
 import PostCard from "@/components/Post/PostCard";
+import { User } from "@/hooks/useUserStore";
 import { NoticeItem } from "@/types/notice";
-import { UserType } from "@/types/user";
 import { cn } from "@/utils/cn";
 import { isPastDate } from "@/utils/datetime";
 
@@ -15,16 +15,17 @@ interface NoticeDetailInfoProps {
   noticeInfo: NoticeItem;
   shopId: string;
   noticeId: string;
-  type?: UserType;
+  user?: User | null;
 }
 
 function NoticeDetailInfo({
   shopId,
   noticeId,
   noticeInfo,
-  type = "employee",
+  user = null,
 }: NoticeDetailInfoProps) {
   const navigate = useNavigate();
+  const { revalidate } = useRevalidator();
 
   const {
     hourlyPay,
@@ -46,14 +47,19 @@ function NoticeDetailInfo({
   const applicationId = currentUserApplication?.item.id;
   const applicationStatus = currentUserApplication?.item.status;
   const isPast = isPastDate(startsAt, workhour);
-  const isDisabledNotice = isPast || closed || applicationStatus === "canceled";
+  const isDisabledNotice =
+    isPast ||
+    closed ||
+    applicationStatus === "canceled" ||
+    applicationStatus === "rejected";
 
   const applyNotice = async () => {
     const result = await postApplication(shopId, noticeId);
 
     if (result.status === 201) {
-      // Modal 병합 후 모달로 변경 예정
+      // TODO: Modal 병합 후 모달로 변경 예정
       alert("신청이 완료 되었습니다.");
+      revalidate();
     }
   };
 
@@ -66,12 +72,16 @@ function NoticeDetailInfo({
     );
 
     if (result.status === 200) {
-      // Modal 병합 후 모달로 변경 예정
+      // TODO: Modal 병합 후 모달로 변경 예정
       alert("취소가 완료 되었습니다.");
     }
   };
 
-  const moveToEditNoticePage = () => navigate("/notice/edit");
+  const moveToEditNoticePage = () => {
+    if (user?.type === "employer") {
+      navigate(`/notice/edit/${user.shopId}`);
+    }
+  };
 
   return (
     <>
@@ -93,7 +103,16 @@ function NoticeDetailInfo({
           workhour={workhour}
           closed={closed}
           buttons={
-            type === "employee" ? (
+            user?.type === "employer" ? (
+              <Button
+                fullWidth
+                variant="white"
+                className={"py-[14px]"}
+                onClick={moveToEditNoticePage}
+              >
+                공고 편집하기
+              </Button>
+            ) : (
               <Button
                 disabled={isDisabledNotice}
                 className={cn("py-[14px]", {
@@ -109,20 +128,11 @@ function NoticeDetailInfo({
               >
                 {applicationStatus === "pending" && "취소하기"}
                 {applicationStatus === "accepted" && "승낙"}
-                {applicationStatus === "rejected" && "지원 거절"}
+                {applicationStatus === "rejected" && "거절된 공고입니다."}
                 {applicationStatus === "canceled" &&
-                  "이미 취소한 지원 공고 입니다."}
+                  "이미 취소하신 공고 입니다."}
                 {!applicationStatus && isDisabledNotice && "신청 불가"}
                 {!applicationStatus && !closed && !isPast && "지원하기"}
-              </Button>
-            ) : (
-              <Button
-                fullWidth
-                variant="white"
-                className={"py-[14px]"}
-                onClick={moveToEditNoticePage}
-              >
-                공고 편집하기
               </Button>
             )
           }
