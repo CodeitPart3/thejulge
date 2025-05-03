@@ -1,7 +1,8 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useMatches } from "react-router-dom";
 
 import Footer from "./Footer";
 import Header from "./Header";
+
 interface MainLayoutProps {
   isLoggedIn?: boolean;
   userNavLabel?: "내 가게" | "내 프로필";
@@ -10,10 +11,17 @@ interface MainLayoutProps {
   onToggleAlarm?: () => void;
 }
 
+interface RouteHandle {
+  hideFooter?: boolean;
+}
+
 export default function MainLayout({
   hasAlarm,
   onToggleAlarm,
 }: MainLayoutProps) {
+  const matches = useMatches() as Array<{ handle?: RouteHandle }>;
+  const hideFooter = matches.some((match) => match.handle?.hideFooter);
+
   return (
     <div className="w-full min-h-screen flex flex-col">
       <Header hasAlarm={hasAlarm} onToggleAlarm={onToggleAlarm} />
@@ -22,7 +30,7 @@ export default function MainLayout({
         <Outlet />
       </main>
 
-      <Footer />
+      {!hideFooter && <Footer />}
     </div>
   );
 }
