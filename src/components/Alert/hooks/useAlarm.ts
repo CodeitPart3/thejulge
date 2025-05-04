@@ -29,7 +29,6 @@ const useAlarm = ({ userId, offset = 5, limit = 5 }: UseAlarmParams) => {
       );
       const nextAlerts = fetchedAlerts.data.items.map(({ item }) => item);
 
-      console.log(fetchedAlerts);
       setAlerts((prev) => [...prev, ...nextAlerts]);
       setHasNext(fetchedAlerts.data.hasNext);
       setTotalCount(fetchedAlerts.data.count);
