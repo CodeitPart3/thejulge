@@ -16,10 +16,10 @@ const ROUTES = {
   NOTICE: {
     ROOT: "/",
     REGISTER: "/notice/register",
-    EDIT: "/notice/edit",
+    EDIT: "/notice/edit/:noticeId",
     NOTICE_ID: {
-      EMPLOYER: `/notice/:noticeId/employer`,
-      EMPLOYEE: `/notice/:noticeId/employee`,
+      EMPLOYER: `/notice/:shopId/:noticeId/employer`,
+      EMPLOYEE: `/notice/:shopId/:noticeId/employee`,
     },
   },
 } as const;

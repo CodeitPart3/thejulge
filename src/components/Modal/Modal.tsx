@@ -1,42 +1,43 @@
 import AlertModalLayout from "./AlertModalLayout";
 import ConfirmModalLayout from "./ConfirmModalLayout";
 
-interface ModalButton {
-  label: string;
-  style: "primary" | "white"; // "primary" -> "filledRed", "white" -> "outlinedRed"
-  onClick: () => void;
-}
+import { useModalStore } from "@/store/useModalStore";
 
-interface ModalProps {
-  message: string;
-  iconType?: "check" | "warning" | "none";
-  buttons: ModalButton[];
-  onClose: () => void;
-}
+export default function Modal() {
+  const { isOpen, options, closeModal } = useModalStore();
 
-export default function Modal({
-  message = "",
-  iconType = "none",
-  buttons = [],
-  onClose,
-}: ModalProps) {
+  if (!isOpen || !options) return null;
+
+  const handleClose = () => {
+    options.onClose?.();
+    closeModal();
+  };
+
   return (
-    <div
-      className="fixed inset-0 bg-black/70  flex justify-center items-center z-50"
-      onClick={onClose}
-    >
-      {iconType === "none" ? (
-        <AlertModalLayout
-          message={message}
-          buttons={buttons}
-          onClose={onClose}
-        />
-      ) : (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
+      {options.type === "confirm" && (
         <ConfirmModalLayout
-          iconType={iconType}
-          message={message}
-          buttons={buttons}
-          onClose={onClose}
+          message={options.message}
+          onClose={handleClose}
+          iconType={options.iconType ?? "none"}
+          onConfirm={() => {
+            options.onConfirm?.();
+            closeModal();
+          }}
+          confirmText={options.confirmText ?? "예"}
+          cancelText={options.cancelText ?? "아니오"}
+        />
+      )}
+      {(options.type === "alert" || options.type === "message") && (
+        <AlertModalLayout
+          type={options.type}
+          message={options.message}
+          iconType={options.iconType ?? "none"}
+          button={{
+            label: "확인",
+            style: "primary",
+            onClick: handleClose,
+          }}
         />
       )}
     </div>

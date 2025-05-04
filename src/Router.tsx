@@ -1,8 +1,15 @@
 import { lazy } from "react";
 
-import { createBrowserRouter, Outlet, RouteObject } from "react-router-dom";
+import { createBrowserRouter, RouteObject } from "react-router-dom";
 
+import noticeEmployeeLoader from "./pages/NoticeEmployeePage/loader/noticeEmployeeLoader";
+import noticeEmployerLoader from "./pages/NoticeEmployerPage/loader/noticeEmployerLoader";
+import profileLoader from "./pages/ProfilePage/loader/profileLoader";
+
+import NoticeDetailSkeleton from "./components/NoticeDetailSkeleton";
 import { ROUTES } from "./constants/router";
+import AuthLayout from "./layouts/AuthLayout";
+import MainLayout from "./layouts/MainLayout";
 
 const SignupPage = lazy(() => import("@/pages/SignupPage"));
 const SigninPage = lazy(() => import("@/pages/SigninPage"));
@@ -18,8 +25,12 @@ const ShopEditPage = lazy(() => import("@/pages/ShopEditPage"));
 const NoticeListPage = lazy(() => import("@/pages/NoticeListPage"));
 const NoticeRegisterPage = lazy(() => import("@/pages/NoticeRegisterPage"));
 const NoticeEditPage = lazy(() => import("@/pages/NoticeEditPage"));
-const NoticeEmployerPage = lazy(() => import("@/pages/NoticeEmployerPage"));
-const NoticeEmployeePage = lazy(() => import("@/pages/NoticeEmployeePage"));
+const NoticeEmployerPage = lazy(
+  () => import("@/pages/NoticeEmployerPage/NoticeEmployerPage"),
+);
+const NoticeEmployeePage = lazy(
+  () => import("@/pages/NoticeEmployeePage/NoticeEmployeePage"),
+);
 
 const authRoutes: RouteObject[] = [
   {
@@ -40,10 +51,12 @@ const shopRoutes: RouteObject[] = [
   {
     path: ROUTES.SHOP.REGISTER,
     Component: ShopRegisterPage,
+    handle: { hideFooter: true },
   },
   {
     path: ROUTES.SHOP.EDIT,
     Component: ShopEditPage,
+    handle: { hideFooter: true },
   },
 ];
 
@@ -51,14 +64,17 @@ const profileRoutes: RouteObject[] = [
   {
     path: ROUTES.PROFILE.ROOT,
     Component: ProfilePage,
+    loader: profileLoader,
   },
   {
     path: ROUTES.PROFILE.REGISTER,
     Component: ProfileRegisterPage,
+    handle: { hideFooter: true },
   },
   {
     path: ROUTES.PROFILE.EDIT,
     Component: ProfileEditPage,
+    handle: { hideFooter: true },
   },
 ];
 
@@ -70,18 +86,24 @@ const noticeRoutes: RouteObject[] = [
   {
     path: ROUTES.NOTICE.REGISTER,
     Component: NoticeRegisterPage,
+    handle: { hideFooter: true },
   },
   {
     path: ROUTES.NOTICE.EDIT,
     Component: NoticeEditPage,
+    handle: { hideFooter: true },
   },
   {
     path: ROUTES.NOTICE.NOTICE_ID.EMPLOYER,
     Component: NoticeEmployerPage,
+    loader: noticeEmployerLoader,
+    hydrateFallbackElement: <NoticeDetailSkeleton />,
   },
   {
     path: ROUTES.NOTICE.NOTICE_ID.EMPLOYEE,
     Component: NoticeEmployeePage,
+    loader: noticeEmployeeLoader,
+    hydrateFallbackElement: <NoticeDetailSkeleton />,
   },
 ];
 
@@ -93,11 +115,11 @@ const appRoutes: RouteObject[] = [
 
 export const router = createBrowserRouter([
   {
-    Component: Outlet,
+    Component: AuthLayout,
     children: authRoutes,
   },
   {
-    Component: Outlet,
+    Component: MainLayout,
     children: appRoutes,
   },
 ]);

@@ -1,8 +1,9 @@
-import { cn } from "@/utils/cn";
 import { Link } from "react-router-dom";
+
+import { Location, Time, ArrowUp, ArrowUpBold } from "@/assets/icon";
+import { cn } from "@/utils/cn";
 import { formatTimeRange, isPastDate } from "@/utils/datetime";
 import { getPayRateText } from "@/utils/payRate";
-import { Location, Time, ArrowUp, ArrowUpBold } from "@/assets/icon";
 
 interface PostProps {
   name: string;
