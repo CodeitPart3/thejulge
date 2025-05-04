@@ -20,12 +20,12 @@ export default function Header() {
 
   return (
     <header className="w-full px-4 py-2">
-      <div className="hidden md:flex max-w-screen-xl mx-auto w-full items-center justify-between">
-        <div className="flex items-center gap-[1.5rem]">
-          <Link to="/">
+      <div className="hidden md:flex gap-5 max-w-screen-xl mx-auto w-full items-center justify-between">
+        <div className="flex-1 flex items-center gap-[1.5rem]">
+          <Link to="/" className="inline-block min-w-[7rem]">
             <img src={Logo} alt="thejulge" className="w-[7rem] h-[2.625rem]" />
           </Link>
-          <div className="relative w-[28.125rem]">
+          <div className="relative w-full max-w-[28.125rem]">
             <img
               src={SearchIcon}
               alt="SearchIcon"
