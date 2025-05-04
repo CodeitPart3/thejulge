@@ -28,7 +28,7 @@ function NoticeEmployeeActionButton({
   applicationStatus,
   isDisabledNotice,
 }: NoticeEmployeeActionButtonProps) {
-  const { isLoggedIn, user } = useUserStore();
+  const { user } = useUserStore();
   const { revalidate } = useRevalidator();
   const { openModal } = useModalStore();
   const { showToast } = useToast();
@@ -49,19 +49,19 @@ function NoticeEmployeeActionButton({
   };
 
   const applyNotice = async () => {
-    if (isLoggedIn && !user?.name) {
-      openModal({
-        type: "alert",
-        iconType: "warning",
-        message: "내 프로필을 먼저 등록해주세요",
-      });
-    } else {
+    if (user?.name) {
       const result = await postApplication(shopId, noticeId);
 
       if (result.status === 201) {
         revalidate();
         showToast("신청 완료!");
       }
+    } else {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "내 프로필을 먼저 등록해주세요",
+      });
     }
   };
 
