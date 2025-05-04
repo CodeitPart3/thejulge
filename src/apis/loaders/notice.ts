@@ -19,7 +19,7 @@ export const loadNotice = async ({ shopId, noticeId }: LoadNoticeParams) => {
 
 const MAX_VISIBLE_RECENT_NOTICES = 6;
 
-export const loadRecentNotices = async (noticeId: string) => {
+export const loadRecentNotices = (noticeId: string) => {
   const allRecentNotices =
     getLocalStorageValue<PostData[]>("recentNotices") ?? [];
 

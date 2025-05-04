@@ -13,10 +13,7 @@ const RECENT_NOTICES = "recentNotices";
 const updateLocalStorageRecentNotices = (candidateNotice: PostData) => {
   const storageValue: PostData[] = getLocalStorageValue(RECENT_NOTICES) ?? [];
 
-  if (
-    storageValue.length > 0 &&
-    !storageValue.some(({ id }) => id === candidateNotice.id)
-  ) {
+  if (!storageValue.some(({ id }) => id === candidateNotice.id)) {
     if (storageValue.length === 7) {
       storageValue.shift();
     }
