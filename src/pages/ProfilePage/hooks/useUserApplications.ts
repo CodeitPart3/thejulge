@@ -6,13 +6,16 @@ import { getUserApplications } from "@/apis/services/applicationService";
 import { UserApplicationList } from "@/types/application";
 
 interface UseUserApplicationsParams {
+  userId: string;
   offset?: number;
   limit?: number;
 }
 
-const useUserApplications = (params?: UseUserApplicationsParams) => {
-  const { offset = 5, limit = 7 } = params ?? {};
-
+const useUserApplications = ({
+  userId,
+  offset = 5,
+  limit = 7,
+}: UseUserApplicationsParams) => {
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState<number>(0);
@@ -24,7 +27,7 @@ const useUserApplications = (params?: UseUserApplicationsParams) => {
   const fetchUserApplication = async () => {
     setIsLoading(true);
     const userApplications = await getUserApplications(
-      "42859259-b879-408c-8edd-bbaa3a79c674",
+      userId,
       (page - 1) * offset,
       limit,
     );

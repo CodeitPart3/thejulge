@@ -8,6 +8,7 @@ import {
 } from "@/apis/services/applicationService";
 import { APPLICATION_STATUS } from "@/constants/applicationStatus";
 import { useToast } from "@/hooks/useToast";
+import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
 import { ApplicationStatus } from "@/types/application";
 import { cn } from "@/utils/cn";
@@ -27,6 +28,7 @@ function NoticeEmployeeActionButton({
   applicationStatus,
   isDisabledNotice,
 }: NoticeEmployeeActionButtonProps) {
+  const { isLoggedIn, user } = useUserStore();
   const { revalidate } = useRevalidator();
   const { openModal } = useModalStore();
   const { showToast } = useToast();
@@ -47,11 +49,19 @@ function NoticeEmployeeActionButton({
   };
 
   const applyNotice = async () => {
-    const result = await postApplication(shopId, noticeId);
+    if (isLoggedIn && !user?.name) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "내 프로필을 먼저 등록해주세요",
+      });
+    } else {
+      const result = await postApplication(shopId, noticeId);
 
-    if (result.status === 201) {
-      revalidate();
-      showToast("신청 완료!");
+      if (result.status === 201) {
+        revalidate();
+        showToast("신청 완료!");
+      }
     }
   };
 

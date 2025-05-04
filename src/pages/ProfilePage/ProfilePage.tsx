@@ -20,7 +20,9 @@ export default function ProfilePage() {
     userApplications: UserApplicationList[];
   }>();
   const navigate = useNavigate();
-  const { isLoading, totalCount, userApplications } = useUserApplications();
+  const { isLoading, totalCount, userApplications } = useUserApplications({
+    userId: userInfo.id,
+  });
 
   return (
     <>
