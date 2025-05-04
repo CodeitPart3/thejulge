@@ -46,7 +46,7 @@ const useShopApplications = ({
 
   useEffect(() => {
     fetchShopApplication();
-  }, [page]);
+  }, [shopId, noticeId, offset, limit, page]);
 
   return {
     refetch: fetchShopApplication,
