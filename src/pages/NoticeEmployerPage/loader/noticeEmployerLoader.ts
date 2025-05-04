@@ -10,15 +10,13 @@ const noticeEmployerLoader: LoaderFunction = async ({ params }) => {
     noticeId: string;
   };
 
-  if (user?.shopId === shopId) {
-    const [noticeInfo] = await Promise.all([loadNotice({ shopId, noticeId })]);
+  const noticeInfo = await loadNotice({ shopId, noticeId });
 
+  if (user?.shopId === shopId) {
     return { noticeInfo };
   }
 
-  const [noticeInfo] = await Promise.all([loadNotice({ shopId, noticeId })]);
   const recentNotices = loadRecentNotices(noticeId);
-
   return { noticeInfo, recentNotices };
 };
 
