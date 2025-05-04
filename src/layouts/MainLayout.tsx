@@ -23,11 +23,13 @@ export default function MainLayout({
   const hideFooter = matches.some((match) => match.handle?.hideFooter);
 
   return (
-    <div className="w-full min-h-screen flex flex-col">
+    <div className="w-full min-h-screen flex flex-col ">
       <Header hasAlarm={hasAlarm} onToggleAlarm={onToggleAlarm} />
 
       <main className="flex flex-col flex-1">
-        <Outlet />
+        <div className="max-w-screen-xl w-full mx-auto">
+          <Outlet />
+        </div>
       </main>
 
       {!hideFooter && <Footer />}
