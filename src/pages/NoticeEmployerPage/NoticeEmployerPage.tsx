@@ -1,6 +1,6 @@
 import { useLoaderData, useParams } from "react-router-dom";
 
-import NoticeDetailInfo from "../../components/NoticeDetailInfo";
+import NoticeDetailInfo from "../../components/NoticeDetailInfo/NoticeDetailInfo";
 
 import NoticeApplicationTableContainer from "./components/NoticeApplicationTableContainer";
 
