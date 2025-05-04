@@ -1,6 +1,6 @@
 import { Location, Time } from "@/assets/icon";
 
-function ShopInfoPostCardSkeleton() {
+function NoticeDetailSkeleton() {
   return (
     <section>
       <div className="flex flex-col gap-3 md:gap-6 xl:w-[60.25rem] mx-auto px-3 md:px-8 py-10 md:py-[3.75rem]">
@@ -49,4 +49,4 @@ function ShopInfoPostCardSkeleton() {
   );
 }
 
-export default ShopInfoPostCardSkeleton;
+export default NoticeDetailSkeleton;

@@ -59,7 +59,7 @@ export default function PostCard({
           className="w-full h-[180px] object-cover md:h-[360px] lg:h-[308px]"
         />
         {isDimmed && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black opcity-70">
+          <div className="absolute inset-0 flex items-center justify-center bg-black opacity-70">
             <p className="text-[1.75rem] text-gray-30 font-bold">
               {!closed && isPast && "지난 공고"}
               {closed && !isPast && "마감 완료"}

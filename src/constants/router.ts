@@ -16,7 +16,7 @@ const ROUTES = {
   NOTICE: {
     ROOT: "/",
     REGISTER: "/notice/register",
-    EDIT: "/notice/edit",
+    EDIT: "/notice/edit/:noticeId",
     NOTICE_ID: {
       EMPLOYER: `/notice/:shopId/:noticeId/employer`,
       EMPLOYEE: `/notice/:shopId/:noticeId/employee`,
