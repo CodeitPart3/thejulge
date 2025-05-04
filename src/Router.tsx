@@ -53,6 +53,7 @@ const shopRoutes: RouteObject[] = [
   {
     path: ROUTES.SHOP.EDIT,
     Component: ShopEditPage,
+    handle: { hideFooter: true },
   },
 ];
 
@@ -65,10 +66,12 @@ const profileRoutes: RouteObject[] = [
   {
     path: ROUTES.PROFILE.REGISTER,
     Component: ProfileRegisterPage,
+    handle: { hideFooter: true },
   },
   {
     path: ROUTES.PROFILE.EDIT,
     Component: ProfileEditPage,
+    handle: { hideFooter: true },
   },
 ];
 
@@ -80,10 +83,12 @@ const noticeRoutes: RouteObject[] = [
   {
     path: ROUTES.NOTICE.REGISTER,
     Component: NoticeRegisterPage,
+    handle: { hideFooter: true },
   },
   {
     path: ROUTES.NOTICE.EDIT,
     Component: NoticeEditPage,
+    handle: { hideFooter: true },
   },
   {
     path: ROUTES.NOTICE.NOTICE_ID.EMPLOYER,
