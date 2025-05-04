@@ -16,6 +16,7 @@ import Select from "@/components/Select";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { CATEGORY_OPTIONS } from "@/constants/shopCategory";
+import { useUserStore } from "@/hooks/useUserStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
 
 type FormType = {
@@ -42,6 +43,7 @@ export default function ShopRegisterPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const updateShopId = useUserStore((state) => state.updateShopId);
 
   const [form, setForm] = useState<FormType>({
     name: "",
@@ -116,7 +118,10 @@ export default function ShopRegisterPage() {
         imageUrl = getPublicURL(presignedURL);
         payload.imageUrl = imageUrl;
       }
-      await postShop(payload);
+      const res = await postShop(payload);
+      const newShopId = res.data.item.id;
+      updateShopId(newShopId);
+
       navigate(ROUTES.SHOP.ROOT);
     } finally {
       setIsSubmitting(false);
