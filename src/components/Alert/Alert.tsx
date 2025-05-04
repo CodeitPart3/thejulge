@@ -1,0 +1,79 @@
+import { useMemo, useRef, useState } from "react";
+
+import AlertCard from "./AlertCard";
+import useAlarm from "./hooks/useAlarm";
+
+import {
+  Active as ActiveAlarmIcon,
+  Inactive as InactiveAlarmIcon,
+} from "@/assets/icon";
+import useIntersection from "@/hooks/useIntersection";
+import useOutsideClick from "@/hooks/useOutsideClick";
+import { useUserStore } from "@/hooks/useUserStore";
+
+function Alert() {
+  const user = useUserStore((state) => state.user);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const { isLoading, hasNext, refetch, alerts, totalCount } = useAlarm({
+    userId: user!.id,
+  });
+
+  const hasAlarm = useMemo(
+    () => alerts.filter(({ read }) => !read).length > 0,
+    [alerts],
+  );
+  const AlarmIcon = hasAlarm ? ActiveAlarmIcon : InactiveAlarmIcon;
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const onToggleAlarm = () => {
+    setShowDropdown((prev) => !prev);
+  };
+
+  useOutsideClick({
+    refs: [wrapperRef, buttonRef],
+    callback: () => setShowDropdown(false),
+  });
+
+  const targetRef = useIntersection({
+    callback: ([entry]) => {
+      if (entry.isIntersecting && !isLoading && hasNext) {
+        console.log("intersecting");
+        refetch();
+      }
+    },
+  });
+
+  return (
+    <div className="relative flex items-center justify-center">
+      <button
+        ref={buttonRef}
+        className="cursor-pointer"
+        onClick={onToggleAlarm}
+      >
+        <AlarmIcon className="h-6" />
+      </button>
+      {showDropdown && (
+        <div
+          ref={wrapperRef}
+          className="absolute top-8 right-0 z-20 w-[23rem] h-[26.875rem] py-6 px-5 rounded-[0.625rem] bg-red-10 border border-gray-30 text-left"
+        >
+          <h3 className="mb-4 text-left text-xl">알림 {totalCount}개</h3>
+          <ul className="flex flex-col gap-2 h-[20.625rem] font-normal overflow-y-auto">
+            {alerts.map((alert, index) => (
+              <AlertCard
+                key={alert.id}
+                ref={index === alerts.length - 1 ? targetRef : null}
+                userId={user?.id}
+                alert={alert}
+              />
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Alert;

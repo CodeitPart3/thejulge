@@ -1,25 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import ActiveAlarmIcon from "../assets/icon/active.svg";
-import InActiveAlarmIcon from "../assets/icon/inactive.svg";
 import SearchIcon from "../assets/icon/search.svg";
 import Logo from "../assets/logo/thejulge.svg";
 
+import Alart from "@/components/Alert/Alert";
 import { useUserStore } from "@/hooks/useUserStore";
 
-interface HeaderProps {
-  hasAlarm?: boolean;
-  onToggleAlarm?: () => void;
-}
-
-export default function Header({ hasAlarm, onToggleAlarm }: HeaderProps) {
+export default function Header() {
   const navigate = useNavigate();
   const { user, isLoggedIn, clearUser } = useUserStore();
 
   const userNavLabel = user?.type === "employer" ? "내 가게" : "내 프로필";
   const userPath = user?.type === "employer" ? "/shop" : "/profile";
-
-  const alarmIcon = hasAlarm ? ActiveAlarmIcon : InActiveAlarmIcon;
 
   const handleLogout = () => {
     clearUser();
@@ -54,9 +46,7 @@ export default function Header({ hasAlarm, onToggleAlarm }: HeaderProps) {
               <button onClick={handleLogout} className="cursor-pointer">
                 로그아웃
               </button>
-              <button className="cursor-pointer" onClick={onToggleAlarm}>
-                <img src={alarmIcon} alt="AlertIcon" className="h-4" />
-              </button>
+              <Alart />
             </>
           ) : (
             <>
@@ -79,9 +69,7 @@ export default function Header({ hasAlarm, onToggleAlarm }: HeaderProps) {
                 <button onClick={handleLogout} className="cursor-pointer">
                   로그아웃
                 </button>
-                <button className="cursor-pointer" onClick={onToggleAlarm}>
-                  <img src={alarmIcon} alt="AlertIcon" className="h-4" />
-                </button>
+                <Alart />
               </>
             ) : (
               <>
