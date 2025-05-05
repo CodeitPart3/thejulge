@@ -78,8 +78,8 @@ export default function MyShopPage() {
   );
 
   return (
-    <section>
-      <div className="xl:w-[60.25rem] mx-auto px-6 xl:px-[0px] py-[3.75rem]">
+    <>
+      <section className="xl:w-[60.25rem] mx-auto px-6 xl:px-[0px] py-[3.75rem]">
         <h1 className="text-[1.75rem] font-bold mb-6">내 가게</h1>
         {isShopLoading ? null : !shop ? (
           <EmptyStateCard
@@ -113,10 +113,10 @@ export default function MyShopPage() {
             }
           />
         )}
-      </div>
+      </section>
 
       {shop && (
-        <div className="flex-1 bg-gray-5">
+        <section className="flex-1 bg-gray-5">
           <div className="xl:w-[60.25rem] mx-auto px-6 xl:px-[0px] pt-[3.75rem] pb-[7.5rem]">
             <h1 className="text-[1.75rem] font-bold mb-8">등록한 공고</h1>
 
@@ -133,8 +133,8 @@ export default function MyShopPage() {
               </div>
             )}
           </div>
-        </div>
+        </section>
       )}
-    </section>
+    </>
   );
 }
