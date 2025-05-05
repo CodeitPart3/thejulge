@@ -53,13 +53,14 @@ export default function NoticeEmployerPage() {
             />
           )}
 
-          {!isMyShop && recentNotices.length > 0 ? (
-            <PostList posts={recentNotices} />
-          ) : (
-            <div className="flex items-center justify-center w-full h-[20rem] text-black">
-              최근에 본 공고가 없습니다.
-            </div>
-          )}
+          {!isMyShop &&
+            (recentNotices.length > 0 ? (
+              <PostList posts={recentNotices} />
+            ) : (
+              <div className="flex items-center justify-center w-full h-[20rem] text-black">
+                최근에 본 공고가 없습니다.
+              </div>
+            ))}
         </div>
       </section>
     </>

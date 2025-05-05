@@ -1,4 +1,4 @@
-import { useRevalidator } from "react-router-dom";
+import { useNavigate, useRevalidator } from "react-router-dom";
 
 import Button from "../Button";
 
@@ -7,6 +7,7 @@ import {
   putApplication,
 } from "@/apis/services/applicationService";
 import { APPLICATION_STATUS } from "@/constants/applicationStatus";
+import { ROUTES } from "@/constants/router";
 import { useToast } from "@/hooks/useToast";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
@@ -32,6 +33,7 @@ function NoticeEmployeeActionButton({
   const { revalidate } = useRevalidator();
   const { openModal } = useModalStore();
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
   const getApplicationButtonLabel = () => {
     switch (applicationStatus) {
@@ -61,6 +63,7 @@ function NoticeEmployeeActionButton({
         type: "alert",
         iconType: "warning",
         message: "내 프로필을 먼저 등록해주세요",
+        onClose: () => navigate(ROUTES.PROFILE.REGISTER),
       });
     }
   };
