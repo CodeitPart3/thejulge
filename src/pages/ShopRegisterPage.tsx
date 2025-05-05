@@ -109,6 +109,15 @@ export default function ShopRegisterPage() {
       return;
     }
 
+    if (!imageFile) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "이미지를 추가해 주세요.",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     let imageUrl = "";
@@ -165,7 +174,7 @@ export default function ShopRegisterPage() {
         <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
           가게 정보
         </h2>
-        <button onClick={() => navigate("/shop")}>
+        <button type="button" onClick={() => navigate("/shop")}>
           <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
         </button>
       </div>
@@ -218,7 +227,7 @@ export default function ShopRegisterPage() {
         />
       </div>
       <div className="mb-6">
-        <label className="block mb-2">가게 이미지</label>
+        <label className="block mb-2">가게 이미지*</label>
         <div
           className="sm:w-[483px] sm:h-[276px] w-full h-[200px] rounded-lg bg-gray-10 border border-gray-30 flex justify-center items-center overflow-hidden cursor-pointer"
           onClick={() => fileInputRef.current?.click()}
@@ -246,11 +255,12 @@ export default function ShopRegisterPage() {
       </div>
       <div className="mb-10">
         <TextField.TextArea
-          label="가게 설명"
+          label="가게 설명 (최대 200자)"
           placeholder="입력"
           fullWidth
           rows={4}
           value={form.description}
+          maxLength={200}
           onChange={(e) => handleChange("description", e.target.value)}
         />
       </div>

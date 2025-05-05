@@ -10,7 +10,6 @@ import { getNotice, putNotice } from "@/apis/services/noticeService";
 import { Close } from "@/assets/icon";
 import Button from "@/components/Button";
 import TextField from "@/components/TextField";
-import { ROUTES } from "@/constants/router";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
@@ -110,6 +109,15 @@ export default function NoticeEditPage() {
       return;
     }
 
+    if (form.startsAt && form.startsAt <= new Date()) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "이미 지난 시간에 대한 공고는 등록할 수 없습니다.",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     const payload = {
@@ -120,12 +128,15 @@ export default function NoticeEditPage() {
     };
 
     try {
-      await putNotice(shopId, noticeId, payload);
+      const res = await putNotice(shopId, noticeId, payload);
+      const newNoticeId = res.data.item.id;
+
       openModal({
         type: "message",
         iconType: "none",
         message: "수정이 완료되었습니다.",
-        onClose: () => navigate(ROUTES.SHOP.ROOT),
+        onClose: () =>
+          navigate(`/notice/${user.shopId}/${newNoticeId}/employer`),
       });
     } catch (e: unknown) {
       const error = e as AxiosError<{ message: string }>;
@@ -153,7 +164,7 @@ export default function NoticeEditPage() {
         <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
           공고 수정
         </h2>
-        <button onClick={() => navigate("/shop")}>
+        <button type="button" onClick={() => navigate("/shop")}>
           <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
         </button>
       </div>
@@ -202,7 +213,7 @@ export default function NoticeEditPage() {
       </div>
       <div className="mb-10">
         <TextField.TextArea
-          label="공고 설명"
+          label="공고 설명 (최대 500자)"
           placeholder="입력"
           fullWidth
           rows={4}

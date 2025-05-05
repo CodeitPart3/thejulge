@@ -58,7 +58,7 @@ export default function ProfileRegisterPage() {
 
     if (isSubmitting) return;
 
-    const requiredFields: Array<keyof FormType> = ["name", "phone"];
+    const requiredFields: Array<keyof FormType> = ["name", "phone", "address"];
 
     const missingField = requiredFields.find((key) => {
       const value = form[key];
@@ -116,7 +116,7 @@ export default function ProfileRegisterPage() {
         <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
           내 프로필
         </h2>
-        <button onClick={() => navigate("/profile")}>
+        <button type="button" onClick={() => navigate("/profile")}>
           <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
         </button>
       </div>
@@ -141,7 +141,7 @@ export default function ProfileRegisterPage() {
           }}
         />
         <Select
-          label="선호 지역"
+          label="선호 지역*"
           placeholder="선택"
           fullWidth
           options={SeoulDistricts.map((d) => ({ label: d, value: d }))}
@@ -151,11 +151,12 @@ export default function ProfileRegisterPage() {
       </div>
       <div className="mb-10">
         <TextField.TextArea
-          label="소개"
+          label="소개 (최대 300자)"
           placeholder="입력"
           fullWidth
           rows={4}
           value={form.bio}
+          maxLength={300}
           onChange={(e) => handleChange("bio", e.target.value)}
         />
       </div>
