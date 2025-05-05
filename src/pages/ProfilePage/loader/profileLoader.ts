@@ -1,7 +1,9 @@
 import { getUser } from "@/apis/services/userService";
+import { useUserStore } from "@/hooks/useUserStore";
 
 const profileLoader = async () => {
-  const userInfo = await getUser("42859259-b879-408c-8edd-bbaa3a79c674");
+  const userId = useUserStore.getState().user?.id;
+  const userInfo = await getUser(userId ?? "");
 
   if (userInfo.status === 200) {
     return {

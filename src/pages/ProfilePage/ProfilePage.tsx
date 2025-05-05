@@ -20,7 +20,9 @@ export default function ProfilePage() {
     userApplications: UserApplicationList[];
   }>();
   const navigate = useNavigate();
-  const { isLoading, totalCount, userApplications } = useUserApplications();
+  const { isLoading, totalCount, userApplications } = useUserApplications({
+    userId: userInfo.id,
+  });
 
   return (
     <>
@@ -28,7 +30,7 @@ export default function ProfilePage() {
         <div className="xl:w-[60.25rem] mx-auto px-6 py-[3.75rem]">
           <div className="flex lg:flex-row flex-col lg:gap-[11.25rem] gap-6 w-full mb-6">
             <h2 className="text-[1.75rem] font-bold">내 프로필</h2>
-            {userInfo && (
+            {userInfo.name && (
               <ProfileCard
                 {...userInfo}
                 className="flex-1"
@@ -36,7 +38,7 @@ export default function ProfilePage() {
               />
             )}
           </div>
-          {!userInfo && (
+          {!userInfo.name && (
             <EmptyStateCard
               description="내 프로필을 등록하고 원하는 가게에 지원해 보세요"
               buttonName="내 프로필 등록하기"
