@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import SearchIcon from "../assets/icon/search.svg";
 import Logo from "../assets/logo/thejulge.svg";
 
-import Alart from "@/components/Alert/Alert";
+import Alert from "@/components/Alert/Alert";
 import { useUserStore } from "@/hooks/useUserStore";
 
 export default function Header() {
@@ -46,7 +46,7 @@ export default function Header() {
               <button onClick={handleLogout} className="cursor-pointer">
                 로그아웃
               </button>
-              <Alart />
+              {user && <Alert userId={user.id} />}
             </>
           ) : (
             <>
@@ -69,7 +69,7 @@ export default function Header() {
                 <button onClick={handleLogout} className="cursor-pointer">
                   로그아웃
                 </button>
-                <Alart />
+                {user && <Alert userId={user.id} />}
               </>
             ) : (
               <>
