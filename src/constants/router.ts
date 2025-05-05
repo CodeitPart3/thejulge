@@ -21,6 +21,7 @@ const ROUTES = {
       EMPLOYER: `/notice/:shopId/:noticeId/employer`,
       EMPLOYEE: `/notice/:shopId/:noticeId/employee`,
     },
+    SEARCH: "/search",
   },
 } as const;
 
