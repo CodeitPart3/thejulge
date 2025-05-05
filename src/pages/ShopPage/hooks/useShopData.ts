@@ -47,7 +47,6 @@ export function useShopData() {
         if (user && user.id) {
           const res = await getUser(user.id);
           const shopItem = res.data.item.shop?.item;
-          console.log(shopItem);
           if (shopItem) {
             setShop(shopItem);
             updateShopId(shopItem.id);

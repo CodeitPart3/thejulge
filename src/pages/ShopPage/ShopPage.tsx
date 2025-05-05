@@ -22,7 +22,7 @@ export interface PostListItem {
   closed: boolean;
 }
 
-export default function MyShopPage() {
+export default function ShopPage() {
   const navigate = useNavigate();
 
   const {
