@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import type { AxiosError } from "axios";
 import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +12,7 @@ import Button from "@/components/Button";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { useUserStore } from "@/hooks/useUserStore";
+import { useModalStore } from "@/store/useModalStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
 
 type FormType = {
@@ -31,6 +33,7 @@ export default function NoticeRegisterPage() {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const openModal = useModalStore((state) => state.openModal);
 
   const [form, setForm] = useState<FormType>({
     hourlyPay: "",
@@ -45,12 +48,20 @@ export default function NoticeRegisterPage() {
 
   const handleSubmit = async () => {
     if (!user?.id) {
-      alert("로그인 정보가 없습니다.");
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 정보가 없습니다.",
+      });
       return;
     }
 
     if (!user?.shopId) {
-      alert("가게 정보가 없습니다.");
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "가게 정보가 없습니다.",
+      });
       return;
     }
 
@@ -70,19 +81,31 @@ export default function NoticeRegisterPage() {
     });
 
     if (missingField) {
-      alert(`${FIELD_LABELS[missingField]}을(를) 입력해 주세요.`);
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: `${FIELD_LABELS[missingField]}을(를) 입력해 주세요.`,
+      });
       return;
     }
 
     const hourlyPay = Number(extractDigits(form.hourlyPay));
     if (isNaN(hourlyPay) || hourlyPay <= 0) {
-      alert("유효한 시급을 입력해 주세요.");
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "유효한 시급을 입력해 주세요.",
+      });
       return;
     }
 
     const workhour = Number(form.workhour);
     if (isNaN(workhour) || workhour <= 0) {
-      alert("유효한 업무 시간을 입력해 주세요.");
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "유효한 업무 시간을 입력해 주세요.",
+      });
       return;
     }
 
@@ -97,7 +120,21 @@ export default function NoticeRegisterPage() {
 
     try {
       await postNotice(user.shopId, payload);
-      navigate(ROUTES.SHOP.ROOT);
+      openModal({
+        type: "message",
+        iconType: "none",
+        message: "등록이 완료되었습니다.",
+        onClose: () => navigate(ROUTES.SHOP.ROOT),
+      });
+    } catch (e: unknown) {
+      const error = e as AxiosError<{ message: string }>;
+      const message =
+        error.response?.data?.message || "알 수 없는 오류가 발생했습니다.";
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message,
+      });
     } finally {
       setIsSubmitting(false);
     }

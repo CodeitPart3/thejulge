@@ -18,7 +18,7 @@ const ProfilePage = lazy(() => import("@/pages/ProfilePage/ProfilePage"));
 const ProfileRegisterPage = lazy(() => import("@/pages/ProfileRegisterPage"));
 const ProfileEditPage = lazy(() => import("@/pages/ProfileEditPage"));
 
-const ShopPage = lazy(() => import("@/pages/ShopPage"));
+const ShopPage = lazy(() => import("@/pages/ShopPage/ShopPage"));
 const ShopRegisterPage = lazy(() => import("@/pages/ShopRegisterPage"));
 const ShopEditPage = lazy(() => import("@/pages/ShopEditPage"));
 

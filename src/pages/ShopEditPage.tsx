@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
+import type { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { SeoulDistrict, SeoulDistricts, ShopCategory } from "../types";
@@ -17,6 +18,7 @@ import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { CATEGORY_OPTIONS } from "@/constants/shopCategory";
 import { useUserStore } from "@/hooks/useUserStore";
+import { useModalStore } from "@/store/useModalStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
 
 type FormType = {
@@ -45,6 +47,7 @@ export default function ShopRegisterPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const openModal = useModalStore((state) => state.openModal);
 
   const [form, setForm] = useState<FormType>({
     name: "",
@@ -113,13 +116,21 @@ export default function ShopRegisterPage() {
     const missingField = requiredFields.find((key) => form[key].trim() === "");
 
     if (missingField) {
-      alert(`${FIELD_LABELS[missingField]}을(를) 입력해 주세요.`);
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: `${FIELD_LABELS[missingField]}을(를) 입력해 주세요.`,
+      });
       return;
     }
 
     const hourlyPay = Number(extractDigits(form.originalHourlyPay));
     if (isNaN(hourlyPay) || hourlyPay <= 0) {
-      alert("유효한 시급을 입력해 주세요.");
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "유효한 시급을 입력해 주세요.",
+      });
       return;
     }
 
@@ -144,7 +155,21 @@ export default function ShopRegisterPage() {
         payload.imageUrl = imageUrl;
       }
       await putShop(shopId, payload);
-      navigate(ROUTES.SHOP.ROOT);
+      openModal({
+        type: "message",
+        iconType: "none",
+        message: "수정이 완료되었습니다.",
+        onClose: () => navigate(ROUTES.SHOP.ROOT),
+      });
+    } catch (e: unknown) {
+      const error = e as AxiosError<{ message: string }>;
+      const message =
+        error.response?.data?.message || "알 수 없는 오류가 발생했습니다.";
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message,
+      });
     } finally {
       setIsSubmitting(false);
     }
