@@ -10,15 +10,12 @@ import {
 } from "@/assets/icon";
 import useIntersection from "@/hooks/useIntersection";
 import useOutsideClick from "@/hooks/useOutsideClick";
-import { useUserStore } from "@/hooks/useUserStore";
 
 interface AlertProps {
   userId: string;
 }
 
 function Alert({ userId }: AlertProps) {
-  const user = useUserStore((state) => state.user);
-
   const [showDropdown, setShowDropdown] = useState(false);
   const { isLoading, hasNext, refetch, alerts, totalCount } = useAlarm({
     userId,
@@ -76,7 +73,7 @@ function Alert({ userId }: AlertProps) {
               <AlertCard
                 key={alert.id}
                 ref={index === alerts.length - 1 ? targetRef : null}
-                userId={user?.id}
+                userId={userId}
                 alert={alert}
               />
             ))}
