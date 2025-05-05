@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import type { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { SeoulDistrict, SeoulDistricts } from "../types";
@@ -11,6 +12,7 @@ import Select from "@/components/Select";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { useUserStore } from "@/hooks/useUserStore";
+import { useModalStore } from "@/store/useModalStore";
 import { autoHyphenFormatter } from "@/utils/phoneNumber";
 
 type FormType = {
@@ -31,6 +33,7 @@ export default function ProfileEditPage() {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const openModal = useModalStore((state) => state.openModal);
 
   const [form, setForm] = useState<FormType>({
     name: "",
@@ -60,7 +63,11 @@ export default function ProfileEditPage() {
 
   const handleSubmit = async () => {
     if (!user?.id) {
-      alert("로그인 정보가 없습니다.");
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 정보가 없습니다.",
+      });
       return;
     }
 
@@ -74,7 +81,11 @@ export default function ProfileEditPage() {
     });
 
     if (missingField) {
-      alert(`${FIELD_LABELS[missingField]}을(를) 입력해 주세요.`);
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: `${FIELD_LABELS[missingField]}을(를) 입력해 주세요.`,
+      });
       return;
     }
 
@@ -88,7 +99,21 @@ export default function ProfileEditPage() {
 
     try {
       await putUser(user.id, payload);
-      navigate(ROUTES.PROFILE.ROOT);
+      openModal({
+        type: "message",
+        iconType: "none",
+        message: "수정이 완료되었습니다.",
+        onClose: () => navigate(ROUTES.PROFILE.ROOT),
+      });
+    } catch (e: unknown) {
+      const error = e as AxiosError<{ message: string }>;
+      const message =
+        error.response?.data?.message || "알 수 없는 오류가 발생했습니다.";
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message,
+      });
     } finally {
       setIsSubmitting(false);
     }
