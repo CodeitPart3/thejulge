@@ -151,11 +151,12 @@ export default function ProfileRegisterPage() {
       </div>
       <div className="mb-10">
         <TextField.TextArea
-          label="소개"
+          label="소개 (최대 300자)"
           placeholder="입력"
           fullWidth
           rows={4}
           value={form.bio}
+          maxLength={300}
           onChange={(e) => handleChange("bio", e.target.value)}
         />
       </div>
