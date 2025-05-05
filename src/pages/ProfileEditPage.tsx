@@ -73,7 +73,7 @@ export default function ProfileEditPage() {
 
     if (isSubmitting) return;
 
-    const requiredFields: Array<keyof FormType> = ["name", "phone"];
+    const requiredFields: Array<keyof FormType> = ["name", "phone", "address"];
 
     const missingField = requiredFields.find((key) => {
       const value = form[key];
@@ -131,7 +131,7 @@ export default function ProfileEditPage() {
         <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
           내 프로필
         </h2>
-        <button onClick={() => navigate("/profile")}>
+        <button type="button" onClick={() => navigate("/profile")}>
           <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
         </button>
       </div>
@@ -156,7 +156,7 @@ export default function ProfileEditPage() {
           }}
         />
         <Select
-          label="선호 지역"
+          label="선호 지역*"
           placeholder="선택"
           fullWidth
           options={SeoulDistricts.map((d) => ({ label: d, value: d }))}
