@@ -1,3 +1,9 @@
+const ONE_SECOND_UNIT_MS = 1_000;
+const ONE_MINUTE = 60;
+const ONE_HOUR = ONE_MINUTE * 60;
+const ONE_DAY = ONE_HOUR * 24;
+const ONE_MONTH = ONE_DAY * 30;
+const ONE_YEAR = ONE_DAY * 365;
 const ONE_HOUR_MS = 3_600_000;
 
 /**
@@ -49,3 +55,30 @@ export function isPastDate(startsAt: string, workhour: number): boolean {
   const end = new Date(start.getTime() + workhour * ONE_HOUR_MS);
   return end.getTime() < Date.now();
 }
+
+export const getRelativeTimeFromNow = (input: string | Date): string => {
+  const date = new Date(input);
+  const now = new Date();
+  const diff = date.getTime() - now.getTime();
+  const diffInSeconds = Math.floor(diff / ONE_SECOND_UNIT_MS);
+
+  const rtf = new Intl.RelativeTimeFormat("ko-KR", { numeric: "auto" });
+
+  const units: [Intl.RelativeTimeFormatUnit, number][] = [
+    ["year", diffInSeconds / ONE_YEAR],
+    ["month", diffInSeconds / ONE_MONTH],
+    ["day", diffInSeconds / ONE_DAY],
+    ["hour", diffInSeconds / ONE_HOUR],
+    ["minute", diffInSeconds / ONE_MINUTE],
+    ["second", diffInSeconds],
+  ];
+
+  for (const [unit, value] of units) {
+    const rounded = Math.round(value);
+    if (Math.abs(rounded) >= 1) {
+      return rtf.format(rounded, unit);
+    }
+  }
+
+  return "방금 전";
+};

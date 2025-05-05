@@ -1,25 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import ActiveAlarmIcon from "../assets/icon/active.svg";
-import InActiveAlarmIcon from "../assets/icon/inactive.svg";
 import SearchIcon from "../assets/icon/search.svg";
 import Logo from "../assets/logo/thejulge.svg";
 
+import Alert from "@/components/Alert/Alert";
 import { useUserStore } from "@/hooks/useUserStore";
 
-interface HeaderProps {
-  hasAlarm?: boolean;
-  onToggleAlarm?: () => void;
-}
-
-export default function Header({ hasAlarm, onToggleAlarm }: HeaderProps) {
+export default function Header() {
   const navigate = useNavigate();
   const { user, isLoggedIn, clearUser } = useUserStore();
 
   const userNavLabel = user?.type === "employer" ? "내 가게" : "내 프로필";
   const userPath = user?.type === "employer" ? "/shop" : "/profile";
-
-  const alarmIcon = hasAlarm ? ActiveAlarmIcon : InActiveAlarmIcon;
 
   const handleLogout = () => {
     clearUser();
@@ -28,12 +20,12 @@ export default function Header({ hasAlarm, onToggleAlarm }: HeaderProps) {
 
   return (
     <header className="w-full px-4 py-2">
-      <div className="hidden md:flex max-w-screen-xl mx-auto w-full items-center justify-between">
-        <div className="flex items-center gap-[1.5rem]">
-          <Link to="/">
+      <div className="hidden md:flex gap-5 max-w-screen-xl mx-auto w-full items-center justify-between">
+        <div className="flex-1 flex items-center gap-[1.5rem]">
+          <Link to="/" className="inline-block min-w-[7rem]">
             <img src={Logo} alt="thejulge" className="w-[7rem] h-[2.625rem]" />
           </Link>
-          <div className="relative w-[28.125rem]">
+          <div className="relative w-full max-w-[28.125rem]">
             <img
               src={SearchIcon}
               alt="SearchIcon"
@@ -54,9 +46,7 @@ export default function Header({ hasAlarm, onToggleAlarm }: HeaderProps) {
               <button onClick={handleLogout} className="cursor-pointer">
                 로그아웃
               </button>
-              <button className="cursor-pointer" onClick={onToggleAlarm}>
-                <img src={alarmIcon} alt="AlertIcon" className="h-4" />
-              </button>
+              {user && <Alert userId={user.id} />}
             </>
           ) : (
             <>
@@ -79,9 +69,7 @@ export default function Header({ hasAlarm, onToggleAlarm }: HeaderProps) {
                 <button onClick={handleLogout} className="cursor-pointer">
                   로그아웃
                 </button>
-                <button className="cursor-pointer" onClick={onToggleAlarm}>
-                  <img src={alarmIcon} alt="AlertIcon" className="h-4" />
-                </button>
+                {user && <Alert userId={user.id} />}
               </>
             ) : (
               <>
