@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import ReactDOM from "react-dom";
 
+import useOutsideClick from "@/hooks/useOutsideClick";
+
 interface DropdownPopoverProps {
   anchorRef: React.RefObject<HTMLElement | null>;
   onClose: () => void;
@@ -53,23 +55,12 @@ const DropdownPopover = ({
     };
   }, [calculatePosition]);
 
-  // 클릭 외부 감지 → 드롭다운 닫기
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        popoverRef.current &&
-        !popoverRef.current.contains(e.target as Node) &&
-        anchorRef.current &&
-        !anchorRef.current.contains(e.target as Node)
-      ) {
-        onClose();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [anchorRef, onClose]);
+  useOutsideClick({
+    refs: [popoverRef, anchorRef],
+    callback: () => {
+      onClose();
+    },
+  });
 
   const isFilter = variant === "filter";
 

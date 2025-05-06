@@ -1,37 +1,22 @@
-// import Post from "./Post";
-// import "keen-slider/keen-slider.min.css";
-// import { PostData } from "./PostList";
-
-// interface PostListSliderProps {
-//   posts: PostData[];
-// }
-
-// export default function PostListSlider({ posts }: PostListSliderProps) {
-//   return (
-//     <div className="keen-slider">
-//       {posts.map((post) => (
-//         <div key={post.id} className="keen-slider__slide">
-//           <Post {...post} />
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
 import { useEffect } from "react";
 
 import { useKeenSlider } from "keen-slider/react";
 
 import "keen-slider/keen-slider.min.css";
-import Post from "./Post"; // 실제 공고 카드 컴포넌트
-import { PostData } from "./PostList"; // 타입 위치는 프로젝트에 맞게 수정
+import Post from "./Post";
+import { PostData } from "./PostList";
 
 interface PostListSliderProps {
   posts: PostData[];
+  intervalMs?: number;
 }
 
-export default function PostListSlider({ posts }: PostListSliderProps) {
-  const isMobile = typeof window !== "undefined" && window.innerWidth <= 1024;
+export default function PostListSlider({
+  posts,
+  intervalMs = 3000,
+}: PostListSliderProps) {
+  const lessThanDesktop =
+    typeof window !== "undefined" && window.innerWidth <= 1024;
 
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
@@ -47,19 +32,19 @@ export default function PostListSlider({ posts }: PostListSliderProps) {
         slides: { perView: 3, spacing: 24 },
       },
     },
-    drag: isMobile,
+    drag: lessThanDesktop,
     mode: "snap",
   });
 
   useEffect(() => {
-    if (!instanceRef.current || isMobile) return;
+    if (!instanceRef.current || lessThanDesktop) return;
 
     const interval = setInterval(() => {
       instanceRef.current?.next();
-    }, 3000);
+    }, intervalMs);
 
     return () => clearInterval(interval);
-  }, [instanceRef, isMobile]);
+  }, [instanceRef, lessThanDesktop, intervalMs]);
 
   if (!posts || posts.length === 0) return null;
 
