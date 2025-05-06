@@ -10,22 +10,31 @@ function PageErrorElement() {
   const error = useRouteError() as AxiosError;
   console.error(error);
 
+  const goHome = () => navigate(ROUTES.NOTICE.ROOT);
+  const goBack = () => {
+    if (window.history.length > 2) navigate(-1);
+    else navigate(ROUTES.NOTICE.ROOT);
+  };
+
   return (
     <div className="flex-1 flex flex-col items-center gap-6 md:gap-10 mt-20 md:mt-48">
       <h1 className="text-2xl md:text-3xl">문제가 발생했습니다.</h1>
-      <div className="flex gap-4">
+      <div className="flex gap-5">
         <Button
-          variant="white"
-          className="py-4 px-5"
-          onClick={() => navigate(-1)}
+          variant="primary"
+          textSize="md"
+          className="px-6 py-3"
+          onClick={goHome}
         >
-          이전으로
+          메인페이지로
         </Button>
         <Button
-          className="py-4 px-5"
-          onClick={() => navigate(ROUTES.NOTICE.ROOT)}
+          variant="white"
+          textSize="md"
+          className="px-6 py-3"
+          onClick={goBack}
         >
-          홈으로
+          이전 페이지로
         </Button>
       </div>
     </div>
