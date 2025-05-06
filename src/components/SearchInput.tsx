@@ -15,7 +15,10 @@ export default function SearchInput() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="relative w-[28.125rem]">
+    <form
+      onSubmit={handleSubmit}
+      className="relative w-full md:max-w-[28.125rem]"
+    >
       <img
         src={SearchIcon}
         alt="SearchIcon"
