@@ -47,7 +47,7 @@ export default function Post({
           <img
             src={imageUrl}
             alt={name}
-            className="w-full h-[84px] overflow-hidden rounded-xl bg-cover bg-center md:h-40"
+            className="w-full h-[84px] overflow-hidden rounded-xl object-cover md:h-40"
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = "/default-image.png";
