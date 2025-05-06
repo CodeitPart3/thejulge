@@ -70,6 +70,13 @@ function FilterDropdownContent({
     onClickApplyButton();
   };
 
+  const resetFilters = () => {
+    reset();
+    setPayFilter(null);
+    setStartDateFilter(null);
+    setAreasFilter([]);
+  };
+
   return (
     <div className="flex flex-col w-full h-full sm:w-[24.375rem] text-black text-sm relative">
       <div className="pt-6 pb-20 sm:pt-6 px-5 overflow-y-auto">
@@ -157,7 +164,7 @@ function FilterDropdownContent({
 
       <div className="absolute sm:static bottom-0 w-full flex justify-between gap-2 p-4 sm:pt-0 bg-white border-t-[1px] border-t-gray-20 sm:border-none">
         <Button
-          onClick={reset}
+          onClick={resetFilters}
           variant="white"
           textSize="lg"
           className="py-3.5 px-[1.125rem]"

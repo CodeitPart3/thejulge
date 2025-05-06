@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { getNotices } from "@/apis/services/noticeService";
+import NoticeSearchResultHeader from "@/components/NoticeSearchResultHeader";
 import Pagination from "@/components/Pagination";
 import type { PostData } from "@/components/Post/PostList";
 import PostList from "@/components/Post/PostList";
 import { useUserStore } from "@/hooks/useUserStore";
-import NoticeSearchResultHeader from "@/pages/NoticeSearchPage/NoticeSearchResultHeader";
 import { useFilterStore } from "@/store/useFilterStore";
 import type { SortKey } from "@/types/notice";
 
