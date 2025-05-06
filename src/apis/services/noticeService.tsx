@@ -12,7 +12,11 @@ import requestor from "../client/requestor";
 export const getNotices = (
   params?: GetNoticesParams,
 ): Promise<AxiosResponse<NoticeListResponseWithoutUserApplication>> => {
-  return requestor.get("/notices", { params });
+  const areas = params?.address ?? [];
+  const areaQueryString =
+    "?" + areas.map((area) => `address=${area}`).join("&");
+
+  return requestor.get(`/notices${areaQueryString}`, { params });
 };
 
 /* 가게의 공고 목록 조회 */
