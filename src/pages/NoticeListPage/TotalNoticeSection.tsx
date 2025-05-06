@@ -44,9 +44,7 @@ export default function TotalNoticeSection({
         </div>
       </div>
 
-      <section>
-        <PostList posts={posts} />
-      </section>
+      <PostList posts={posts} />
     </section>
   );
 }
