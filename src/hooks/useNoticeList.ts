@@ -46,8 +46,7 @@ export default function useNoticeList(page: number, selectedSort: SortKey) {
       console.error("맞춤 공고 조회 실패", err);
     }
   };
-  console.log("isLoggedIn:", isLoggedIn);
-  console.log("address:", address);
+
   useEffect(() => {
     fetchNotices();
     if (isLoggedIn && address) {
