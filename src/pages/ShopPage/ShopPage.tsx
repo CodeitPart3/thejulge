@@ -79,7 +79,7 @@ export default function ShopPage() {
 
   return (
     <>
-      <section className="xl:w-[60.25rem] mx-auto px-6 xl:px-[0px] py-[3.75rem]">
+      <section className="xl:w-[60.25rem] xl:mx-auto px-6 xl:px-[0px] py-[3.75rem]">
         <h1 className="text-[1.75rem] font-bold mb-6">내 가게</h1>
         {isShopLoading ? null : !shop ? (
           <EmptyStateCard
