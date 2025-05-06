@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-gray-10 py-6 px-4 gap-2">
       <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-center justify-between text-gray-50 text-base">
-        <span>©codeit - 2023</span>
+        <span>©codeit - 2025</span>
 
         <div className="flex gap-6">
           <a href="/privacy-policy" className="hover:underline">

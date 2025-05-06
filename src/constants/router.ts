@@ -22,6 +22,7 @@ const ROUTES = {
       EMPLOYEE: `/notice/:shopId/:noticeId/employee`,
     },
   },
+  notFound: "*",
 } as const;
 
 export { ROUTES };
