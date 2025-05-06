@@ -12,4 +12,5 @@ export const numberCommaFormatter = Intl.NumberFormat("ko-kr", {
  * @returns 숫자형
  * @example extractDigits(20,000) -> 20000
  */
-export const extractDigits = (value: string) => value.replace(/[^\d]/g, "");
+export const extractDigits = (value: string): string =>
+  value.replace(/[^\d]/g, "");

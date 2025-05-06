@@ -7,6 +7,7 @@ import noticeEmployerLoader from "./pages/NoticeEmployerPage/loader/noticeEmploy
 import profileLoader from "./pages/ProfilePage/loader/profileLoader";
 
 import NoticeDetailSkeleton from "./components/NoticeDetailSkeleton";
+import PageErrorElement from "./components/PageErrorElement";
 import { ROUTES } from "./constants/router";
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
@@ -22,12 +23,14 @@ const ShopPage = lazy(() => import("@/pages/ShopPage/ShopPage"));
 const ShopRegisterPage = lazy(() => import("@/pages/ShopRegisterPage"));
 const ShopEditPage = lazy(() => import("@/pages/ShopEditPage"));
 
-const NoticeListPage = lazy(
-  () => import("@/pages/NoticeListPage/NoticeListPage"),
-);
 const NoticeSearchPage = lazy(
   () => import("@/pages/NoticeSearchPage/NoticeSearchPage"),
 );
+
+const NoticeListPage = lazy(
+  () => import("@/pages/NoticeListPage/NoticeListPage"),
+);
+
 const NoticeRegisterPage = lazy(() => import("@/pages/NoticeRegisterPage"));
 const NoticeEditPage = lazy(() => import("@/pages/NoticeEditPage"));
 const NoticeEmployerPage = lazy(
@@ -36,6 +39,8 @@ const NoticeEmployerPage = lazy(
 const NoticeEmployeePage = lazy(
   () => import("@/pages/NoticeEmployeePage/NoticeEmployeePage"),
 );
+
+const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 
 const authRoutes: RouteObject[] = [
   {
@@ -120,15 +125,26 @@ const appRoutes: RouteObject[] = [
   ...shopRoutes,
   ...profileRoutes,
   ...noticeRoutes,
+  { path: "*", Component: NotFoundPage },
 ];
 
 export const router = createBrowserRouter([
   {
     Component: AuthLayout,
-    children: authRoutes,
+    children: [
+      {
+        children: authRoutes,
+        errorElement: <PageErrorElement />,
+      },
+    ],
   },
   {
     Component: MainLayout,
-    children: appRoutes,
+    children: [
+      {
+        children: appRoutes,
+        errorElement: <PageErrorElement />,
+      },
+    ],
   },
 ]);
