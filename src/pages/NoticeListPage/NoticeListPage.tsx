@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 
-import clsx from "clsx";
 import { useSearchParams } from "react-router-dom";
 
 import useNoticeList from "../../hooks/useNoticeList";
@@ -35,7 +34,7 @@ export default function NoticeListPage() {
         startsAt: notice.startsAt,
         workhour: notice.workhour,
         closed: notice.closed,
-        link: `/notices/${shop?.id}/${notice.id}/${
+        link: `/notice/${shop?.id}/${notice.id}/${
           user?.type === "employer" ? "employer" : "employee"
         }`,
       };
@@ -43,12 +42,7 @@ export default function NoticeListPage() {
   }, [notices, user?.type]);
 
   return (
-    <section
-      className={clsx(
-        "w-full space-y-16",
-        !(user?.type && customNotices.length > 0) && "pt-[12rem]",
-      )}
-    >
+    <section className="w-full space-y-16">
       {user?.type && customNotices.length > 0 && (
         <CustomNoticeSection customNotices={customNotices} />
       )}
