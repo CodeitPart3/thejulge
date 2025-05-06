@@ -22,9 +22,14 @@ const ShopPage = lazy(() => import("@/pages/ShopPage/ShopPage"));
 const ShopRegisterPage = lazy(() => import("@/pages/ShopRegisterPage"));
 const ShopEditPage = lazy(() => import("@/pages/ShopEditPage"));
 
+
+const NoticeListPage = lazy(() => import("@/pages/NoticeListPage"));
+const NoticeSearchPage = lazy(
+  () => import("@/pages/NoticeSearchPage/NoticeSearchPage"),
+
 const NoticeListPage = lazy(
   () => import("@/pages/NoticeListPage/NoticeListPage"),
-);
+      
 const NoticeRegisterPage = lazy(() => import("@/pages/NoticeRegisterPage"));
 const NoticeEditPage = lazy(() => import("@/pages/NoticeEditPage"));
 const NoticeEmployerPage = lazy(
@@ -86,6 +91,10 @@ const noticeRoutes: RouteObject[] = [
   {
     path: ROUTES.NOTICE.ROOT,
     Component: NoticeListPage,
+  },
+  {
+    path: ROUTES.NOTICE.SEARCH,
+    Component: NoticeSearchPage,
   },
   {
     path: ROUTES.NOTICE.REGISTER,
