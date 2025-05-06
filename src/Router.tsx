@@ -7,6 +7,7 @@ import noticeEmployerLoader from "./pages/NoticeEmployerPage/loader/noticeEmploy
 import profileLoader from "./pages/ProfilePage/loader/profileLoader";
 
 import NoticeDetailSkeleton from "./components/NoticeDetailSkeleton";
+import PageErrorElement from "./components/PageErrorElement";
 import { ROUTES } from "./constants/router";
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
@@ -130,10 +131,20 @@ const appRoutes: RouteObject[] = [
 export const router = createBrowserRouter([
   {
     Component: AuthLayout,
-    children: authRoutes,
+    children: [
+      {
+        children: authRoutes,
+        errorElement: <PageErrorElement />,
+      },
+    ],
   },
   {
     Component: MainLayout,
-    children: appRoutes,
+    children: [
+      {
+        children: appRoutes,
+        errorElement: <PageErrorElement />,
+      },
+    ],
   },
 ]);
