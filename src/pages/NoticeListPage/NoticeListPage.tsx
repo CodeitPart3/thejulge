@@ -5,10 +5,10 @@ import { useSearchParams } from "react-router-dom";
 import useNoticeList from "../../hooks/useNoticeList";
 
 import CustomNoticeSection from "./CustomNoticeSection";
-import TotalNoticeSection from "./TotalNoticeSection";
 
+import NoticeSearchResultHeader from "@/components/NoticeSearchResultHeader";
 import PageNation from "@/components/Pagination";
-import { PostData } from "@/components/Post/PostList";
+import PostList, { PostData } from "@/components/Post/PostList";
 import { useUserStore } from "@/hooks/useUserStore";
 import type { SortKey } from "@/types/notice";
 
@@ -18,7 +18,10 @@ export default function NoticeListPage() {
   const page = Number(searchParams.get("page") ?? 1);
   const [selectedSort, setSelectedSort] = useState<SortKey>("time");
 
-  const { notices, total, customNotices } = useNoticeList(page, selectedSort);
+  const { isLoading, refetch, notices, total, customNotices } = useNoticeList(
+    page,
+    selectedSort,
+  );
 
   const posts: PostData[] = useMemo(() => {
     return notices.map((notice) => {
@@ -41,19 +44,42 @@ export default function NoticeListPage() {
     });
   }, [notices, user?.type]);
 
+  const handleSortChange = (value: string) => {
+    setSelectedSort(value as SortKey);
+  };
+
+  const refetchFilteredNotices = () => {
+    refetch();
+  };
+
   return (
     <section className="w-full space-y-16">
       {user?.type && customNotices.length > 0 && (
         <CustomNoticeSection customNotices={customNotices} />
       )}
-
-      <TotalNoticeSection
-        posts={posts}
-        total={total}
-        selectedSort={selectedSort}
-        setSelectedSort={setSelectedSort}
+      <NoticeSearchResultHeader
         page={page}
+        selectedSort={selectedSort}
+        onChangeSort={handleSortChange}
+        refetch={refetchFilteredNotices}
       />
+
+      <div className="min-h-[33.5rem] sm:min-h-[48.75rem]">
+        {isLoading && (
+          <p className="text-center text-gray-400 pt-40 sm:pt-60">
+            공고 불러오는 중
+          </p>
+        )}
+
+        {!isLoading &&
+          (posts.length > 0 ? (
+            <PostList posts={posts} />
+          ) : (
+            <p className="text-center text-gray-400 pt-40 sm:pt-60">
+              조건에 맞는 공고가 없어요.
+            </p>
+          ))}
+      </div>
 
       <div className="flex justify-center mt-8">
         <PageNation count={total} itemCountPerPage={7} />

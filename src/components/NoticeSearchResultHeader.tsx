@@ -20,7 +20,7 @@ interface TotalNoticeSectionProps {
 }
 
 export default function NoticeSearchResultHeader({
-  keyword = "전체 공고",
+  keyword,
   selectedSort,
   onChangeSort,
   refetch,
