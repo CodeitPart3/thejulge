@@ -11,7 +11,6 @@ import PageNation from "@/components/Pagination";
 import { PostData } from "@/components/Post/PostList";
 import { useUserStore } from "@/hooks/useUserStore";
 import type { SortKey } from "@/types/notice";
-import { cn } from "@/utils/cn";
 
 export default function NoticeListPage() {
   const { user } = useUserStore();
@@ -43,12 +42,7 @@ export default function NoticeListPage() {
   }, [notices, user?.type]);
 
   return (
-    <section
-      className={cn(
-        "w-full space-y-16",
-        !(user?.type && customNotices.length > 0) && "pt-[12rem]",
-      )}
-    >
+    <section className="w-full space-y-16">
       {user?.type && customNotices.length > 0 && (
         <CustomNoticeSection customNotices={customNotices} />
       )}
