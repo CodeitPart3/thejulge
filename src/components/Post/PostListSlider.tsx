@@ -21,15 +21,16 @@ export default function PostListSlider({
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: {
-      perView: 1.2,
-      spacing: 12,
+      perView: 3,
+      spacing: 14,
     },
     breakpoints: {
-      "(min-width: 640px)": {
-        slides: { perView: 2.5, spacing: 16 },
-      },
-      "(min-width: 1024px)": {
-        slides: { perView: 3, spacing: 24 },
+      "(max-width: 80rem)": {
+        slides: {
+          // perView: 3,
+          perView: 2,
+          spacing: 14,
+        },
       },
     },
     drag: lessThanDesktop,
@@ -49,9 +50,9 @@ export default function PostListSlider({
   if (!posts || posts.length === 0) return null;
 
   return (
-    <div ref={sliderRef} className="keen-slider">
+    <div ref={sliderRef} className="keen-slider !w-[60.25rem] mx-auto">
       {posts.map((post) => (
-        <div key={post.id} className="keen-slider__slide">
+        <div key={post.id} className="keen-slider__slide post-slide">
           <Post {...post} />
         </div>
       ))}
