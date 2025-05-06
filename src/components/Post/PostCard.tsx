@@ -57,6 +57,10 @@ export default function PostCard({
           src={imageUrl}
           alt={name}
           className="w-full h-[180px] object-cover md:h-[360px] lg:h-[308px]"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/default-image.png";
+          }}
         />
         {isDimmed && (
           <div className="absolute inset-0 flex items-center justify-center bg-black opacity-70">

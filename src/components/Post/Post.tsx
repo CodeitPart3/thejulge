@@ -47,7 +47,11 @@ export default function Post({
           <img
             src={imageUrl}
             alt={name}
-            className="w-full h-[84px] overflow-hidden rounded-xl bg-cover bg-center md:h-40"
+            className="w-full h-[84px] overflow-hidden rounded-xl object-cover md:h-40"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/default-image.png";
+            }}
           />
           {isDimmed && (
             <h3 className="absolute inset-0 flex items-center justify-center rounded-md bg-black/70 text-sm text-gray-30 md:text-[28px]">
