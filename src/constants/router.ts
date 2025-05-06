@@ -23,6 +23,7 @@ const ROUTES = {
     },
     SEARCH: "/search",
   },
+  notFound: "*",
 } as const;
 
 export { ROUTES };

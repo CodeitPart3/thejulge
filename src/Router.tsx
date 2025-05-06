@@ -39,6 +39,8 @@ const NoticeEmployeePage = lazy(
   () => import("@/pages/NoticeEmployeePage/NoticeEmployeePage"),
 );
 
+const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
+
 const authRoutes: RouteObject[] = [
   {
     path: ROUTES.AUTH.SIGNUP,
@@ -122,6 +124,7 @@ const appRoutes: RouteObject[] = [
   ...shopRoutes,
   ...profileRoutes,
   ...noticeRoutes,
+  { path: "*", Component: NotFoundPage },
 ];
 
 export const router = createBrowserRouter([
