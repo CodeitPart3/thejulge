@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
 
 import Button from "@/components/Button";
+import { ROUTES } from "@/constants/router";
 
 export default function NotFoundPage() {
   const navigate = useNavigate();
 
-  const goHome = () => navigate("/");
+  const goHome = () => navigate(ROUTES.NOTICE.ROOT);
   const goBack = () => {
     if (window.history.length > 2) navigate(-1);
-    else navigate("/");
+    else navigate(ROUTES.NOTICE.ROOT);
   };
 
   return (
