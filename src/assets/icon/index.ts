@@ -1,8 +1,8 @@
 import Active from "./active.svg?react";
 import ArrowLeft from "./arrow-left.svg?react";
 import ArrowRight from "./arrow-right.svg?react";
-import ArrowUp from "./arrow-up.svg?react";
 import ArrowUpBold from "./arrow-up-bold.svg?react";
+import ArrowUp from "./arrow-up.svg?react";
 import Camera from "./camera.svg?react";
 import Check from "./check.svg?react";
 import Close from "./close.svg?react";
@@ -13,6 +13,7 @@ import Location from "./location.svg?react";
 import Notice from "./notice.svg?react";
 import Phone from "./phone.svg?react";
 import Search from "./search.svg?react";
+import TagClose from "./tag-close.svg?react";
 import Time from "./time.svg?react";
 
 export {
@@ -21,6 +22,7 @@ export {
   ArrowLeft,
   ArrowRight,
   Close,
+  TagClose,
   Camera,
   Search,
   DropdownDown,

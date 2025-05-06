@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 import { cn } from "@/utils/cn";
 
@@ -27,28 +27,40 @@ const variantClassMap: Record<ButtonVariant, string> = {
 
 const disabledClass = "bg-gray-40 text-white cursor-not-allowed";
 
-export default function Button({
-  variant = "primary",
-  textSize = "md",
-  fullWidth = false,
-  disabled = false,
-  className,
-  children,
-  ...props
-}: ButtonProps) {
-  const baseClasses = "rounded-md";
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      variant = "primary",
+      textSize = "md",
+      fullWidth = false,
+      disabled = false,
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const baseClasses = "rounded-md";
 
-  const mergedClasses = cn(
-    baseClasses,
-    textSizeClassMap[textSize],
-    disabled ? disabledClass : variantClassMap[variant],
-    fullWidth && "w-full",
-    className,
-  );
+    const mergedClasses = cn(
+      baseClasses,
+      textSizeClassMap[textSize],
+      disabled ? disabledClass : variantClassMap[variant],
+      fullWidth && "w-full",
+      className,
+    );
 
-  return (
-    <button className={mergedClasses} disabled={disabled} {...props}>
-      {children}
-    </button>
-  );
-}
+    return (
+      <button
+        ref={ref}
+        className={mergedClasses}
+        disabled={disabled}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  },
+);
+
+export default Button;

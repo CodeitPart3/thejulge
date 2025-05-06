@@ -82,3 +82,12 @@ export const getRelativeTimeFromNow = (input: string | Date): string => {
 
   return "방금 전";
 };
+
+export const getUTCDateFromLocaleTime = (date: Date) => {
+  const yyyy = date.getFullYear();
+  const mm = date.getMonth();
+  const dd = date.getDate();
+
+  const utcDate = new Date(Date.UTC(yyyy, mm, dd, 0, 0, 0));
+  return utcDate.toISOString();
+};
