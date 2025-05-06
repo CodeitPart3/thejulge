@@ -4,6 +4,7 @@ import SearchIcon from "../assets/icon/search.svg";
 import Logo from "../assets/logo/thejulge.svg";
 
 import Alert from "@/components/Alert/Alert";
+import SearchInput from "@/components/SearchInput";
 import { useUserStore } from "@/hooks/useUserStore";
 
 export default function Header() {
@@ -25,18 +26,8 @@ export default function Header() {
           <Link to="/" className="inline-block min-w-[7rem]">
             <img src={Logo} alt="thejulge" className="w-[7rem] h-[2.625rem]" />
           </Link>
-          <div className="relative w-full max-w-[28.125rem]">
-            <img
-              src={SearchIcon}
-              alt="SearchIcon"
-              className="absolute inset-y-2.5 left-3 flex items-center"
-            />
-            <input
-              type="text"
-              placeholder="가게 이름으로 찾아보세요"
-              className="pl-10 w-full h-[2.5rem] rounded-[0.625rem] p-[0.625rem] bg-gray-10 border border-transparent placeholder:text-gray-40 placeholder:text-sm"
-            />
-          </div>
+
+          <SearchInput />
         </div>
 
         <div className="flex items-center gap-8 text-sm font-bold">
