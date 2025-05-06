@@ -78,22 +78,21 @@ export default function Post({
               {hourlyPay.toLocaleString()}원
             </h2>
 
-            {displayRate > 0 && (
-              <span
-                className={cn(
-                  "mt-[5px] flex items-center gap-[2px] text-xs font-normal text-red-40 md:text-sm md:text-white md:px-3 md:py-2 md:rounded-[20px]",
-                  displayRate >= 50
-                    ? "md:bg-red-40"
-                    : displayRate >= 25
-                      ? "md:bg-red-30"
-                      : "md:bg-red-20",
-                )}
-              >
-                {rateText}
-                <ArrowUp className="hidden h-5 w-5 md:block" />
-                <ArrowUpBold className="h-4 w-4 md:hidden" />
-              </span>
-            )}
+            <span
+              className={cn(
+                "mt-[5px] flex items-center gap-[2px] text-xs font-normal text-red-40 md:text-sm md:text-white md:px-3 md:py-2 md:rounded-[20px]",
+                displayRate >= 50
+                  ? "md:bg-red-40"
+                  : displayRate >= 25
+                    ? "md:bg-red-30"
+                    : "md:bg-red-20",
+                displayRate > 0 ? "" : "opacity-0",
+              )}
+            >
+              {rateText}
+              <ArrowUp className="hidden h-5 w-5 md:block" />
+              <ArrowUpBold className="h-4 w-4 md:hidden" />
+            </span>
           </div>
         </div>
       </article>
