@@ -25,6 +25,7 @@
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
+    "keen-slider": "^6.8.6",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-datepicker": "^8.3.0",
