@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 
-import clsx from "clsx";
 import { useSearchParams } from "react-router-dom";
 
 import useNoticeList from "../../hooks/useNoticeList";
@@ -12,6 +11,7 @@ import PageNation from "@/components/Pagination";
 import { PostData } from "@/components/Post/PostList";
 import { useUserStore } from "@/hooks/useUserStore";
 import type { SortKey } from "@/types/notice";
+import { cn } from "@/utils/cn";
 
 export default function NoticeListPage() {
   const { user } = useUserStore();
@@ -35,7 +35,7 @@ export default function NoticeListPage() {
         startsAt: notice.startsAt,
         workhour: notice.workhour,
         closed: notice.closed,
-        link: `/notices/${shop?.id}/${notice.id}/${
+        link: `/notice/${shop?.id}/${notice.id}/${
           user?.type === "employer" ? "employer" : "employee"
         }`,
       };
@@ -44,7 +44,7 @@ export default function NoticeListPage() {
 
   return (
     <section
-      className={clsx(
+      className={cn(
         "w-full space-y-16",
         !(user?.type && customNotices.length > 0) && "pt-[12rem]",
       )}
