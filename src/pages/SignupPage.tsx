@@ -151,8 +151,14 @@ export default function SignupPage() {
               onClick={() =>
                 setFormData((prev) => ({ ...prev, userType: "employee" }))
               }
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && isFormValid) {
+                  e.preventDefault();
+                  handleSubmit();
+                }
+              }}
               className={clsx(
-                "flex items-center justify-center gap-[0.5625rem] rounded-[1.875rem] border px-[2.5625rem] py-[0.8125rem]",
+                "flex items-center justify-center gap-[0.5625rem] rounded-[1.875rem] border px-[2.5625rem] py-[0.8125rem] focus:outline-none focus:ring-0",
                 formData.userType === "employee"
                   ? "border-primary"
                   : "border-gray-30",
@@ -178,8 +184,14 @@ export default function SignupPage() {
               onClick={() =>
                 setFormData((prev) => ({ ...prev, userType: "employer" }))
               }
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && isFormValid) {
+                  e.preventDefault();
+                  handleSubmit();
+                }
+              }}
               className={clsx(
-                "flex items-center justify-center gap-[0.5625rem] rounded-[1.875rem] border px-[2.5625rem] py-[0.8125rem]",
+                "flex items-center justify-center gap-[0.5625rem] rounded-[1.875rem] border px-[2.5625rem] py-[0.8125rem] focus:outline-none focus:ring-0",
                 formData.userType === "employer"
                   ? "border-primary"
                   : "border-gray-30",
@@ -201,10 +213,9 @@ export default function SignupPage() {
         </fieldset>
 
         <Button
-          type="button"
+          type="submit"
           fullWidth
           className="py-[0.875rem]"
-          onClick={handleSubmit}
           disabled={!isFormValid}
         >
           가입하기

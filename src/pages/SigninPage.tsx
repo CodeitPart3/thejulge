@@ -85,7 +85,9 @@ export default function SigninPage() {
         className="mt-[2.5rem] mx-auto flex max-w-sm flex-col gap-[1.75rem]"
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit();
+          if (isFormValid) {
+            handleSubmit();
+          }
         }}
       >
         <TextField.Input
@@ -111,7 +113,7 @@ export default function SigninPage() {
         />
 
         <Button
-          type="button"
+          type="submit"
           fullWidth
           className="py-[0.875rem]"
           onClick={handleSubmit}
