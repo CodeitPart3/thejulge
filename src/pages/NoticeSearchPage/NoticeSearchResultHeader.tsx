@@ -1,7 +1,3 @@
-// 현재 리스트 공고 페이지가 PR이 올라간 상태여서 TotalNoticeSection 파일을 수정하기 어려움.
-// 그래서 임시로 복사본 만들어서 작업 진행 중.
-// import { Dispatch, SetStateAction } from "react";
-
 import { useMemo, useRef, useState } from "react";
 
 import { useSearchParams } from "react-router-dom";

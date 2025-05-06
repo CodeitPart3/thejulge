@@ -12,11 +12,18 @@ import requestor from "../client/requestor";
 export const getNotices = (
   params?: GetNoticesParams,
 ): Promise<AxiosResponse<NoticeListResponseWithoutUserApplication>> => {
-  const areas = params?.address ?? [];
-  const areaQueryString =
-    "?" + areas.map((area) => `address=${area}`).join("&");
+  const { address, ...restParams } = params ?? {};
+  let queryAddress: string | undefined = "";
 
-  return requestor.get(`/notices${areaQueryString}`, { params });
+  if (address && Array.isArray(address)) {
+    queryAddress = "?" + address.map((area) => `address=${area}`).join("&");
+  }
+
+  if (typeof address === "string") {
+    queryAddress = `?address=${address}`;
+  }
+
+  return requestor.get(`/notices${queryAddress}`, { params: restParams });
 };
 
 /* 가게의 공고 목록 조회 */

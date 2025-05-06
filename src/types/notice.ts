@@ -32,7 +32,7 @@ export interface NoticeItem {
 export interface GetNoticesParams {
   offset?: number;
   limit?: number;
-  address?: string[];
+  address?: string | string[];
   keyword?: string;
   startsAtGte?: string;
   hourlyPayGte?: number;
