@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import Button from "@/components/Button";
 import FilterDropdownContent from "@/components/Dropdown/FilterDropdownContent";
 import Select from "@/components/Select";
+import useBreakpoint from "@/hooks/useBreakpoint";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { SORT_OPTIONS } from "@/pages/NoticeSearchPage/constantsCopy";
 import { useFilterStore } from "@/store/useFilterStore";
@@ -26,6 +27,7 @@ export default function NoticeSearchResultHeader({
   refetch,
 }: TotalNoticeSectionProps) {
   const [, setSearchParams] = useSearchParams();
+  const device = useBreakpoint();
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const { minPay, selectedAreas, startDate } = useFilterStore();
 
@@ -63,12 +65,13 @@ export default function NoticeSearchResultHeader({
   };
 
   useEffect(() => {
-    if (showFilter) {
+    const isMobile = device === "mobile";
+    if (showFilter && isMobile) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
     }
-  }, [showFilter]);
+  }, [device, showFilter]);
 
   return (
     <div>
