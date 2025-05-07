@@ -89,7 +89,7 @@ function NoticeApplicationTable({
           <Table.Th className="min-w-[12rem] max-w-[14.25rem]">
             전화번호
           </Table.Th>
-          <Table.Th className="min-w-[12.5rem] max-w-[14.25rem]">상태</Table.Th>
+          <Table.Th className="min-w-[15rem] max-w-[14.25rem]">상태</Table.Th>
         </Table.Tr>
       )}
       bodyRow={({ id, status, user, shop, notice }) => (
