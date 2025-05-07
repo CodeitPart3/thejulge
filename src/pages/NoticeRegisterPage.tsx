@@ -10,6 +10,7 @@ import { postNotice } from "@/apis/services/noticeService";
 import { Close } from "@/assets/icon";
 import Button from "@/components/Button";
 import TextField from "@/components/TextField";
+import { MAX_WAGE, MIN_WAGE } from "@/constants/wage";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
@@ -89,11 +90,20 @@ export default function NoticeRegisterPage() {
     }
 
     const hourlyPay = Number(extractDigits(form.hourlyPay));
-    if (isNaN(hourlyPay) || hourlyPay <= 0) {
+    const formattedMaxWage = numberCommaFormatter(MAX_WAGE);
+
+    if (hourlyPay < MIN_WAGE) {
       openModal({
         type: "alert",
         iconType: "warning",
-        message: "유효한 시급을 입력해 주세요.",
+        message: "시급은 최저시급 이상이어야 합니다.",
+      });
+      return;
+    } else if (hourlyPay > MAX_WAGE) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: `시급은 ${formattedMaxWage}원 이하여야 합니다.`,
       });
       return;
     }
