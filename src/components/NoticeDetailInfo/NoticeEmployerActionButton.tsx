@@ -14,6 +14,7 @@ function NoticeEmployerActionButton({
   noticeId,
 }: NoticeEmployerActionButtonProps) {
   const navigate = useNavigate();
+  const isMyShop = userShopId === noticeShopId;
 
   const moveToEditNoticePage = () => {
     navigate(`/notice/edit/${noticeId}`);
@@ -25,9 +26,9 @@ function NoticeEmployerActionButton({
       variant="white"
       className={"py-[14px]"}
       onClick={moveToEditNoticePage}
-      disabled={userShopId !== noticeShopId}
+      disabled={!isMyShop}
     >
-      공고 편집하기
+      {isMyShop ? "공고 편집하기" : "다른 가게의 공고 편집 불가"}
     </Button>
   );
 }
