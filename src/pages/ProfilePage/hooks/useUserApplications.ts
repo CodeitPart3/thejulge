@@ -24,26 +24,31 @@ const useUserApplications = ({
   >([]);
   const page = Number(searchParams.get("page")) || 1;
 
-  const fetchUserApplication = async () => {
-    setIsLoading(true);
-    const userApplications = await getUserApplications(
-      userId,
-      (page - 1) * offset,
-      limit,
-    );
-
-    const nextUserApplications = userApplications.data.items.map(
-      ({ item }) => item,
-    );
-
-    setTotalCount(userApplications.data.count);
-    setUserApplications(nextUserApplications);
-    setIsLoading(false);
-  };
-
   useEffect(() => {
+    if (!userId) return;
+
+    const fetchUserApplication = async () => {
+      try {
+        setIsLoading(true);
+        const userApplications = await getUserApplications(
+          userId,
+          (page - 1) * offset,
+          limit,
+        );
+
+        const nextUserApplications = userApplications.data.items.map(
+          ({ item }) => item,
+        );
+
+        setTotalCount(userApplications.data.count);
+        setUserApplications(nextUserApplications);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     fetchUserApplication();
-  }, [page]);
+  }, [userId, page, offset, limit]); // 의존성 보완
 
   return { userApplications, isLoading, totalCount };
 };

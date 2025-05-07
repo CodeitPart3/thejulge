@@ -8,6 +8,8 @@ import profileLoader from "./pages/ProfilePage/loader/profileLoader";
 
 import NoticeDetailSkeleton from "./components/NoticeDetailSkeleton";
 import PageErrorElement from "./components/PageErrorElement";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { loginProtectCondition } from "./constants/router";
 import { ROUTES } from "./constants/router";
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
@@ -45,27 +47,27 @@ const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 const authRoutes: RouteObject[] = [
   {
     path: ROUTES.AUTH.SIGNUP,
-    Component: SignupPage,
+    element: <SignupPage />,
   },
   {
     path: ROUTES.AUTH.SIGNIN,
-    Component: SigninPage,
+    element: <SigninPage />,
   },
 ];
 
 const shopRoutes: RouteObject[] = [
   {
     path: ROUTES.SHOP.ROOT,
-    Component: ShopPage,
+    element: <ShopPage />,
   },
   {
     path: ROUTES.SHOP.REGISTER,
-    Component: ShopRegisterPage,
+    element: <ShopRegisterPage />,
     handle: { hideFooter: true },
   },
   {
     path: ROUTES.SHOP.EDIT,
-    Component: ShopEditPage,
+    element: <ShopEditPage />,
     handle: { hideFooter: true },
   },
 ];
@@ -73,17 +75,30 @@ const shopRoutes: RouteObject[] = [
 const profileRoutes: RouteObject[] = [
   {
     path: ROUTES.PROFILE.ROOT,
-    Component: ProfilePage,
+    element: (
+      <ProtectedRoute
+        conditions={({ isLoggedIn, user }) => [
+          loginProtectCondition(isLoggedIn),
+          {
+            isPass: user?.type === "employee",
+            redirectPath: ROUTES.SHOP.ROOT,
+            message: "알바생 계정으로만 이용 가능한 기능입니다.",
+          },
+        ]}
+      >
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
     loader: profileLoader,
   },
   {
     path: ROUTES.PROFILE.REGISTER,
-    Component: ProfileRegisterPage,
+    element: <ProfileRegisterPage />,
     handle: { hideFooter: true },
   },
   {
     path: ROUTES.PROFILE.EDIT,
-    Component: ProfileEditPage,
+    element: <ProfileEditPage />,
     handle: { hideFooter: true },
   },
 ];
@@ -91,31 +106,57 @@ const profileRoutes: RouteObject[] = [
 const noticeRoutes: RouteObject[] = [
   {
     path: ROUTES.NOTICE.ROOT,
-    Component: NoticeListPage,
+    element: <NoticeListPage />,
   },
   {
     path: ROUTES.NOTICE.SEARCH,
-    Component: NoticeSearchPage,
+    element: <NoticeSearchPage />,
   },
   {
     path: ROUTES.NOTICE.REGISTER,
-    Component: NoticeRegisterPage,
+    element: <NoticeRegisterPage />,
     handle: { hideFooter: true },
   },
   {
     path: ROUTES.NOTICE.EDIT,
-    Component: NoticeEditPage,
+    element: <NoticeEditPage />,
     handle: { hideFooter: true },
   },
   {
     path: ROUTES.NOTICE.NOTICE_ID.EMPLOYER,
-    Component: NoticeEmployerPage,
+    element: (
+      <ProtectedRoute
+        conditions={({ isLoggedIn, user }) => [
+          loginProtectCondition(isLoggedIn),
+          {
+            isPass: user?.type === "employer",
+            redirectPath: ROUTES.PROFILE.ROOT,
+            message: "사장님 계정으로만 이용 가능한 기능입니다.",
+          },
+        ]}
+      >
+        <NoticeEmployerPage />
+      </ProtectedRoute>
+    ),
     loader: noticeEmployerLoader,
     hydrateFallbackElement: <NoticeDetailSkeleton />,
   },
   {
     path: ROUTES.NOTICE.NOTICE_ID.EMPLOYEE,
-    Component: NoticeEmployeePage,
+    element: (
+      <ProtectedRoute
+        conditions={({ isLoggedIn, user }) => [
+          loginProtectCondition(isLoggedIn),
+          {
+            isPass: user?.type === "employee",
+            redirectPath: ROUTES.SHOP.ROOT,
+            message: "알바생 계정으로만 이용 가능한 기능입니다.",
+          },
+        ]}
+      >
+        <NoticeEmployeePage />
+      </ProtectedRoute>
+    ),
     loader: noticeEmployeeLoader,
     hydrateFallbackElement: <NoticeDetailSkeleton />,
   },
@@ -125,12 +166,12 @@ const appRoutes: RouteObject[] = [
   ...shopRoutes,
   ...profileRoutes,
   ...noticeRoutes,
-  { path: "*", Component: NotFoundPage },
+  { path: "*", element: <NotFoundPage /> },
 ];
 
 export const router = createBrowserRouter([
   {
-    Component: AuthLayout,
+    element: <AuthLayout />,
     children: [
       {
         children: authRoutes,
@@ -139,7 +180,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    Component: MainLayout,
+    element: <MainLayout />,
     children: [
       {
         children: appRoutes,

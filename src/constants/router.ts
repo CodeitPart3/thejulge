@@ -1,4 +1,4 @@
-const ROUTES = {
+export const ROUTES = {
   AUTH: {
     SIGNUP: "/signup",
     SIGNIN: "/signin",
@@ -26,4 +26,9 @@ const ROUTES = {
   notFound: "*",
 } as const;
 
-export { ROUTES };
+export const loginProtectCondition = (isLoggedIn: boolean) =>
+  ({
+    isPass: isLoggedIn,
+    redirectPath: ROUTES.AUTH.SIGNIN,
+    message: "로그인 후에 이용 가능한 기능입니다.",
+  }) as const;
