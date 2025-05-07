@@ -20,7 +20,7 @@ export default function Header() {
 
   return (
     <header className="w-full px-4 py-2">
-      <div className="hidden md:flex gap-5 max-w-screen-xl mx-auto w-full items-center justify-between">
+      <div className="hidden md:flex gap-5 max-w-screen-lg mx-auto w-full items-center justify-between">
         <div className="flex-1 flex items-center gap-[1.5rem]">
           <Link to="/" className="inline-block min-w-[7rem]">
             <img src={Logo} alt="thejulge" className="w-[7rem] h-[2.625rem]" />
@@ -36,7 +36,7 @@ export default function Header() {
               <button onClick={handleLogout} className="cursor-pointer">
                 로그아웃
               </button>
-              {user && <Alert userId={user.id} />}
+              {user && user.type === "employee" && <Alert userId={user.id} />}
             </>
           ) : (
             <>
@@ -59,7 +59,7 @@ export default function Header() {
                 <button onClick={handleLogout} className="cursor-pointer">
                   로그아웃
                 </button>
-                {user && <Alert userId={user.id} />}
+                {user && user.type === "employee" && <Alert userId={user.id} />}
               </>
             ) : (
               <>

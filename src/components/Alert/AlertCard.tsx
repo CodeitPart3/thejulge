@@ -1,4 +1,4 @@
-import { forwardRef, Ref, useState } from "react";
+import { forwardRef, Ref } from "react";
 
 import { putAlert } from "@/apis/services/alertService";
 import useIntersection from "@/hooks/useIntersection";
@@ -14,16 +14,13 @@ interface AlertCardProps {
 const AlertCard = forwardRef(
   ({ alert, userId }: AlertCardProps, ref: Ref<HTMLLIElement>) => {
     const { id, shop, notice, read, result, createdAt } = alert;
-    const [readStatus, setReadStatus] = useState(read);
+
+    const isAccepted = result === "accepted";
 
     const targetRef = useIntersection({
       callback: async ([entry]) => {
         if (entry.isIntersecting && userId && !read) {
-          const result = await putAlert(userId, id);
-
-          if (result.status === 200) {
-            setReadStatus(result.data.items[0].item.read);
-          }
+          await putAlert(userId, id);
         }
       },
     });
@@ -36,17 +33,15 @@ const AlertCard = forwardRef(
         <span
           className={cn(
             "inline-block my-1 w-[0.3125rem] h-[0.3125rem] rounded-full",
-            readStatus ? "bg-blue-20" : "bg-red-40",
+            isAccepted ? "bg-blue-20" : "bg-red-40",
           )}
         />
         <p className="text-sm">
           {shop.item.name}(
           {formatTimeRange(notice.item.startsAt, notice.item.workhour)}) 공고
           지원이{" "}
-          <strong
-            className={result === "accepted" ? "text-blue-20" : "text-red-40"}
-          >
-            {result === "accepted" ? "승인" : "거절"}
+          <strong className={isAccepted ? "text-blue-20" : "text-red-40"}>
+            {isAccepted ? "승인" : "거절"}
           </strong>
           되었어요.
         </p>

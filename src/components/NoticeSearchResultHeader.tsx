@@ -6,6 +6,7 @@ import Button from "@/components/Button";
 import FilterDropdownContent from "@/components/Dropdown/FilterDropdownContent";
 import Select from "@/components/Select";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import useRemoveTopPageScroll from "@/hooks/useRemoveTopPageScroll";
 import { SORT_OPTIONS } from "@/pages/NoticeSearchPage/constantsCopy";
 import { useFilterStore } from "@/store/useFilterStore";
 import type { SortKey } from "@/types/notice";
@@ -44,6 +45,11 @@ export default function NoticeSearchResultHeader({
     callback: () => setShowFilter(false),
   });
 
+  useRemoveTopPageScroll({
+    observeDevices: ["mobile"],
+    condition: showFilter,
+  });
+
   const handleSortChange = (value: string) => {
     onChangeSort(value as SortKey);
   };
@@ -64,8 +70,8 @@ export default function NoticeSearchResultHeader({
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-6 sm:mb-8">
-        <h2 className="font-bold text-[1.25rem] md:text-[1.75rem] text-black ">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 ">
+        <h2 className="font-bold text-[1.25rem] sm:text-[1.75rem] lg:text-[1.75rem] text-black">
           {keyword ? (
             <>
               <span className="text-primary">{keyword}</span>에 대한 공고 목록
@@ -94,10 +100,11 @@ export default function NoticeSearchResultHeader({
                 ref={wrapperRef}
                 className={cn(
                   "fixed inset-0 sm:inset-auto sm:absolute sm:top-12 sm:right-0 z-10 bg-white",
-                  "border border-gray-20 shadow-xl rounded-[0.625rem] overflow-hidden",
+                  "border border-gray-20 shadow-xl sm:rounded-[0.625rem] overflow-hidden",
                 )}
               >
                 <FilterDropdownContent
+                  refetch={refetch}
                   onClickApplyButton={clickFilterConfirmHandler}
                   onClose={toggleShowFilter}
                 />
