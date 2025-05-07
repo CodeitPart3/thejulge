@@ -31,7 +31,7 @@ const FIELD_LABELS: Record<keyof FormType, string> = {
 
 export default function ProfileRegisterPage() {
   const navigate = useNavigate();
-  const { user } = useUserStore();
+  const { user, updateUser } = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const openModal = useModalStore((state) => state.openModal);
 
@@ -84,6 +84,7 @@ export default function ProfileRegisterPage() {
 
     try {
       await putUser(user.id, payload);
+      updateUser(payload);
       openModal({
         type: "message",
         iconType: "none",
