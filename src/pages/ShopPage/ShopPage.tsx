@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,9 @@ import EmptyStateCard from "@/components/EmptyStateCard";
 import PostCard from "@/components/Post/PostCard";
 import PostList from "@/components/Post/PostList";
 import { ROUTES } from "@/constants/router";
+import { useUserStore } from "@/hooks/useUserStore";
 import { useShopData } from "@/pages/ShopPage/hooks/useShopData";
+import { useModalStore } from "@/store/useModalStore";
 
 export interface PostListItem {
   id: string;
@@ -24,6 +26,8 @@ export interface PostListItem {
 
 export default function ShopPage() {
   const navigate = useNavigate();
+  const { openModal, closeModal } = useModalStore();
+  const { user } = useUserStore();
 
   const {
     shop,
@@ -36,6 +40,46 @@ export default function ShopPage() {
     LIMIT,
   } = useShopData();
 
+  useEffect(() => {
+    if (!user) {
+      openModal({
+        type: "alert",
+        message: "로그인 후에 이용 가능한 기능입니다.",
+        iconType: "warning",
+        buttons: [
+          {
+            label: "확인",
+            style: "white",
+            onClick: () => {
+              closeModal();
+            },
+          },
+        ],
+        onClose: () => {
+          navigate(ROUTES.AUTH.SIGNIN);
+        },
+      });
+    } else if (user.type === "employee") {
+      openModal({
+        type: "alert",
+        message: "사장님 계정으로만 이용 가능한 기능입니다.",
+        iconType: "warning",
+        buttons: [
+          {
+            label: "확인",
+            style: "white",
+            onClick: () => {
+              closeModal();
+            },
+          },
+        ],
+        onClose: () => {
+          navigate(ROUTES.PROFILE.ROOT);
+        },
+      });
+    }
+  }, [user, openModal, closeModal, navigate]);
+
   const observer = useRef<IntersectionObserver | null>(null);
 
   const postListData: PostListItem[] = useMemo(() => {
@@ -44,7 +88,7 @@ export default function ShopPage() {
     return [...notices]
       .sort(
         (a, b) =>
-          new Date(b.startsAt).getTime() - new Date(a.startsAt).getTime(),
+          new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime(),
       )
       .map((notice) => ({
         id: notice.id,
@@ -79,7 +123,7 @@ export default function ShopPage() {
 
   return (
     <>
-      <section className="xl:w-[60.25rem] xl:mx-auto px-6 xl:px-[0px] py-[3.75rem]">
+      <section className="lg:w-[60.25rem] lg:mx-auto px-6 lg:px-[0px] py-[3.75rem]">
         <h1 className="text-[1.75rem] font-bold mb-6">내 가게</h1>
         {isShopLoading ? null : !shop ? (
           <EmptyStateCard
@@ -90,6 +134,11 @@ export default function ShopPage() {
         ) : (
           <PostCard
             {...shop}
+            description={
+              shop.description && shop.description.trim() !== ""
+                ? shop.description
+                : "등록된 가게 정보가 없습니다"
+            }
             isShopInfo={true}
             backgroundColor="bg-red-10"
             buttons={
@@ -117,7 +166,7 @@ export default function ShopPage() {
 
       {shop && (
         <section className="flex-1 bg-gray-5">
-          <div className="xl:w-[60.25rem] mx-auto px-6 xl:px-[0px] pt-[3.75rem] pb-[7.5rem]">
+          <div className="lg:w-[60.25rem] mx-auto px-6 lg:px-[0px] pt-[3.75rem] pb-[7.5rem]">
             <h1 className="text-[1.75rem] font-bold mb-8">등록한 공고</h1>
 
             {isNoticeLoading ? null : notices.length === 0 ? (
