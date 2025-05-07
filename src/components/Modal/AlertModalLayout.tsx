@@ -42,12 +42,12 @@ export default function AlertModalLayout({
       `}
       onClick={(e) => e.stopPropagation()}
     >
-      {Icon && <Icon className="w-6 h-6 mb-6 mx-auto" />}{" "}
+      {Icon && <Icon className="w-6 h-6 mb-6 mx-auto shrink-0" />}{" "}
       <p className="text-gray-900 text-base md:text-lg mb-[1rem]">{message}</p>
       <div
         className={
           type === "message"
-            ? "absolute bottom-6 right-6 md:right-6 md:bottom-6 mx-auto md:mx-0"
+            ? "w-full absolute bottom-6 flex justify-center sm:justify-end sm:right-6 sm:bottom-6"
             : ""
         }
       >
