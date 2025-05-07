@@ -9,11 +9,12 @@ interface UseAlarmParams {
   limit?: number;
 }
 
-const useAlarm = ({ userId, offset = 10, limit = 10 }: UseAlarmParams) => {
+const useAlerts = ({ userId, offset = 10, limit = 10 }: UseAlarmParams) => {
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [alerts, setAlerts] = useState<AlertItem[]>([]);
   const [hasNext, setHasNext] = useState(false);
+  const [hasAlarm, setHasAlarm] = useState(false);
 
   const pageRef = useRef(1);
 
@@ -27,8 +28,11 @@ const useAlarm = ({ userId, offset = 10, limit = 10 }: UseAlarmParams) => {
       );
       const nextAlerts = fetchedAlerts.data.items.map(({ item }) => item);
 
+      const hasUnreadAlert = nextAlerts.filter(({ read }) => !read).length > 0;
+
       setAlerts((prev) => [...prev, ...nextAlerts]);
       setHasNext(fetchedAlerts.data.hasNext);
+      setHasAlarm(hasUnreadAlert);
       setTotalCount(fetchedAlerts.data.count);
 
       if (fetchedAlerts.data.hasNext) {
@@ -45,11 +49,12 @@ const useAlarm = ({ userId, offset = 10, limit = 10 }: UseAlarmParams) => {
 
   return {
     refetch: fetchAlerts,
-    hasNext,
     alerts,
-    isLoading,
     totalCount,
+    hasNext,
+    hasAlarm,
+    isLoading,
   };
 };
 
-export default useAlarm;
+export default useAlerts;

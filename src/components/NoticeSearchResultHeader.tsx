@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { useSearchParams } from "react-router-dom";
 
 import Button from "@/components/Button";
 import FilterDropdownContent from "@/components/Dropdown/FilterDropdownContent";
 import Select from "@/components/Select";
-import useBreakpoint from "@/hooks/useBreakpoint";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import useRemoveTopPageScroll from "@/hooks/useRemoveTopPageScroll";
 import { SORT_OPTIONS } from "@/pages/NoticeSearchPage/constantsCopy";
 import { useFilterStore } from "@/store/useFilterStore";
 import type { SortKey } from "@/types/notice";
@@ -27,7 +27,6 @@ export default function NoticeSearchResultHeader({
   refetch,
 }: TotalNoticeSectionProps) {
   const [, setSearchParams] = useSearchParams();
-  const device = useBreakpoint();
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const { minPay, selectedAreas, startDate } = useFilterStore();
 
@@ -44,6 +43,11 @@ export default function NoticeSearchResultHeader({
   useOutsideClick({
     refs: [buttonRef, wrapperRef],
     callback: () => setShowFilter(false),
+  });
+
+  useRemoveTopPageScroll({
+    observeDevices: ["mobile"],
+    condition: showFilter,
   });
 
   const handleSortChange = (value: string) => {
@@ -63,15 +67,6 @@ export default function NoticeSearchResultHeader({
     refetch();
     setShowFilter(false);
   };
-
-  useEffect(() => {
-    const isMobile = device === "mobile";
-    if (showFilter && isMobile) {
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-  }, [device, showFilter]);
 
   return (
     <div>

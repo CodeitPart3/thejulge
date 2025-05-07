@@ -1,34 +1,29 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import AlertCard from "./AlertCard";
-import useAlarm from "./hooks/useAlarm";
+import useAlerts from "./hooks/useAlerts";
 
 import {
   Active as ActiveAlarmIcon,
   Close,
   Inactive as InactiveAlarmIcon,
 } from "@/assets/icon";
-import useBreakpoint from "@/hooks/useBreakpoint";
 import useIntersection from "@/hooks/useIntersection";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import useRemoveTopPageScroll from "@/hooks/useRemoveTopPageScroll";
 
 interface AlertProps {
   userId: string;
 }
 
 function Alert({ userId }: AlertProps) {
-  const device = useBreakpoint();
-  const [showDropdown, setShowDropdown] = useState(false);
-  const { isLoading, hasNext, refetch, alerts, totalCount } = useAlarm({
-    userId,
-  });
+  const { isLoading, hasNext, hasAlarm, refetch, alerts, totalCount } =
+    useAlerts({
+      userId,
+    });
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const [hasUnreadAlarm, setHasUnreadAlarm] = useState<boolean>(false);
 
-  const hasAlarm = useMemo(
-    () => alerts.filter(({ read }) => !read).length > 0,
-    [alerts],
-  );
-
-  const AlarmIcon = hasAlarm ? ActiveAlarmIcon : InactiveAlarmIcon;
   const buttonRef = useRef<HTMLButtonElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const targetRef = useIntersection<HTMLDivElement>({
@@ -48,14 +43,18 @@ function Alert({ userId }: AlertProps) {
     callback: () => setShowDropdown(false),
   });
 
+  useRemoveTopPageScroll({
+    observeDevices: ["mobile"],
+    condition: showDropdown,
+  });
+
   useEffect(() => {
-    const isMobile = device === "mobile";
-    if (showDropdown && isMobile) {
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-  }, [device, showDropdown]);
+    setHasUnreadAlarm(hasAlarm);
+  }, [hasAlarm]);
+
+  useEffect(() => {
+    setHasUnreadAlarm(false);
+  }, [showDropdown]);
 
   return (
     <div className="relative flex items-center justify-center">
@@ -64,7 +63,12 @@ function Alert({ userId }: AlertProps) {
         className="cursor-pointer"
         onClick={onToggleAlarm}
       >
-        <AlarmIcon className="h-6" />
+        {hasUnreadAlarm ? (
+          <ActiveAlarmIcon className="h-6" />
+        ) : (
+          <InactiveAlarmIcon className="h-6" />
+        )}
+        {/* <AlarmIcon className="h-6" /> */}
       </button>
       {showDropdown && (
         <div
@@ -91,4 +95,4 @@ function Alert({ userId }: AlertProps) {
   );
 }
 
-export default memo(Alert);
+export default Alert;
