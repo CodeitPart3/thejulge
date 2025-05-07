@@ -28,8 +28,8 @@ function CustomNoticeSection({ customNotices }: CustomNoticeSectionProps) {
   });
 
   return (
-    <div className="bg-red-10 h-[23.75rem]  md:h-[33.375rem] lg:h-[33.375rem] mx-auto">
-      <div className="pt-[4rem] w-[60.25rem] mx-auto font-bold text-[1.25rem] md:text-[1.75rem] tracking-[-0.02em]  text-black p-4 pl-0">
+    <div className="bg-red-10 h-[23.75rem] sm:h-[33.375rem] lg:h-[33.375rem] mx-auto">
+      <div className="pl-[2rem] pt-[2rem]  sm:pt-[4rem] lg:pt-[4rem] pt-[1rem] w-[60.25rem] mx-auto font-bold text-[1.25rem] sm:text-[1.75rem] lg:text-[1.75rem] tracking-[-0.02em]  text-black p-4 pl-0">
         맞춤 공고
       </div>
       <PostListSlider posts={posts} />
