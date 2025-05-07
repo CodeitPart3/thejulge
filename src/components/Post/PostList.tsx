@@ -19,7 +19,7 @@ interface PostListProps {
 
 export default function PostList({ posts }: PostListProps) {
   return (
-    <section className="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-4 md:gap-x-[14px] md:gap-y-[32px]">
+    <section className="grid grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-4 sm:gap-x-[14px] sm:gap-y-[32px]">
       {posts.map((post) => (
         <Post key={post.id} {...post} />
       ))}
