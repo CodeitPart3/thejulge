@@ -94,7 +94,7 @@ export default function NoticeSearchResultHeader({
                 ref={wrapperRef}
                 className={cn(
                   "fixed inset-0 sm:inset-auto sm:absolute sm:top-12 sm:right-0 z-10 bg-white",
-                  "border border-gray-20 shadow-xl rounded-[0.625rem] overflow-hidden",
+                  "border border-gray-20 shadow-xl sm:rounded-[0.625rem] overflow-hidden",
                 )}
               >
                 <FilterDropdownContent

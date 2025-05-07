@@ -79,7 +79,7 @@ function FilterDropdownContent({
 
   return (
     <div className="flex flex-col w-full h-full sm:w-[24.375rem] text-black text-sm relative">
-      <div className="pt-6 pb-20 sm:pt-6 px-5 overflow-y-auto">
+      <div className="pt-6 pb-20 sm:pb-0 sm:pt-6 px-5 overflow-y-auto">
         <div className="pb-6 flex justify-between items-center">
           <span className="text-xl font-bold">상세 필터</span>
           <button onClick={onClose} className="cursor-pointer">
