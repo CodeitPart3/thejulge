@@ -41,24 +41,34 @@ export function useAuthForm(mode: Mode) {
     (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setFormData((prev) => ({ ...prev, [field]: value }));
-
       if (field === "email") {
-        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
         setErrors((prev) => ({
           ...prev,
-          email: isValidEmail ? undefined : "올바른 이메일 형식이 아닙니다.",
+          email:
+            value.length === 0
+              ? undefined
+              : value.includes("@")
+                ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                  ? undefined
+                  : "올바른 이메일 형식이 아닙니다."
+                : undefined,
         }));
       }
 
       if (field === "password") {
+        const trimmed = value.trim();
         setErrors((prev) => ({
           ...prev,
           password:
-            value.length >= 8 ? undefined : "비밀번호는 8자 이상이어야 합니다.",
+            value.length > 0 && trimmed.length === 0
+              ? "비밀번호에 공백만 입력할 수 없습니다."
+              : trimmed.length > 0 && trimmed.length < 8
+                ? "비밀번호는 최소 8자 이상이어야 합니다."
+                : undefined,
           ...(mode === "signup" &&
             formData.confirmPassword && {
               confirmPassword:
-                value !== formData.confirmPassword
+                trimmed !== formData.confirmPassword
                   ? "비밀번호가 일치하지 않습니다."
                   : undefined,
             }),

@@ -1,8 +1,12 @@
+import { useState, useEffect } from "react";
+
 import { AxiosError } from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
-import Logo from "../assets/logo/thejulge.svg?react";
-import { useAuthForm } from "../hooks/useAuthForm";
+import Logo from "../../assets/logo/thejulge.svg?react";
+
+import Spinner from "./components/Spinner";
+import { useAuthForm } from "./hooks/useAuthForm";
 
 import { postAuthentication } from "@/apis/services/authenticationService";
 import Button from "@/components/Button";
@@ -13,13 +17,28 @@ import { useModalStore } from "@/store/useModalStore";
 
 export default function SigninPage() {
   const navigate = useNavigate();
-  const { setUserAndToken } = useUserStore();
+  const { user, setUserAndToken } = useUserStore();
   const { openModal, closeModal } = useModalStore();
 
   const { formData, errors, isFormValid, handleChange, resetForm } =
     useAuthForm("signin");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      if (user.type === "employer") {
+        navigate(ROUTES.SHOP.ROOT);
+      } else if (user.type === "employee") {
+        navigate(ROUTES.PROFILE.ROOT);
+      }
+    }
+  }, [user, navigate]);
+
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       const res = await postAuthentication({
         email: formData.email,
@@ -72,13 +91,15 @@ export default function SigninPage() {
           },
         ],
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full pt-[8.75rem] sm:pt-[17.5rem] lg:pt-[19.5rem] pb-[15.625rem] sm:pb-[26.125rem] lg:pb-[15.5rem]">
       <Link to={ROUTES.NOTICE.ROOT}>
-        <Logo className="mx-auto mb-2 h-[2.8125rem] w-[15.5rem]" />
+        <Logo className="mx-auto mb-2 h-[2.375rem] sm:h-[2.8125rem] w-[13rem] sm:w-[15.5rem]" />
       </Link>
 
       <form
@@ -115,11 +136,12 @@ export default function SigninPage() {
         <Button
           type="submit"
           fullWidth
-          className="py-[0.875rem]"
+          className="py-[0.875rem] flex justify-center items-center gap-2"
           onClick={handleSubmit}
-          disabled={!isFormValid}
+          disabled={!isFormValid || isSubmitting}
         >
-          로그인하기
+          {isSubmitting && <Spinner />}
+          {isSubmitting ? "로그인 중..." : "로그인하기"}
         </Button>
       </form>
 

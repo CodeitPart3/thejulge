@@ -12,8 +12,8 @@ import { ROUTES } from "./constants/router";
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
 
-const SignupPage = lazy(() => import("@/pages/SignupPage"));
-const SigninPage = lazy(() => import("@/pages/SigninPage"));
+const SignupPage = lazy(() => import("@/pages/AuthPage/SignupPage"));
+const SigninPage = lazy(() => import("@/pages/AuthPage/SigninPage"));
 
 const ProfilePage = lazy(() => import("@/pages/ProfilePage/ProfilePage"));
 const ProfileRegisterPage = lazy(() => import("@/pages/ProfileRegisterPage"));

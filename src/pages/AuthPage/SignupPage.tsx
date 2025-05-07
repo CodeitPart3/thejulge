@@ -1,10 +1,14 @@
+import { useState, useEffect } from "react";
+
 import { AxiosError } from "axios";
 import clsx from "clsx";
 import { useNavigate, Link } from "react-router-dom";
 
-import IconCheck from "../assets/icon/check.svg?react";
-import Logo from "../assets/logo/thejulge.svg?react";
-import { useAuthForm } from "../hooks/useAuthForm";
+import IconCheck from "../../assets/icon/check.svg?react";
+import Logo from "../../assets/logo/thejulge.svg?react";
+
+import Spinner from "./components/Spinner";
+import { useAuthForm } from "./hooks/useAuthForm";
 
 import { postAuthentication } from "@/apis/services/authenticationService";
 import { postUser } from "@/apis/services/userService";
@@ -16,7 +20,7 @@ import { useModalStore } from "@/store/useModalStore";
 
 export default function SignupPage() {
   const navigate = useNavigate();
-  const { setUserAndToken } = useUserStore();
+  const { user, setUserAndToken } = useUserStore();
   const { openModal, closeModal } = useModalStore();
 
   const {
@@ -28,7 +32,22 @@ export default function SignupPage() {
     resetForm,
   } = useAuthForm("signup");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      if (user.type === "employer") {
+        navigate(ROUTES.SHOP.ROOT);
+      } else if (user.type === "employee") {
+        navigate(ROUTES.PROFILE.ROOT);
+      }
+    }
+  }, [user, navigate]);
+
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       const response = await postUser({
         email: formData.email,
@@ -90,13 +109,15 @@ export default function SignupPage() {
           },
         ],
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full pt-[4.5625rem] sm:pt-[8.6875rem] lg:pt-[9.75rem] pb-[5.1975rem] sm:pb-[20.6875rem] lg:pb-[12.8125rem] ">
       <Link to={ROUTES.NOTICE.ROOT}>
-        <Logo className="mx-auto mb-2 h-[2.8125rem] w-[15.5rem]" />
+        <Logo className="mx-auto mb-2 h-[2.375rem] sm:h-[2.8125rem] w-[13rem] sm:w-[15.5rem]" />
       </Link>
 
       <form
@@ -215,10 +236,11 @@ export default function SignupPage() {
         <Button
           type="submit"
           fullWidth
-          className="py-[0.875rem]"
-          disabled={!isFormValid}
+          className="py-[0.875rem] flex justify-center items-center gap-2"
+          disabled={!isFormValid || isSubmitting}
         >
-          가입하기
+          {isSubmitting && <Spinner />}
+          {isSubmitting ? "가입 중..." : "가입하기"}
         </Button>
       </form>
 
