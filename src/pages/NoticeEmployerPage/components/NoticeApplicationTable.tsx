@@ -6,6 +6,7 @@ import Table from "@/components/Table";
 import { useToast } from "@/hooks/useToast";
 import { useModalStore } from "@/store/useModalStore";
 import { ApplicationItem, ApplicationStatus } from "@/types/application";
+import { cn } from "@/utils/cn";
 
 const applicationStatusMessageMap: {
   [key in Exclude<ApplicationStatus, "pending" | "canceled">]: {
@@ -88,13 +89,15 @@ function NoticeApplicationTable({
           <Table.Th className="min-w-[12rem] max-w-[14.25rem]">
             전화번호
           </Table.Th>
-          <Table.Th className="min-w-[12.5rem] max-w-[14.25rem]">상태</Table.Th>
+          <Table.Th className="min-w-[15rem] max-w-[14.25rem]">상태</Table.Th>
         </Table.Tr>
       )}
       bodyRow={({ id, status, user, shop, notice }) => (
         <Table.Tr key={id} showLastBottomBorder>
           <Table.Td>{user.item.name}</Table.Td>
-          <Table.Td>{user.item.bio}</Table.Td>
+          <Table.Td className={cn({ "text-gray-30": !user.item.bio })}>
+            {user.item.bio ? user.item.bio : "(등록된 소개가 없습니다.)"}
+          </Table.Td>
           <Table.Td>{user.item.phone}</Table.Td>
           <Table.Td>
             {status === "pending" ? (
