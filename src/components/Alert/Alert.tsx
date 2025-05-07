@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import AlertCard from "./AlertCard";
 import useAlarm from "./hooks/useAlarm";
@@ -8,6 +8,7 @@ import {
   Close,
   Inactive as InactiveAlarmIcon,
 } from "@/assets/icon";
+import useBreakpoint from "@/hooks/useBreakpoint";
 import useIntersection from "@/hooks/useIntersection";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
@@ -16,6 +17,7 @@ interface AlertProps {
 }
 
 function Alert({ userId }: AlertProps) {
+  const device = useBreakpoint();
   const [showDropdown, setShowDropdown] = useState(false);
   const { isLoading, hasNext, refetch, alerts, totalCount } = useAlarm({
     userId,
@@ -47,6 +49,15 @@ function Alert({ userId }: AlertProps) {
     },
   });
 
+  useEffect(() => {
+    const isMobile = device === "mobile";
+    if (showDropdown && isMobile) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [device, showDropdown]);
+
   return (
     <div className="relative flex items-center justify-center">
       <button
@@ -59,12 +70,12 @@ function Alert({ userId }: AlertProps) {
       {showDropdown && (
         <div
           ref={wrapperRef}
-          className="fixed sm:absolute inset-0 sm:inset-auto sm:top-8 sm:right-0 z-20 sm:w-[23rem] sm:h-[26.875rem] py-6 px-5 rounded-[0.625rem] bg-red-10 border border-gray-30 text-left"
+          className="fixed sm:absolute inset-0 sm:inset-auto sm:top-8 sm:right-0 z-20 sm:w-[23rem] sm:h-[26.875rem] py-6 px-5 sm:rounded-[0.625rem] bg-red-10 border border-gray-30 text-left"
         >
           <p className="flex justify-between mb-4 text-left text-xl">
             알림 {totalCount}개{" "}
             <Close
-              className="md:hidden w-6 h-6 cursor-pointer"
+              className="sm:hidden w-6 h-6 cursor-pointer"
               onClick={onToggleAlarm}
             />
           </p>
