@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { AxiosError } from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -17,13 +17,23 @@ import { useModalStore } from "@/store/useModalStore";
 
 export default function SigninPage() {
   const navigate = useNavigate();
-  const { setUserAndToken } = useUserStore();
+  const { user, setUserAndToken } = useUserStore();
   const { openModal, closeModal } = useModalStore();
 
   const { formData, errors, isFormValid, handleChange, resetForm } =
     useAuthForm("signin");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      if (user.type === "employer") {
+        navigate(ROUTES.SHOP.ROOT);
+      } else if (user.type === "employee") {
+        navigate(ROUTES.PROFILE.ROOT);
+      }
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async () => {
     if (isSubmitting) return;

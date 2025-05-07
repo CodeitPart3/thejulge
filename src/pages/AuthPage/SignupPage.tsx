@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { AxiosError } from "axios";
 import clsx from "clsx";
@@ -20,7 +20,7 @@ import { useModalStore } from "@/store/useModalStore";
 
 export default function SignupPage() {
   const navigate = useNavigate();
-  const { setUserAndToken } = useUserStore();
+  const { user, setUserAndToken } = useUserStore();
   const { openModal, closeModal } = useModalStore();
 
   const {
@@ -33,6 +33,16 @@ export default function SignupPage() {
   } = useAuthForm("signup");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      if (user.type === "employer") {
+        navigate(ROUTES.SHOP.ROOT);
+      } else if (user.type === "employee") {
+        navigate(ROUTES.PROFILE.ROOT);
+      }
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async () => {
     if (isSubmitting) return;
