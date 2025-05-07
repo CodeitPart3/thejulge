@@ -31,7 +31,7 @@ const FIELD_LABELS: Record<keyof FormType, string> = {
 
 export default function ProfileEditPage() {
   const navigate = useNavigate();
-  const { user } = useUserStore();
+  const { user, updateUser } = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const openModal = useModalStore((state) => state.openModal);
 
@@ -43,9 +43,35 @@ export default function ProfileEditPage() {
   });
 
   useEffect(() => {
-    async function fetchUser() {
+    if (!user) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 후에 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.AUTH.SIGNIN),
+      });
+      return;
+    }
+    if (user.type === "employer") {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "알바생 계정으로만 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.SHOP.ROOT),
+      });
+      return;
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
       if (!user?.id) return;
       const res = await getUser(user.id);
+
+      if (!res.data.item?.name) {
+        navigate(ROUTES.PROFILE.REGISTER);
+        return;
+      }
       const { name, phone, address, bio } = res.data.item;
       setForm({
         name: name ?? "",
@@ -53,24 +79,16 @@ export default function ProfileEditPage() {
         address,
         bio: bio ?? "",
       });
-    }
+    };
     fetchUser();
-  }, [user?.id]);
+  }, [user?.id, navigate]);
 
   const handleChange = (key: keyof FormType, value: string | SeoulDistrict) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async () => {
-    if (!user?.id) {
-      openModal({
-        type: "alert",
-        iconType: "warning",
-        message: "로그인 정보가 없습니다.",
-      });
-      return;
-    }
-
+    if (!user?.id) return;
     if (isSubmitting) return;
 
     const requiredFields: Array<keyof FormType> = ["name", "phone", "address"];
@@ -99,6 +117,7 @@ export default function ProfileEditPage() {
 
     try {
       await putUser(user.id, payload);
+      updateUser(payload);
       openModal({
         type: "message",
         iconType: "none",
@@ -120,72 +139,74 @@ export default function ProfileEditPage() {
   };
 
   return (
-    <form
-      className="w-full max-w-[964px] mx-auto px-4 py-12"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-    >
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
-          내 프로필
-        </h2>
-        <button type="button" onClick={() => navigate("/profile")}>
-          <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
-        </button>
-      </div>
+    <div className="w-full bg-gray-5 min-h-screen">
+      <form
+        className="w-full max-w-[964px] mx-auto px-4 py-12"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
+            내 프로필
+          </h2>
+          <button type="button" onClick={() => navigate("/profile")}>
+            <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
+          </button>
+        </div>
 
-      <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 mb-6">
-        <TextField.Input
-          label="이름*"
-          placeholder="입력"
-          fullWidth
-          value={form.name}
-          onChange={(e) => handleChange("name", e.target.value)}
-          maxLength={20}
-        />
-        <TextField.Input
-          label="연락처*"
-          placeholder="입력"
-          fullWidth
-          value={form.phone}
-          onChange={(e) => {
-            const formatted = autoHyphenFormatter(e.target.value);
-            handleChange("phone", formatted);
-          }}
-        />
-        <Select
-          label="선호 지역*"
-          placeholder="선택"
-          fullWidth
-          options={SeoulDistricts.map((d) => ({ label: d, value: d }))}
-          value={form.address}
-          onValueChange={(value) => handleChange("address", value)}
-        />
-      </div>
-      <div className="mb-10">
-        <TextField.TextArea
-          label="소개 (최대 300자)"
-          placeholder="입력"
-          fullWidth
-          rows={4}
-          value={form.bio}
-          maxLength={300}
-          onChange={(e) => handleChange("bio", e.target.value)}
-        />
-      </div>
-      <div className="text-center">
-        <Button
-          variant="primary"
-          textSize="md"
-          className="sm:w-[350px] w-full px-34 py-3.5"
-          disabled={isSubmitting}
-          type="submit"
-        >
-          수정하기
-        </Button>
-      </div>
-    </form>
+        <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 mb-6">
+          <TextField.Input
+            label="이름*"
+            placeholder="입력"
+            fullWidth
+            value={form.name}
+            onChange={(e) => handleChange("name", e.target.value)}
+            maxLength={20}
+          />
+          <TextField.Input
+            label="연락처*"
+            placeholder="입력"
+            fullWidth
+            value={form.phone}
+            onChange={(e) => {
+              const formatted = autoHyphenFormatter(e.target.value);
+              handleChange("phone", formatted);
+            }}
+          />
+          <Select
+            label="선호 지역*"
+            placeholder="선택"
+            fullWidth
+            options={SeoulDistricts.map((d) => ({ label: d, value: d }))}
+            value={form.address}
+            onValueChange={(value) => handleChange("address", value)}
+          />
+        </div>
+        <div className="mb-10">
+          <TextField.TextArea
+            label="소개 (최대 300자)"
+            placeholder="입력"
+            fullWidth
+            rows={4}
+            value={form.bio}
+            maxLength={300}
+            onChange={(e) => handleChange("bio", e.target.value)}
+          />
+        </div>
+        <div className="text-center">
+          <Button
+            variant="primary"
+            textSize="md"
+            className="sm:w-[350px] w-full px-34 py-3.5"
+            disabled={isSubmitting}
+            type="submit"
+          >
+            수정하기
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }

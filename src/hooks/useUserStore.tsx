@@ -16,6 +16,7 @@ interface UserState {
   user: User | null;
   token: string | null;
   isLoggedIn: boolean;
+  updateUser: (partial: Partial<User>) => void;
   setUserAndToken: (user: User, token: string) => void;
   updateShopId: (shopId: string) => void;
   clearUser: () => void;
@@ -27,6 +28,14 @@ export const useUserStore = create<UserState>()(
       user: null,
       token: null,
       isLoggedIn: false,
+
+      updateUser: (partial) => {
+        const current = get();
+        if (!current.user) return;
+        set({
+          user: { ...current.user, ...partial },
+        });
+      },
 
       setUserAndToken: (user, token) =>
         set({
