@@ -57,28 +57,29 @@ export default function NoticeListPage() {
       {user?.type && customNotices.length > 0 && (
         <CustomNoticeSection customNotices={customNotices} />
       )}
-      <NoticeSearchResultHeader
-        page={page}
-        selectedSort={selectedSort}
-        onChangeSort={handleSortChange}
-        refetch={refetchFilteredNotices}
-      />
+      <div className="w-full mx-auto px-4  lg:max-w-[60.25rem]">
+        <NoticeSearchResultHeader
+          page={page}
+          selectedSort={selectedSort}
+          onChangeSort={handleSortChange}
+          refetch={refetchFilteredNotices}
+        />
 
-      <div className="min-h-[33.5rem] sm:min-h-[48.75rem]">
-        {isLoading && (
-          <p className="text-center text-gray-400 pt-40 sm:pt-60">
-            공고 불러오는 중
-          </p>
-        )}
-
-        {!isLoading &&
-          (posts.length > 0 ? (
-            <PostList posts={posts} />
-          ) : (
+        <div className="min-h-[33.5rem] sm:min-h-[48.75rem] ">
+          {isLoading && (
             <p className="text-center text-gray-400 pt-40 sm:pt-60">
-              조건에 맞는 공고가 없어요.
+              공고 불러오는 중
             </p>
-          ))}
+          )}
+          {!isLoading &&
+            (posts.length > 0 ? (
+              <PostList posts={posts} />
+            ) : (
+              <p className="text-center text-gray-400 pt-40 sm:pt-60">
+                조건에 맞는 공고가 없어요.
+              </p>
+            ))}
+        </div>
       </div>
 
       <div className="flex justify-center mt-8">
