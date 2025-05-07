@@ -5,6 +5,7 @@ import PostCard from "@/components/Post/PostCard";
 import { APPLICATION_STATUS } from "@/constants/applicationStatus";
 import { User } from "@/hooks/useUserStore";
 import { NoticeItem } from "@/types/notice";
+import { cn } from "@/utils/cn";
 import { isPastDate } from "@/utils/datetime";
 
 interface NoticeDetailInfoCardProps {
@@ -50,11 +51,11 @@ function NoticeDetailInfoCard({
 
   return (
     <>
-      <div className="flex flex-col gap-2 mb-1 md:mb-0">
-        <span className="inline-block text-sm md:text-base text-primary font-bold leading-5">
+      <div className="flex flex-col gap-2 mb-1 sm:mb-0">
+        <span className="inline-block text-sm sm:text-base text-primary font-bold leading-5">
           식당
         </span>
-        <h2 className="text-xl md:text-[1.625rem] font-bold">{name}</h2>
+        <h2 className="text-xl sm:text-[1.625rem] font-bold">{name}</h2>
       </div>
       {noticeInfo && (
         <PostCard
@@ -88,7 +89,11 @@ function NoticeDetailInfoCard({
       )}
       <div className="flex flex-col gap-3 p-8 bg-gray-10 text-black rounded-xl">
         <span className="font-bold leading-5">공고 설명</span>
-        <p className="leading-[1.625rem]">{description}</p>
+        <p
+          className={cn("leading-[1.625rem]", { "text-gray-30": !description })}
+        >
+          {description ? description : "(등록된 공고 설명이 없습니다.)"}
+        </p>
       </div>
     </>
   );
