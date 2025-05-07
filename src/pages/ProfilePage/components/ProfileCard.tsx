@@ -48,7 +48,13 @@ function ProfileCard({
       <div className="mb-5 md:mb-7 flex items-center gap-1.5 text-sm md:text-[1rem] text-gray-50">
         <Location className="w-4 md:w-5 h-4 md:h-5" /> 선호 지역: {address}
       </div>
-      <p className="text-sm md:text-[1rem]">{bio}</p>
+      <p
+        className={cn("text-sm md:text-[1rem]", {
+          "text-gray-30": !bio,
+        })}
+      >
+        {bio ? bio : "(등록된 공고가 없습니다.)"}
+      </p>
     </div>
   );
 }
