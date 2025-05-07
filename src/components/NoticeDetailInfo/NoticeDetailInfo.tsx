@@ -5,6 +5,7 @@ import PostCard from "@/components/Post/PostCard";
 import { APPLICATION_STATUS } from "@/constants/applicationStatus";
 import { User } from "@/hooks/useUserStore";
 import { NoticeItem } from "@/types/notice";
+import { cn } from "@/utils/cn";
 import { isPastDate } from "@/utils/datetime";
 
 interface NoticeDetailInfoCardProps {
@@ -88,7 +89,11 @@ function NoticeDetailInfoCard({
       )}
       <div className="flex flex-col gap-3 p-8 bg-gray-10 text-black rounded-xl">
         <span className="font-bold leading-5">공고 설명</span>
-        <p className="leading-[1.625rem]">{description}</p>
+        <p
+          className={cn("leading-[1.625rem]", { "text-gray-30": !description })}
+        >
+          {description ? description : "(등록된 공고 설명이 없습니다.)"}
+        </p>
       </div>
     </>
   );
