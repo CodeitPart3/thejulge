@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 
 import AlertCard from "./AlertCard";
 import useAlarm from "./hooks/useAlarm";
@@ -27,10 +27,17 @@ function Alert({ userId }: AlertProps) {
     () => alerts.filter(({ read }) => !read).length > 0,
     [alerts],
   );
-  const AlarmIcon = hasAlarm ? ActiveAlarmIcon : InactiveAlarmIcon;
 
+  const AlarmIcon = hasAlarm ? ActiveAlarmIcon : InactiveAlarmIcon;
   const buttonRef = useRef<HTMLButtonElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const targetRef = useIntersection<HTMLDivElement>({
+    callback: ([entry]) => {
+      if (entry.isIntersecting && !isLoading && hasNext) {
+        refetch();
+      }
+    },
+  });
 
   const onToggleAlarm = () => {
     setShowDropdown((prev) => !prev);
@@ -39,14 +46,6 @@ function Alert({ userId }: AlertProps) {
   useOutsideClick({
     refs: [wrapperRef, buttonRef],
     callback: () => setShowDropdown(false),
-  });
-
-  const targetRef = useIntersection({
-    callback: ([entry]) => {
-      if (entry.isIntersecting && !isLoading && hasNext) {
-        refetch();
-      }
-    },
   });
 
   useEffect(() => {
@@ -73,21 +72,17 @@ function Alert({ userId }: AlertProps) {
           className="fixed sm:absolute inset-0 sm:inset-auto sm:top-8 sm:right-0 z-20 sm:w-[23rem] sm:h-[26.875rem] py-6 px-5 sm:rounded-[0.625rem] bg-red-10 border border-gray-30 text-left"
         >
           <p className="flex justify-between mb-4 text-left text-xl">
-            알림 {totalCount}개{" "}
+            알림 {totalCount}개
             <Close
               className="sm:hidden w-6 h-6 cursor-pointer"
               onClick={onToggleAlarm}
             />
           </p>
           <ul className="flex flex-col gap-2 h-[calc(100%-2.75rem)] sm:h-[20.625rem] font-normal overflow-y-auto">
-            {alerts.map((alert, index) => (
-              <AlertCard
-                key={alert.id}
-                ref={index === alerts.length - 1 ? targetRef : null}
-                userId={userId}
-                alert={alert}
-              />
+            {alerts.map((alert) => (
+              <AlertCard key={alert.id} userId={userId} alert={alert} />
             ))}
+            <div ref={targetRef} />
             {isLoading && "로딩 중 ..."}
           </ul>
         </div>
@@ -96,4 +91,4 @@ function Alert({ userId }: AlertProps) {
   );
 }
 
-export default Alert;
+export default memo(Alert);

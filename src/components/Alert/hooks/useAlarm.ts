@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { getAlerts } from "@/apis/services/alertService";
 import { AlertItem } from "@/types/alert";
@@ -9,18 +9,16 @@ interface UseAlarmParams {
   limit?: number;
 }
 
-const useAlarm = ({ userId, offset = 5, limit = 5 }: UseAlarmParams) => {
+const useAlarm = ({ userId, offset = 10, limit = 10 }: UseAlarmParams) => {
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [alerts, setAlerts] = useState<AlertItem[]>([]);
   const [hasNext, setHasNext] = useState(false);
 
-  const hasFetched = useRef(false);
   const pageRef = useRef(1);
 
-  const fetchAlerts = async () => {
+  const fetchAlerts = useCallback(async () => {
     setIsLoading(true);
-
     try {
       const fetchedAlerts = await getAlerts(
         userId,
@@ -39,14 +37,11 @@ const useAlarm = ({ userId, offset = 5, limit = 5 }: UseAlarmParams) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userId, offset, limit]);
 
   useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
     fetchAlerts();
-  }, [userId, offset, limit]);
+  }, [userId, fetchAlerts]);
 
   return {
     refetch: fetchAlerts,
