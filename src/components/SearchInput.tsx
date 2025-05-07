@@ -16,6 +16,7 @@ export default function SearchInput() {
 
     reset();
     navigate(`/search?keyword=${encodeURIComponent(keyword.trim())}`);
+    setKeyword("");
   };
 
   const removeKeyword = () => {

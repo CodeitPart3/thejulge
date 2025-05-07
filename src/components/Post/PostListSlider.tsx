@@ -17,18 +17,16 @@ export default function PostListSlider({
 }: PostListSliderProps) {
   const lessThanDesktop =
     typeof window !== "undefined" && window.innerWidth <= 1024;
-
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: {
-      perView: 3,
-      spacing: 14,
+      perView: 2, // 기본, sm: 2개
+      spacing: 8,
     },
     breakpoints: {
-      "(max-width: 80rem)": {
+      "(min-width: 1024px)": {
         slides: {
-          // perView: 3,
-          perView: 2,
+          perView: 3, // lg 이상: 3개
           spacing: 14,
         },
       },
@@ -50,12 +48,14 @@ export default function PostListSlider({
   if (!posts || posts.length === 0) return null;
 
   return (
-    <div ref={sliderRef} className="keen-slider !w-[60.25rem] mx-auto">
-      {posts.map((post) => (
-        <div key={post.id} className="keen-slider__slide post-slide">
-          <Post {...post} />
-        </div>
-      ))}
+    <div className="w-full px-8 lg:max-w-[60.25rem] mx-auto">
+      <div ref={sliderRef} className="keen-slider">
+        {posts.map((post) => (
+          <div key={post.id} className="keen-slider__slide w-1/2 lg:w-1/3">
+            <Post {...post} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

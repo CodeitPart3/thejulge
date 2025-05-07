@@ -64,8 +64,8 @@ export default function NoticeSearchResultHeader({
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-6 sm:mb-8">
-        <h2 className="font-bold text-[1.25rem] md:text-[1.75rem] text-black ">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 ">
+        <h2 className="font-bold text-[1.25rem] sm:text-[1.75rem] lg:text-[1.75rem] text-black">
           {keyword ? (
             <>
               <span className="text-primary">{keyword}</span>에 대한 공고 목록

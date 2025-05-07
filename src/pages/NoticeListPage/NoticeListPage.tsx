@@ -14,7 +14,7 @@ import type { SortKey } from "@/types/notice";
 
 export default function NoticeListPage() {
   const { user } = useUserStore();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const [selectedSort, setSelectedSort] = useState<SortKey>("time");
 
@@ -46,6 +46,9 @@ export default function NoticeListPage() {
 
   const handleSortChange = (value: string) => {
     setSelectedSort(value as SortKey);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", "1");
+    setSearchParams(newParams);
   };
 
   const refetchFilteredNotices = () => {
@@ -53,11 +56,11 @@ export default function NoticeListPage() {
   };
 
   return (
-    <section className="w-full space-y-16">
+    <section className="w-full">
       {user?.type && customNotices.length > 0 && (
         <CustomNoticeSection customNotices={customNotices} />
       )}
-      <div className="w-full mx-auto px-4  lg:max-w-[60.25rem]">
+      <div className="w-full mx-auto lg:max-w-[60.25rem] pt-12 px-8 pb-0">
         <NoticeSearchResultHeader
           page={page}
           selectedSort={selectedSort}
@@ -82,7 +85,7 @@ export default function NoticeListPage() {
         </div>
       </div>
 
-      <div className="flex justify-center mt-8">
+      <div className="flex justify-center mt-8 pb-[4rem]">
         <PageNation count={total} itemCountPerPage={7} />
       </div>
     </section>

@@ -20,38 +20,6 @@
     line-height: 1;
   }
 
-  .keen-slider__slide {
-    width: unset !important;
-    min-width: unset !important;
-    max-width: unset !important;
-    flex: 0 0 auto !important;
-  }
-  .post-slide {
-    width: 22.5rem !important;
-    height: 14.875rem;
-  }
-
-  @media (min-width: 640px) {
-    .post-slide {
-      width: 20.75rem !important;
-      height: 21.875rem;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .post-slide {
-      width: 29.625rem !important;
-      height: 21.875rem;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .post-slide {
-      width: 19.5rem !important;
-      height: 22.5rem;
-    }
-  }
-
   @keyframes skeleton {
     0% {
       opacity: 1;

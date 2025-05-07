@@ -85,8 +85,8 @@ export default function NoticeSearchPage() {
   };
 
   return (
-    <section className="w-full px-4 pt-10 sm:pt-15 pb-15 sm:pb-[7.5rem]">
-      <div className="max-w-[66.25rem] mx-auto flex flex-col">
+    <section className="w-full   pb-15 sm:pb-[4rem]">
+      <div className="w-full mx-auto lg:max-w-[60.25rem] pt-12 px-8 pb-0">
         <NoticeSearchResultHeader
           page={page}
           keyword={keyword}
