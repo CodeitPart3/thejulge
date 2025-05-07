@@ -87,7 +87,7 @@ export default function SigninPage() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full pt-[8.75rem] sm:pt-[17.5rem] lg:pt-[19.5rem] pb-[15.625rem] sm:pb-[26.125rem] lg:pb-[15.5rem]">
       <Link to={ROUTES.NOTICE.ROOT}>
         <Logo className="mx-auto mb-2 h-[2.375rem] sm:h-[2.8125rem] w-[13rem] sm:w-[15.5rem]" />
       </Link>
