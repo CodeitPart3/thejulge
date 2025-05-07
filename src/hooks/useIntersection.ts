@@ -5,9 +5,12 @@ interface UseIntersectionParams {
   deps?: DependencyList;
 }
 
-const useIntersection = ({ callback, deps }: UseIntersectionParams) => {
+const useIntersection = <T extends HTMLElement>({
+  callback,
+  deps,
+}: UseIntersectionParams) => {
   const dependencies = deps ?? [];
-  const targetRef = useRef<HTMLLIElement>(null);
+  const targetRef = useRef<T>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(callback);
