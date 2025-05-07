@@ -17,6 +17,7 @@ import Select from "@/components/Select";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { CATEGORY_OPTIONS } from "@/constants/shopCategory";
+import { MIN_WAGE, MAX_WAGE } from "@/constants/wage";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
@@ -100,11 +101,20 @@ export default function ShopRegisterPage() {
     }
 
     const hourlyPay = Number(extractDigits(form.originalHourlyPay));
-    if (isNaN(hourlyPay) || hourlyPay <= 0) {
+    const formattedMaxWage = numberCommaFormatter(MAX_WAGE);
+
+    if (hourlyPay < MIN_WAGE) {
       openModal({
         type: "alert",
         iconType: "warning",
-        message: "유효한 시급을 입력해 주세요.",
+        message: "시급은 최저시급 이상이어야 합니다.",
+      });
+      return;
+    } else if (hourlyPay > MAX_WAGE) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: `시급은 ${formattedMaxWage}원 이하여야 합니다.`,
       });
       return;
     }
