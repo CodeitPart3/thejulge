@@ -27,7 +27,7 @@ export default function ProfilePage() {
   return (
     <>
       <section>
-        <div className="xl:w-[60.25rem] mx-auto px-6 py-[7rem]">
+        <div className="lg:w-[64rem] mx-auto px-3 sm:px-8 py-15">
           <div className="flex lg:flex-row flex-col lg:gap-[11.25rem] gap-6 w-full mb-6">
             <h2 className="text-[1.75rem] font-bold">내 프로필</h2>
             {userInfo.name && (
@@ -50,7 +50,7 @@ export default function ProfilePage() {
 
       {userInfo && (
         <section className="flex-1 bg-gray-5">
-          <div className="xl:w-[60.25rem] mx-auto px-6 pt-[3.75rem] pb-[7rem]">
+          <div className="lg:w-[64rem] mx-auto px-3 sm:px-8 pt-[3.75rem] pb-[7rem]">
             <h3 className="mb-8 text-[1.75rem] font-bold">신청 내역</h3>
 
             {isLoading && <UserApplicationTableSkeleton />}
