@@ -51,11 +51,11 @@ function NoticeDetailInfoCard({
 
   return (
     <>
-      <div className="flex flex-col gap-2 mb-1 md:mb-0">
-        <span className="inline-block text-sm md:text-base text-primary font-bold leading-5">
+      <div className="flex flex-col gap-2 mb-1 sm:mb-0">
+        <span className="inline-block text-sm sm:text-base text-primary font-bold leading-5">
           식당
         </span>
-        <h2 className="text-xl md:text-[1.625rem] font-bold">{name}</h2>
+        <h2 className="text-xl sm:text-[1.625rem] font-bold">{name}</h2>
       </div>
       {noticeInfo && (
         <PostCard

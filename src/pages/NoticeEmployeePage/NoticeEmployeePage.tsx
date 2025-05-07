@@ -24,7 +24,7 @@ export default function NoticeEmployeePage() {
   return (
     <>
       <section>
-        <div className="flex flex-col gap-3 md:gap-6 xl:w-[60.25rem] mx-auto px-3 md:px-8 py-10 md:py-[3.75rem]">
+        <div className="flex flex-col gap-3 sm:gap-6 lg:w-[60.25rem] mx-auto px-3 sm:px-8 py-10 sm:py-[3.75rem]">
           <NoticeDetailInfo
             shopId={shopId}
             noticeId={noticeId}
@@ -34,7 +34,7 @@ export default function NoticeEmployeePage() {
       </section>
 
       <section>
-        <div className="flex flex-col gap-8 xl:w-[60.25rem] mx-auto mb-[3.75rem] px-3 md:px-8 py-10 md:py-[3.75rem]">
+        <div className="flex flex-col gap-8 lg:w-[60.25rem] mx-auto mb-[3.75rem] px-3 sm:px-8 py-10 sm:py-[3.75rem]">
           <h2 className="text-[1.625rem] font-bold">최근에 본 공고</h2>
 
           {recentNotices.length > 0 ? (
