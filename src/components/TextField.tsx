@@ -82,7 +82,7 @@ const Input = forwardRef(
     ref: Ref<HTMLInputElement>,
   ) => {
     const wrapperClassNames = cn(
-      "flex w-fit gap-1.5 border rounded-[0.375rem] border-gray-30 focus-within:border-blue-20 placeholder:text-gray-40 ",
+      "flex w-fit gap-1.5 border rounded-[0.375rem] border-gray-30 focus-within:border-blue-20 placeholder:text-gray-40 bg-white",
       {
         "w-full": fullWidth,
         "bg-gray-20 text-gray-40": disabled,
@@ -136,7 +136,7 @@ const TextArea = forwardRef(
     ref: Ref<HTMLTextAreaElement>,
   ) => {
     const wrapperClassNames = cn(
-      "flex w-fit gap-1.5 border rounded-[0.375rem] border-gray-30 focus-within:border-blue-20 placeholder:text-gray-40 ",
+      "flex w-fit gap-1.5 border rounded-[0.375rem] border-gray-30 focus-within:border-blue-20 placeholder:text-gray-40 bg-white",
       {
         "w-full": fullWidth,
         "bg-gray-20 text-gray-40": disabled,

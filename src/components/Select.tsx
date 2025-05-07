@@ -103,7 +103,7 @@ function Select({
   );
 
   const listClassNames = cn(
-    "absolute top-full left-0 mt-1 border rounded-[0.375rem] bg-white border-gray-30 text-black shadow-lg z-10 max-h-48 overflow-y-auto",
+    "absolute top-full left-0 mt-1 border rounded-[0.375rem] bg-white border-gray-30 text-black shadow-lg z-10 max-h-48 overflow-y-auto z-30",
   );
 
   const handleSelect = (selectedValue: string) => {
@@ -164,25 +164,29 @@ function Select({
               width: buttonWidth,
             }}
           >
-            {options.map((option) => (
-              <li
-                key={option.value}
-                className="border-b border-gray-20 last:border-0"
-              >
-                <button
-                  type="button"
-                  className={cn(
-                    "w-full text-center hover:bg-gray-10 cursor-pointer",
-                    size === "sm"
-                      ? "px-3 py-2 text-sm"
-                      : "px-5 py-3 text-[1rem]",
-                  )}
-                  onClick={() => handleSelect(option.value)}
+            {options.map((option) => {
+              const isSelected = option.value === value;
+              return (
+                <li
+                  key={option.value}
+                  className="border-b border-gray-20 last:border-0"
                 >
-                  {option.label}
-                </button>
-              </li>
-            ))}
+                  <button
+                    type="button"
+                    className={cn(
+                      "w-full text-center hover:bg-gray-10 cursor-pointer",
+                      size === "sm"
+                        ? "px-3 py-2 text-sm"
+                        : "px-5 py-3 text-[1rem]",
+                      isSelected && "bg-red-10 hover:bg-red-100",
+                    )}
+                    onClick={() => handleSelect(option.value)}
+                  >
+                    {option.label}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
