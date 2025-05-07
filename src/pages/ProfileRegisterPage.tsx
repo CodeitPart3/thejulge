@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
@@ -42,20 +42,36 @@ export default function ProfileRegisterPage() {
     bio: "",
   });
 
+  useEffect(() => {
+    if (!user) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 후에 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.AUTH.SIGNIN),
+      });
+      return;
+    }
+    if (user.type === "employer") {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "알바생 계정으로만 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.SHOP.ROOT),
+      });
+      return;
+    }
+    if (user.name) {
+      navigate(ROUTES.PROFILE.EDIT);
+    }
+  }, []);
+
   const handleChange = (key: keyof FormType, value: string | SeoulDistrict) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async () => {
-    if (!user?.id) {
-      openModal({
-        type: "alert",
-        iconType: "warning",
-        message: "로그인 정보가 없습니다.",
-      });
-      return;
-    }
-
+    if (!user?.id) return;
     if (isSubmitting) return;
 
     const requiredFields: Array<keyof FormType> = ["name", "phone", "address"];

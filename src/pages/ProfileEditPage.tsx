@@ -43,9 +43,35 @@ export default function ProfileEditPage() {
   });
 
   useEffect(() => {
-    async function fetchUser() {
+    if (!user) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 후에 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.AUTH.SIGNIN),
+      });
+      return;
+    }
+    if (user.type === "employer") {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "알바생 계정으로만 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.SHOP.ROOT),
+      });
+      return;
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
       if (!user?.id) return;
       const res = await getUser(user.id);
+
+      if (!res.data.item?.name) {
+        navigate(ROUTES.PROFILE.REGISTER);
+        return;
+      }
       const { name, phone, address, bio } = res.data.item;
       setForm({
         name: name ?? "",
@@ -53,24 +79,16 @@ export default function ProfileEditPage() {
         address,
         bio: bio ?? "",
       });
-    }
+    };
     fetchUser();
-  }, [user?.id]);
+  }, [user?.id, navigate]);
 
   const handleChange = (key: keyof FormType, value: string | SeoulDistrict) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async () => {
-    if (!user?.id) {
-      openModal({
-        type: "alert",
-        iconType: "warning",
-        message: "로그인 정보가 없습니다.",
-      });
-      return;
-    }
-
+    if (!user?.id) return;
     if (isSubmitting) return;
 
     const requiredFields: Array<keyof FormType> = ["name", "phone", "address"];
