@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useSearchParams } from "react-router-dom";
 
@@ -61,6 +61,14 @@ export default function NoticeSearchResultHeader({
     refetch();
     setShowFilter(false);
   };
+
+  useEffect(() => {
+    if (showFilter) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [showFilter]);
 
   return (
     <div>
