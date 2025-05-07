@@ -50,10 +50,11 @@ export function formatTimeRange(startsAt: string, workhour: number): string {
  * @param startsAt - ISO 8601 형식의 날짜 문자열
  * @param workhour - 근무 시간 (시간 단위)
  */
-export function isPastDate(startsAt: string, workhour: number): boolean {
-  const start = new Date(startsAt);
-  const end = new Date(start.getTime() + workhour * ONE_HOUR_MS);
-  return end.getTime() < Date.now();
+export function isPastDate(startsAt: string): boolean {
+  const startMs = Date.parse(startsAt);
+  const nowMs = Date.now();
+
+  return startMs < nowMs;
 }
 
 export const getRelativeTimeFromNow = (input: string | Date): string => {
