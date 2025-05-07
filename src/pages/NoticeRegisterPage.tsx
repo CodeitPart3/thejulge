@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { AxiosError } from "axios";
 import DatePicker from "react-datepicker";
@@ -10,6 +10,7 @@ import { postNotice } from "@/apis/services/noticeService";
 import { Close } from "@/assets/icon";
 import Button from "@/components/Button";
 import TextField from "@/components/TextField";
+import { ROUTES } from "@/constants/router";
 import { MAX_WAGE, MIN_WAGE } from "@/constants/wage";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
@@ -41,6 +42,36 @@ export default function NoticeRegisterPage() {
     workhour: "",
     description: "",
   });
+
+  useEffect(() => {
+    if (!user) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 후 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.AUTH.SIGNIN),
+      });
+      return;
+    }
+    if (user.type === "employee") {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "사장님 계정으로만 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.PROFILE.ROOT),
+      });
+      return;
+    }
+    if (!user.shopId) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "가게 정보 등록 후 이용 가능합니다.",
+        onClose: () => navigate(ROUTES.SHOP.REGISTER),
+      });
+      return;
+    }
+  }, []);
 
   const handleChange = (key: keyof FormType, value: string | null | Date) => {
     setForm((prev) => ({ ...prev, [key]: value }));

@@ -10,6 +10,7 @@ import { getNotice, putNotice } from "@/apis/services/noticeService";
 import { Close } from "@/assets/icon";
 import Button from "@/components/Button";
 import TextField from "@/components/TextField";
+import { ROUTES } from "@/constants/router";
 import { MIN_WAGE, MAX_WAGE } from "@/constants/wage";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
@@ -45,19 +46,77 @@ export default function NoticeEditPage() {
   });
 
   useEffect(() => {
-    async function fetchNotice() {
-      if (!shopId || !noticeId) return;
-      const res = await getNotice(shopId, noticeId);
-      const { hourlyPay, startsAt, workhour, description } = res.data.item;
-      setForm({
-        hourlyPay: numberCommaFormatter(hourlyPay),
-        startsAt: new Date(startsAt),
-        workhour: String(workhour),
-        description: description ?? "",
+    if (!user) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 후에 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.AUTH.SIGNIN),
       });
+      return;
     }
+    if (user.type === "employee") {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "사장님 계정으로만 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.PROFILE.ROOT),
+      });
+      return;
+    }
+    if (!user.shopId) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "가게 정보 등록 후 이용 가능합니다.",
+        onClose: () => navigate(ROUTES.SHOP.REGISTER),
+      });
+      return;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!shopId || !noticeId) return;
+    const fetchNotice = async () => {
+      try {
+        const res = await getNotice(shopId, noticeId);
+        const {
+          hourlyPay,
+          startsAt,
+          workhour,
+          description,
+          shop: noticeShop,
+        } = res.data.item;
+
+        const ownerShopId = noticeShop?.item.id;
+
+        if (ownerShopId !== shopId) {
+          openModal({
+            type: "alert",
+            iconType: "warning",
+            message: "다른 가게의 공고 편집은 불가능합니다.",
+            onClose: () => navigate(ROUTES.SHOP.ROOT),
+          });
+          return;
+        }
+
+        setForm({
+          hourlyPay: numberCommaFormatter(hourlyPay),
+          startsAt: new Date(startsAt),
+          workhour: String(workhour),
+          description: description ?? "",
+        });
+      } catch {
+        openModal({
+          type: "alert",
+          iconType: "warning",
+          message: "다른 가게의 공고 편집은 불가능합니다.",
+          onClose: () => navigate(ROUTES.SHOP.ROOT),
+        });
+      }
+    };
     fetchNotice();
-  }, [shopId, noticeId]);
+  }, [shopId, noticeId, navigate, openModal]);
 
   const handleChange = (key: keyof FormType, value: string | null | Date) => {
     setForm((prev) => ({ ...prev, [key]: value }));
