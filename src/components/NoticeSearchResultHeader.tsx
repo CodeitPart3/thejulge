@@ -106,6 +106,7 @@ export default function NoticeSearchResultHeader({
                 )}
               >
                 <FilterDropdownContent
+                  refetch={refetch}
                   onClickApplyButton={clickFilterConfirmHandler}
                   onClose={toggleShowFilter}
                 />

@@ -13,11 +13,13 @@ import { extractDigits, numberCommaFormatter } from "@/utils/number";
 import "react-datepicker/dist/react-datepicker.css";
 
 interface FilterDropdownContentProps {
-  onClickApplyButton: () => void;
+  refetch: () => void;
   onClose: () => void;
+  onClickApplyButton: () => void;
 }
 
 function FilterDropdownContent({
+  refetch,
   onClose,
   onClickApplyButton,
 }: FilterDropdownContentProps) {
@@ -75,6 +77,7 @@ function FilterDropdownContent({
     setPayFilter(null);
     setStartDateFilter(null);
     setAreasFilter([]);
+    refetch();
   };
 
   return (
