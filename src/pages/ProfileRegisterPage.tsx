@@ -139,7 +139,7 @@ export default function ProfileRegisterPage() {
           </button>
         </div>
 
-        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 mb-6">
+        <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 mb-6">
           <TextField.Input
             label="이름*"
             placeholder="입력"
