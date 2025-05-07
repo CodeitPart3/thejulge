@@ -17,6 +17,7 @@ import Select from "@/components/Select";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { CATEGORY_OPTIONS } from "@/constants/shopCategory";
+import { MAX_WAGE, MIN_WAGE } from "@/constants/wage";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
@@ -39,7 +40,7 @@ const FIELD_LABELS: Record<keyof FormType, string> = {
   description: "가게 설명",
 };
 
-export default function ShopRegisterPage() {
+export default function ShopEditPage() {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const shopId = user?.shopId;
@@ -59,8 +60,33 @@ export default function ShopRegisterPage() {
   });
 
   useEffect(() => {
-    async function fetchShop() {
-      if (!shopId) return;
+    if (!user) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 후에 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.AUTH.SIGNIN),
+      });
+      return;
+    }
+
+    if (user.type === "employee") {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "사장님 계정으로만 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.PROFILE.ROOT),
+      });
+      return;
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchShop = async () => {
+      if (!shopId) {
+        navigate(ROUTES.SHOP.REGISTER);
+        return;
+      }
       const res = await getShop(shopId);
       const {
         name,
@@ -80,9 +106,9 @@ export default function ShopRegisterPage() {
         description,
       });
       if (imageUrl) setImagePreview(imageUrl);
-    }
+    };
     fetchShop();
-  }, [shopId]);
+  }, [shopId, navigate]);
 
   const handleChange = (
     key: keyof FormType,
@@ -125,11 +151,20 @@ export default function ShopRegisterPage() {
     }
 
     const hourlyPay = Number(extractDigits(form.originalHourlyPay));
-    if (isNaN(hourlyPay) || hourlyPay <= 0) {
+    const formattedMaxWage = numberCommaFormatter(MAX_WAGE);
+
+    if (hourlyPay < MIN_WAGE) {
       openModal({
         type: "alert",
         iconType: "warning",
-        message: "유효한 시급을 입력해 주세요.",
+        message: "시급은 최저시급 이상이어야 합니다.",
+      });
+      return;
+    } else if (hourlyPay > MAX_WAGE) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: `시급은 ${formattedMaxWage}원 이하여야 합니다.`,
       });
       return;
     }
@@ -176,118 +211,120 @@ export default function ShopRegisterPage() {
   };
 
   return (
-    <form
-      className="w-full max-w-[964px] mx-auto px-4 py-12"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-    >
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
-          가게 정보
-        </h2>
-        <button type="button" onClick={() => navigate("/shop")}>
-          <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
-        </button>
-      </div>
-
-      <div className="grid sm:grid-cols-2 grid-cols-1 gap-5 mb-6">
-        <TextField.Input
-          label="가게 이름*"
-          placeholder="입력"
-          fullWidth
-          value={form.name}
-          onChange={(e) => handleChange("name", e.target.value)}
-        />
-        <Select
-          label="분류*"
-          placeholder="선택"
-          fullWidth
-          options={CATEGORY_OPTIONS}
-          value={form.category}
-          onValueChange={(value) => handleChange("category", value)}
-        />
-        <Select
-          label="주소*"
-          placeholder="선택"
-          fullWidth
-          options={SeoulDistricts.map((d) => ({ label: d, value: d }))}
-          value={form.address1}
-          onValueChange={(value) => handleChange("address1", value)}
-        />
-        <TextField.Input
-          label="상세 주소*"
-          placeholder="입력"
-          fullWidth
-          value={form.address2}
-          onChange={(e) => handleChange("address2", e.target.value)}
-        />
-        <TextField.Input
-          label="기본 시급*"
-          placeholder="입력"
-          fullWidth
-          value={form.originalHourlyPay}
-          onChange={(e) => {
-            const rawValue = e.target.value;
-            const digitsOnly = extractDigits(rawValue);
-            const formatted = digitsOnly
-              ? numberCommaFormatter(Number(digitsOnly))
-              : "";
-            handleChange("originalHourlyPay", formatted);
-          }}
-          postfix={<span className="text-black mr-2">원</span>}
-        />
-      </div>
-      <div className="mb-6">
-        <label className="block mb-2">가게 이미지*</label>
-        <div
-          className="relative sm:w-[483px] sm:h-[276px] w-full h-[200px] rounded-lg bg-gray-10 border border-gray-30 overflow-hidden cursor-pointer"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          {imagePreview && (
-            <img
-              src={imagePreview}
-              alt="preview"
-              className="object-cover w-full h-full z-0"
-            />
-          )}
-          <div className="absolute inset-0 bg-black/40 z-10" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-20">
-            <Camera className="w-8 h-8 mb-2.5 text-white" />
-            <span>이미지 변경하기</span>
-          </div>
+    <div className="w-full bg-gray-5 min-h-screen">
+      <form
+        className="w-full max-w-[964px] mx-auto px-4 py-12"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
+            가게 정보
+          </h2>
+          <button type="button" onClick={() => navigate("/shop")}>
+            <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
+          </button>
         </div>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          hidden
-          onChange={handleImageUpload}
-        />
-      </div>
-      <div className="mb-10">
-        <TextField.TextArea
-          label="가게 설명 (최대 200자)"
-          placeholder="입력"
-          fullWidth
-          rows={4}
-          value={form.description}
-          maxLength={200}
-          onChange={(e) => handleChange("description", e.target.value)}
-        />
-      </div>
-      <div className="text-center">
-        <Button
-          variant="primary"
-          textSize="md"
-          className="sm:w-[350px] w-full px-34 py-3.5"
-          disabled={isSubmitting}
-          type="submit"
-        >
-          완료하기
-        </Button>
-      </div>
-    </form>
+
+        <div className="grid sm:grid-cols-2 grid-cols-1 gap-5 mb-6">
+          <TextField.Input
+            label="가게 이름*"
+            placeholder="입력"
+            fullWidth
+            value={form.name}
+            onChange={(e) => handleChange("name", e.target.value)}
+          />
+          <Select
+            label="분류*"
+            placeholder="선택"
+            fullWidth
+            options={CATEGORY_OPTIONS}
+            value={form.category}
+            onValueChange={(value) => handleChange("category", value)}
+          />
+          <Select
+            label="주소*"
+            placeholder="선택"
+            fullWidth
+            options={SeoulDistricts.map((d) => ({ label: d, value: d }))}
+            value={form.address1}
+            onValueChange={(value) => handleChange("address1", value)}
+          />
+          <TextField.Input
+            label="상세 주소*"
+            placeholder="입력"
+            fullWidth
+            value={form.address2}
+            onChange={(e) => handleChange("address2", e.target.value)}
+          />
+          <TextField.Input
+            label="기본 시급*"
+            placeholder="입력"
+            fullWidth
+            value={form.originalHourlyPay}
+            onChange={(e) => {
+              const rawValue = e.target.value;
+              const digitsOnly = extractDigits(rawValue);
+              const formatted = digitsOnly
+                ? numberCommaFormatter(Number(digitsOnly))
+                : "";
+              handleChange("originalHourlyPay", formatted);
+            }}
+            postfix={<span className="text-black mr-2">원</span>}
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block mb-2">가게 이미지*</label>
+          <div
+            className="relative sm:w-[483px] sm:h-[276px] w-full h-[200px] rounded-lg bg-gray-10 border border-gray-30 overflow-hidden cursor-pointer"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="preview"
+                className="object-cover w-full h-full z-0"
+              />
+            )}
+            <div className="absolute inset-0 bg-black/40 z-10" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-20">
+              <Camera className="w-8 h-8 mb-2.5 text-white" />
+              <span>이미지 변경하기</span>
+            </div>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleImageUpload}
+          />
+        </div>
+        <div className="mb-10">
+          <TextField.TextArea
+            label="가게 설명 (최대 200자)"
+            placeholder="입력"
+            fullWidth
+            rows={4}
+            value={form.description}
+            maxLength={200}
+            onChange={(e) => handleChange("description", e.target.value)}
+          />
+        </div>
+        <div className="text-center">
+          <Button
+            variant="primary"
+            textSize="md"
+            className="sm:w-[350px] w-full px-34 py-3.5"
+            disabled={isSubmitting}
+            type="submit"
+          >
+            완료하기
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
