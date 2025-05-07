@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import type { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +46,7 @@ export default function ShopRegisterPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const user = useUserStore((state) => state.user);
   const updateShopId = useUserStore((state) => state.updateShopId);
   const openModal = useModalStore((state) => state.openModal);
 
@@ -57,6 +58,33 @@ export default function ShopRegisterPage() {
     originalHourlyPay: "",
     description: "",
   });
+
+  useEffect(() => {
+    if (!user) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 후에 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.AUTH.SIGNIN),
+      });
+      return;
+    }
+
+    if (user.type === "employee") {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "사장님 계정으로만 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.PROFILE.ROOT),
+      });
+      return;
+    }
+
+    if (user.shopId) {
+      navigate(ROUTES.SHOP.EDIT);
+      return;
+    }
+  }, []);
 
   const handleChange = (
     key: keyof FormType,

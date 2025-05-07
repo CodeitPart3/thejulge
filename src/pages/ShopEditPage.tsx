@@ -40,7 +40,7 @@ const FIELD_LABELS: Record<keyof FormType, string> = {
   description: "가게 설명",
 };
 
-export default function ShopRegisterPage() {
+export default function ShopEditPage() {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const shopId = user?.shopId;
@@ -60,8 +60,33 @@ export default function ShopRegisterPage() {
   });
 
   useEffect(() => {
-    async function fetchShop() {
-      if (!shopId) return;
+    if (!user) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 후에 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.AUTH.SIGNIN),
+      });
+      return;
+    }
+
+    if (user.type === "employee") {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "사장님 계정으로만 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.PROFILE.ROOT),
+      });
+      return;
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchShop = async () => {
+      if (!shopId) {
+        navigate(ROUTES.SHOP.REGISTER);
+        return;
+      }
       const res = await getShop(shopId);
       const {
         name,
@@ -81,9 +106,9 @@ export default function ShopRegisterPage() {
         description,
       });
       if (imageUrl) setImagePreview(imageUrl);
-    }
+    };
     fetchShop();
-  }, [shopId]);
+  }, [shopId, navigate]);
 
   const handleChange = (
     key: keyof FormType,
