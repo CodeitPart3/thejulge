@@ -2,6 +2,7 @@ import { getShopApplications } from "../services/applicationService";
 import { getNotice } from "../services/noticeService";
 
 import { PostData } from "@/components/Post/PostList";
+import { UserType } from "@/types/user";
 import { getLocalStorageValue } from "@/utils/localStorage";
 
 interface LoadNoticeParams {
@@ -19,12 +20,20 @@ export const loadNotice = async ({ shopId, noticeId }: LoadNoticeParams) => {
 
 const MAX_VISIBLE_RECENT_NOTICES = 6;
 
-export const loadRecentNotices = (noticeId: string) => {
+export const loadRecentNotices = (noticeId: string, userType?: UserType) => {
   const allRecentNotices =
     getLocalStorageValue<PostData[]>("recentNotices") ?? [];
 
   const recentNotices = allRecentNotices
     .filter(({ id }) => id !== noticeId)
+    .map(({ link, ...restNoticeInfo }) => {
+      const type = userType ?? "employee";
+      const splittedLink = link.split("/");
+      splittedLink[splittedLink.length - 1] = type;
+
+      const updatedLink = splittedLink.join("/");
+      return { link: updatedLink, ...restNoticeInfo };
+    })
     .slice(0, MAX_VISIBLE_RECENT_NOTICES);
 
   return recentNotices;
