@@ -1,6 +1,6 @@
-import { useToast } from "@/hooks/useToast";
-import ToastPortal from "@/components/Toast/ToastPortal";
 import Toast from "@/components/Toast/Toast";
+import ToastPortal from "@/components/Toast/ToastPortal";
+import { useToast } from "@/hooks/useToast";
 
 export default function ToastContainer() {
   const { toasts } = useToast();

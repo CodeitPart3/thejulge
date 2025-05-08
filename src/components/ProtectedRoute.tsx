@@ -2,8 +2,8 @@ import { ReactNode, useLayoutEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { User, useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
+import { User, useUserStore } from "@/store/useUserStore";
 
 interface ProtectedRouteConditionType {
   isPass: boolean;

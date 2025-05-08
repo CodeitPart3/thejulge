@@ -11,8 +11,8 @@ import Button from "@/components/Button";
 import Select from "@/components/Select";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
-import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
+import { useUserStore } from "@/store/useUserStore";
 import { autoHyphenFormatter } from "@/utils/phoneNumber";
 
 type FormType = {

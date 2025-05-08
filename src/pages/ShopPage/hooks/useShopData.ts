@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 
 import { getShopNotices } from "@/apis/services/noticeService";
 import { getUser } from "@/apis/services/userService";
-import { useUserStore } from "@/hooks/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 
 export type ShopItem = {
   id: string;

@@ -3,7 +3,7 @@ import NoticeEmployerActionButton from "./NoticeEmployerActionButton";
 
 import PostCard from "@/components/Post/PostCard";
 import { APPLICATION_STATUS } from "@/constants/applicationStatus";
-import { User } from "@/hooks/useUserStore";
+import { User } from "@/store/useUserStore";
 import { NoticeItem } from "@/types/notice";
 import { cn } from "@/utils/cn";
 import { isPastDate } from "@/utils/datetime";

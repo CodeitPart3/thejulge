@@ -7,8 +7,8 @@ import NoticeSearchResultHeader from "@/components/NoticeSearchResultHeader";
 import Pagination from "@/components/Pagination";
 import type { PostData } from "@/components/Post/PostList";
 import PostList from "@/components/Post/PostList";
-import { useUserStore } from "@/hooks/useUserStore";
 import { useFilterStore } from "@/store/useFilterStore";
+import { useUserStore } from "@/store/useUserStore";
 import type { SortKey } from "@/types/notice";
 
 const ITEM_PER_PAGE = 6;

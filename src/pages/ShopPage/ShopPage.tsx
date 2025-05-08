@@ -7,9 +7,9 @@ import EmptyStateCard from "@/components/EmptyStateCard";
 import PostCard from "@/components/Post/PostCard";
 import PostList from "@/components/Post/PostList";
 import { ROUTES } from "@/constants/router";
-import { useUserStore } from "@/hooks/useUserStore";
 import { useShopData } from "@/pages/ShopPage/hooks/useShopData";
 import { useModalStore } from "@/store/useModalStore";
+import { useUserStore } from "@/store/useUserStore";
 
 export interface PostListItem {
   id: string;
