@@ -27,7 +27,7 @@ export default function PostListSlider({
       "(min-width: 1024px)": {
         slides: {
           perView: 3, // lg 이상: 3개
-          spacing: 14,
+          spacing: 6,
         },
       },
     },
@@ -51,7 +51,7 @@ export default function PostListSlider({
     <div className="w-full px-8 lg:max-w-[60.25rem] mx-auto">
       <div ref={sliderRef} className="keen-slider">
         {posts.map((post) => (
-          <div key={post.id} className="keen-slider__slide w-1/2 lg:w-1/3">
+          <div key={post.id} className="keen-slider__slide w-1/2 lg:w-1/3 p-1">
             <Post {...post} />
           </div>
         ))}
