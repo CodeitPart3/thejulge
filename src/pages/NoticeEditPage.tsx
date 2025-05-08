@@ -12,8 +12,8 @@ import Button from "@/components/Button";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
 import { MIN_WAGE, MAX_WAGE } from "@/constants/wage";
-import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
+import { useUserStore } from "@/store/useUserStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
 
 type FormType = {

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
 import { getNotices } from "@/apis/services/noticeService";
-import { useUserStore } from "@/hooks/useUserStore";
 import {
   ITEM_COUNT_PER_PAGE,
   CUSTOM_NOTICE_LIMIT,
 } from "@/pages/NoticeListPage/constants";
 import { useFilterStore } from "@/store/useFilterStore";
+import { useUserStore } from "@/store/useUserStore";
 import type { NoticeWithoutUserApplication, SortKey } from "@/types/notice";
 
 export default function useNoticeList(page: number, selectedSort: SortKey) {

@@ -1,5 +1,5 @@
 import { getUser } from "@/apis/services/userService";
-import { useUserStore } from "@/hooks/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 
 const profileLoader = async () => {
   const userId = useUserStore.getState().user?.id;

@@ -4,7 +4,7 @@ import Logo from "../assets/logo/thejulge.svg";
 
 import Alert from "@/components/Alert/Alert";
 import SearchInput from "@/components/SearchInput";
-import { useUserStore } from "@/hooks/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 
 export default function Header() {
   const navigate = useNavigate();

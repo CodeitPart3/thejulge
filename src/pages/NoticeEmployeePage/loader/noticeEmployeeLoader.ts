@@ -1,7 +1,7 @@
 import { LoaderFunction } from "react-router-dom";
 
 import { loadNotice, loadRecentNotices } from "@/apis/loaders/notice";
-import { useUserStore } from "@/hooks/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 
 const noticeEmployeeLoader: LoaderFunction = async ({ params }) => {
   const user = useUserStore.getState().user;

@@ -9,7 +9,7 @@ import CustomNoticeSection from "./CustomNoticeSection";
 import NoticeSearchResultHeader from "@/components/NoticeSearchResultHeader";
 import PageNation from "@/components/Pagination";
 import PostList, { PostData } from "@/components/Post/PostList";
-import { useUserStore } from "@/hooks/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import type { SortKey } from "@/types/notice";
 
 export default function NoticeListPage() {

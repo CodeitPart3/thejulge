@@ -12,8 +12,8 @@ import { postAuthentication } from "@/apis/services/authenticationService";
 import Button from "@/components/Button";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
-import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
+import { useUserStore } from "@/store/useUserStore";
 
 export default function SigninPage() {
   const navigate = useNavigate();

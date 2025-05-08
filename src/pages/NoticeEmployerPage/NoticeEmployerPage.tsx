@@ -7,7 +7,7 @@ import useShopApplications from "./hooks/useShopApplications";
 
 import PostList, { PostData } from "@/components/Post/PostList";
 import useUpdateRecentNotices from "@/hooks/useUpdateRecentNotices";
-import { useUserStore } from "@/hooks/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { NoticeItem } from "@/types/notice";
 
 export default function NoticeEmployerPage() {

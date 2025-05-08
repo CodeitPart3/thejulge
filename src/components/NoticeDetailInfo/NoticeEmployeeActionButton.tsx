@@ -9,8 +9,8 @@ import {
 import { APPLICATION_STATUS } from "@/constants/applicationStatus";
 import { ROUTES } from "@/constants/router";
 import { useToast } from "@/hooks/useToast";
-import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
+import { useUserStore } from "@/store/useUserStore";
 import { ApplicationStatus } from "@/types/application";
 import { cn } from "@/utils/cn";
 
