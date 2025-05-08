@@ -36,7 +36,7 @@ function NoticeEmployerActionButton({
   const navigate = useNavigate();
 
   const moveToEditNoticePage = () => {
-    if (isMyShop && !isPastNotice && isClosed && !isStartApplication) {
+    if (isMyShop && !isPastNotice && !isClosed && !isStartApplication) {
       navigate(`/notice/edit/${noticeId}`);
     }
   };
