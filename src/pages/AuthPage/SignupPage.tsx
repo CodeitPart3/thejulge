@@ -115,7 +115,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="w-full pt-[4.5625rem] sm:pt-[8.6875rem] lg:pt-[9.75rem] pb-[5.1975rem] sm:pb-[20.6875rem] lg:pb-[12.8125rem] ">
+    <div className="w-full pt-[4.5625rem] sm:pt-0">
       <Link to={ROUTES.NOTICE.ROOT}>
         <Logo className="mx-auto mb-2 h-[2.375rem] sm:h-[2.8125rem] w-[13rem] sm:w-[15.5rem]" />
       </Link>
