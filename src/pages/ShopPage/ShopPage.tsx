@@ -27,7 +27,7 @@ export interface PostListItem {
 export default function ShopPage() {
   const navigate = useNavigate();
   const { openModal, closeModal } = useModalStore();
-  const { user } = useUserStore();
+  const { user, isLoggedIn } = useUserStore();
 
   const {
     shop,
@@ -41,7 +41,7 @@ export default function ShopPage() {
   } = useShopData();
 
   useEffect(() => {
-    if (!user) {
+    if (!(isLoggedIn && user)) {
       openModal({
         type: "alert",
         message: "로그인 후에 이용 가능한 기능입니다.",
@@ -59,7 +59,7 @@ export default function ShopPage() {
           navigate(ROUTES.AUTH.SIGNIN);
         },
       });
-    } else if (user.type === "employee") {
+    } else if (user?.type === "employee") {
       openModal({
         type: "alert",
         message: "사장님 계정으로만 이용 가능한 기능입니다.",
