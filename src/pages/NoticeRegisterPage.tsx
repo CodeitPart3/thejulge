@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { AxiosError } from "axios";
 import DatePicker from "react-datepicker";
@@ -10,6 +10,8 @@ import { postNotice } from "@/apis/services/noticeService";
 import { Close } from "@/assets/icon";
 import Button from "@/components/Button";
 import TextField from "@/components/TextField";
+import { ROUTES } from "@/constants/router";
+import { MAX_WAGE, MIN_WAGE } from "@/constants/wage";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useModalStore } from "@/store/useModalStore";
 import { extractDigits, numberCommaFormatter } from "@/utils/number";
@@ -40,6 +42,36 @@ export default function NoticeRegisterPage() {
     workhour: "",
     description: "",
   });
+
+  useEffect(() => {
+    if (!user) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "로그인 후 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.AUTH.SIGNIN),
+      });
+      return;
+    }
+    if (user.type === "employee") {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "사장님 계정으로만 이용 가능한 기능입니다.",
+        onClose: () => navigate(ROUTES.PROFILE.ROOT),
+      });
+      return;
+    }
+    if (!user.shopId) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: "가게 정보 등록 후 이용 가능합니다.",
+        onClose: () => navigate(ROUTES.SHOP.REGISTER),
+      });
+      return;
+    }
+  }, []);
 
   const handleChange = (key: keyof FormType, value: string | null | Date) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -89,11 +121,20 @@ export default function NoticeRegisterPage() {
     }
 
     const hourlyPay = Number(extractDigits(form.hourlyPay));
-    if (isNaN(hourlyPay) || hourlyPay <= 0) {
+    const formattedMaxWage = numberCommaFormatter(MAX_WAGE);
+
+    if (hourlyPay < MIN_WAGE) {
       openModal({
         type: "alert",
         iconType: "warning",
-        message: "유효한 시급을 입력해 주세요.",
+        message: "시급은 최저시급 이상이어야 합니다.",
+      });
+      return;
+    } else if (hourlyPay > MAX_WAGE) {
+      openModal({
+        type: "alert",
+        iconType: "warning",
+        message: `시급은 ${formattedMaxWage}원 이하여야 합니다.`,
       });
       return;
     }
@@ -152,86 +193,88 @@ export default function NoticeRegisterPage() {
   };
 
   return (
-    <form
-      className="w-full max-w-[964px] mx-auto px-4 py-12"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-    >
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
-          공고 등록
-        </h2>
-        <button type="button" onClick={() => navigate("/shop")}>
-          <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
-        </button>
-      </div>
+    <div className="w-full bg-gray-5 min-h-screen">
+      <form
+        className="w-full max-w-[964px] mx-auto px-4 py-12"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="sm:text-[1.75rem] text-[1.25rem] font-bold">
+            공고 등록
+          </h2>
+          <button type="button" onClick={() => navigate("/shop")}>
+            <Close className="sm:w-8 sm:h-8 w-6 h-6 cursor-pointer" />
+          </button>
+        </div>
 
-      <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 mb-6">
-        <TextField.Input
-          label="시급*"
-          placeholder="입력"
-          fullWidth
-          value={form.hourlyPay}
-          onChange={(e) => {
-            const rawValue = e.target.value;
-            const digitsOnly = extractDigits(rawValue);
-            const formatted = digitsOnly
-              ? numberCommaFormatter(Number(digitsOnly))
-              : "";
-            handleChange("hourlyPay", formatted);
-          }}
-          postfix={<span className="text-black mr-2">원</span>}
-        />
-        <div className="flex flex-col">
-          <label className="inline-block mb-2 leading-[1.625rem]">
-            시작 일시*
-          </label>
-          <DatePicker
-            selected={form.startsAt}
-            onChange={(date) => handleChange("startsAt", date)}
-            showTimeSelect
-            timeFormat="HH:mm"
-            timeIntervals={10}
-            dateFormat="yyyy-MM-dd HH:mm"
-            placeholderText="선택"
-            className="w-full border border-gray-30 focus-within:border-blue-20 rounded-[0.375rem] py-4 px-5 text-[1rem]"
+        <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 mb-6">
+          <TextField.Input
+            label="시급*"
+            placeholder="입력"
+            fullWidth
+            value={form.hourlyPay}
+            onChange={(e) => {
+              const rawValue = e.target.value;
+              const digitsOnly = extractDigits(rawValue);
+              const formatted = digitsOnly
+                ? numberCommaFormatter(Number(digitsOnly))
+                : "";
+              handleChange("hourlyPay", formatted);
+            }}
+            postfix={<span className="text-black mr-2">원</span>}
+          />
+          <div className="flex flex-col">
+            <label className="inline-block mb-2 leading-[1.625rem]">
+              시작 일시*
+            </label>
+            <DatePicker
+              selected={form.startsAt}
+              onChange={(date) => handleChange("startsAt", date)}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={10}
+              dateFormat="yyyy-MM-dd HH:mm"
+              placeholderText="선택"
+              className="w-full border border-gray-30 focus-within:border-blue-20 rounded-[0.375rem] py-4 px-5 text-[1rem] bg-white"
+            />
+          </div>
+          <TextField.Input
+            label="업무 시간*"
+            placeholder="입력"
+            fullWidth
+            value={form.workhour}
+            onChange={(e) => handleChange("workhour", e.target.value)}
+            postfix={
+              <span className="text-black mr-2 whitespace-nowrap">시간</span>
+            }
           />
         </div>
-        <TextField.Input
-          label="업무 시간*"
-          placeholder="입력"
-          fullWidth
-          value={form.workhour}
-          onChange={(e) => handleChange("workhour", e.target.value)}
-          postfix={
-            <span className="text-black mr-2 whitespace-nowrap">시간</span>
-          }
-        />
-      </div>
-      <div className="mb-10">
-        <TextField.TextArea
-          label="공고 설명 (최대 500자)"
-          placeholder="입력"
-          fullWidth
-          rows={4}
-          maxLength={500}
-          value={form.description}
-          onChange={(e) => handleChange("description", e.target.value)}
-        />
-      </div>
-      <div className="text-center">
-        <Button
-          variant="primary"
-          textSize="md"
-          className="sm:w-[350px] w-full px-34 py-3.5"
-          disabled={isSubmitting}
-          type="submit"
-        >
-          등록하기
-        </Button>
-      </div>
-    </form>
+        <div className="mb-10">
+          <TextField.TextArea
+            label="공고 설명 (최대 500자)"
+            placeholder="입력"
+            fullWidth
+            rows={4}
+            maxLength={500}
+            value={form.description}
+            onChange={(e) => handleChange("description", e.target.value)}
+          />
+        </div>
+        <div className="text-center">
+          <Button
+            variant="primary"
+            textSize="md"
+            className="sm:w-[350px] w-full px-34 py-3.5"
+            disabled={isSubmitting}
+            type="submit"
+          >
+            등록하기
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
