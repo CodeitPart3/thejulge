@@ -35,15 +35,15 @@ export default function AlertModalLayout({
         bg-white rounded-lg text-center relative
         ${
           type === "message"
-            ? "w-[20.625rem] h-[13.75rem] md:w-[33.75rem] md:h-[15.625rem]"
-            : "w-[18.625rem] h-[11.5rem] md:w-[18.625rem] md:h-[11.5rem]"
+            ? "w-[20.625rem] h-[13.75rem] sm:w-[33.75rem] sm:h-[15.625rem]"
+            : "w-[18.625rem] h-[11.5rem] sm:w-[19.625rem] sm:h-[11.5rem]"
         }
         p-6 flex flex-col justify-center items-center
       `}
       onClick={(e) => e.stopPropagation()}
     >
-      {Icon && <Icon className="w-6 h-6 mb-6 mx-auto shrink-0" />}{" "}
-      <p className="text-gray-900 text-base md:text-lg mb-[1rem]">{message}</p>
+      {Icon && <Icon className="w-6 h-6 mb-3.5 mx-auto shrink-0" />}{" "}
+      <p className="text-gray-900 text-base sm:text-lg mb-[1rem]">{message}</p>
       <div
         className={
           type === "message"

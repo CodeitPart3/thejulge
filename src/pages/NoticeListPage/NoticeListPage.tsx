@@ -56,7 +56,7 @@ export default function NoticeListPage() {
   };
 
   return (
-    <section className="w-full">
+    <section className="w-full overflow-hidden">
       {user?.type && customNotices.length > 0 && (
         <CustomNoticeSection customNotices={customNotices} />
       )}

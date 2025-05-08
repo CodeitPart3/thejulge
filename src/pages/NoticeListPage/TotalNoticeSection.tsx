@@ -26,9 +26,9 @@ export default function TotalNoticeSection({
   };
 
   return (
-    <section className="mt-10 lg:w-[60.25rem] md:w-[42.375rem] mx-auto ">
+    <section className="mt-10 lg:w-[60.25rem] sm:w-[42.375rem] mx-auto">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="font-bold text-[1.25rem] md:text-[1.75rem] tracking-[-0.02em]  text-black p-4 pl-0">
+        <h2 className="font-bold text-[1.25rem] sm:text-[1.75rem] tracking-[-0.02em]  text-black p-4 pl-0">
           전체 공고
         </h2>
         <div className="flex px-4 pr-0 gap-[0.625rem]">
