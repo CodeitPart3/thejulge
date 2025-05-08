@@ -32,7 +32,7 @@ function UserApplicationTable({
       bodyRow={({ id, notice, shop, status }) => (
         <Table.Tr
           key={id}
-          className="text-sm md:text-[1rem]"
+          className="text-sm sm:text-[1rem]"
           showLastBottomBorder
         >
           <Table.Td>{shop.item.name}</Table.Td>
