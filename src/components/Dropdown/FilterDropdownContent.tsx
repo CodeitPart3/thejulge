@@ -92,12 +92,12 @@ function FilterDropdownContent({
 
         <div>
           <span className="inline-block text-base font-normal mb-2">위치</span>
-          <div className="grid grid-cols-2 gap-2 h-[16.125rem] overflow-y-auto border border-gray-200 rounded-md p-2">
+          <div className="grid grid-cols-2 gap-1 h-[16.125rem] overflow-y-auto border border-gray-200 rounded-md p-2">
             {sortedSeoulStricts.map((area) => (
               <button
                 key={area}
                 onClick={() => toggleArea(area)}
-                className={`px-2 py-1 rounded-md text-sm whitespace-nowrap cursor-pointer ${
+                className={`px-2 py-2 rounded-sm text-sm whitespace-nowrap hover:bg-gray-20 transition-colors cursor-pointer ${
                   areasFilter?.includes(area)
                     ? "bg-red-30 text-white"
                     : "bg-gray-100 text-gray-800"
