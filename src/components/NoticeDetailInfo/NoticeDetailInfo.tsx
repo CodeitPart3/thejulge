@@ -73,9 +73,11 @@ function NoticeDetailInfoCard({
           buttons={
             isEmployerPage ? (
               <NoticeEmployerActionButton
-                isMyShop={user?.shopId === shopId}
                 noticeId={noticeId}
+                isMyShop={user?.shopId === shopId}
                 isStartApplication={isStartApplication}
+                isPastNotice={isPastDate(startsAt)}
+                isClosed={closed}
               />
             ) : (
               <NoticeEmployeeActionButton

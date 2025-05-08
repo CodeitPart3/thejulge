@@ -51,7 +51,7 @@ const useShopApplications = ({
     if (type === "employer") {
       fetchShopApplication();
     }
-  }, [shopId, noticeId, offset, limit, page]);
+  }, [type, shopId, noticeId, offset, limit, page]);
 
   return {
     refetch: fetchShopApplication,

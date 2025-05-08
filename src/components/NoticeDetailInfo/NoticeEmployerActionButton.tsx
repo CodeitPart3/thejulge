@@ -6,17 +6,39 @@ interface NoticeEmployerActionButtonProps {
   noticeId: string;
   isMyShop: boolean;
   isStartApplication: boolean;
+  isPastNotice: boolean;
+  isClosed: boolean;
 }
 
 function NoticeEmployerActionButton({
   noticeId,
   isMyShop,
   isStartApplication,
+  isPastNotice,
+  isClosed,
 }: NoticeEmployerActionButtonProps) {
+  let buttonText = "";
+  let isDisabled = true;
+
+  if (!isMyShop) {
+    buttonText = "다른 가게의 공고 편집 불가";
+  } else if (isPastNotice) {
+    buttonText = "기간이 지난 공고입니다.";
+  } else if (isClosed) {
+    buttonText = "마감된 공고입니다.";
+  } else if (isStartApplication) {
+    buttonText = "이미 지원을 받은 공고입니다.";
+  } else {
+    buttonText = "공고 편집하기";
+    isDisabled = false;
+  }
+
   const navigate = useNavigate();
 
   const moveToEditNoticePage = () => {
-    navigate(`/notice/edit/${noticeId}`);
+    if (isMyShop && !isPastNotice && isClosed && !isStartApplication) {
+      navigate(`/notice/edit/${noticeId}`);
+    }
   };
 
   return (
@@ -25,12 +47,9 @@ function NoticeEmployerActionButton({
       variant="white"
       className={"py-[14px]"}
       onClick={moveToEditNoticePage}
-      disabled={!isMyShop || isStartApplication}
+      disabled={isDisabled}
     >
-      {isMyShop && !isStartApplication
-        ? "공고 편집하기"
-        : "이미 지원이 시작된 공고입니다."}
-      {!isMyShop && "다른 가게의 공고 편집 불가"}
+      {buttonText}
     </Button>
   );
 }
