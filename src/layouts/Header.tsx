@@ -14,8 +14,8 @@ export default function Header() {
   const userPath = user?.type === "employer" ? "/shop" : "/profile";
 
   const handleLogout = () => {
-    clearUser();
     navigate("/");
+    setTimeout(() => clearUser(), 100);
   };
 
   return (
