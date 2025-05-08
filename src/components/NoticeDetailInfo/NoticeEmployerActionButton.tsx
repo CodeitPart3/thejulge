@@ -3,21 +3,42 @@ import { useNavigate } from "react-router-dom";
 import Button from "../Button";
 
 interface NoticeEmployerActionButtonProps {
-  userShopId?: string;
-  noticeShopId: string;
   noticeId: string;
+  isMyShop: boolean;
+  isStartApplication: boolean;
+  isPastNotice: boolean;
+  isClosed: boolean;
 }
 
 function NoticeEmployerActionButton({
-  userShopId,
-  noticeShopId,
   noticeId,
+  isMyShop,
+  isStartApplication,
+  isPastNotice,
+  isClosed,
 }: NoticeEmployerActionButtonProps) {
+  let buttonText = "";
+  let isDisabled = true;
+
+  if (!isMyShop) {
+    buttonText = "다른 가게의 공고 편집 불가";
+  } else if (isPastNotice) {
+    buttonText = "기간이 지난 공고입니다.";
+  } else if (isClosed) {
+    buttonText = "마감된 공고입니다.";
+  } else if (isStartApplication) {
+    buttonText = "이미 지원을 받은 공고입니다.";
+  } else {
+    buttonText = "공고 편집하기";
+    isDisabled = false;
+  }
+
   const navigate = useNavigate();
-  const isMyShop = userShopId === noticeShopId;
 
   const moveToEditNoticePage = () => {
-    navigate(`/notice/edit/${noticeId}`);
+    if (isMyShop && !isPastNotice && isClosed && !isStartApplication) {
+      navigate(`/notice/edit/${noticeId}`);
+    }
   };
 
   return (
@@ -26,9 +47,9 @@ function NoticeEmployerActionButton({
       variant="white"
       className={"py-[14px]"}
       onClick={moveToEditNoticePage}
-      disabled={!isMyShop}
+      disabled={isDisabled}
     >
-      {isMyShop ? "공고 편집하기" : "다른 가게의 공고 편집 불가"}
+      {buttonText}
     </Button>
   );
 }

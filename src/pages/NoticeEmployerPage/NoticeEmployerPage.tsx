@@ -2,7 +2,8 @@ import { useLoaderData, useParams } from "react-router-dom";
 
 import NoticeDetailInfo from "../../components/NoticeDetailInfo/NoticeDetailInfo";
 
-import NoticeApplicationTableContainer from "./components/NoticeApplicationTableContainer";
+import NoticeApplicationTable from "./components/NoticeApplicationTable";
+import useShopApplications from "./hooks/useShopApplications";
 
 import PostList, { PostData } from "@/components/Post/PostList";
 import useUpdateRecentNotices from "@/hooks/useUpdateRecentNotices";
@@ -19,6 +20,15 @@ export default function NoticeEmployerPage() {
     noticeId: string;
   };
   const { user } = useUserStore();
+  const {
+    refetch: refetchShopApplications,
+    shopApplications,
+    totalCount,
+  } = useShopApplications({
+    shopId,
+    noticeId,
+    type: user?.type,
+  });
 
   const isMyShop = user?.shopId === shopId;
 
@@ -37,6 +47,7 @@ export default function NoticeEmployerPage() {
             noticeInfo={noticeInfo}
             user={user}
             isEmployerPage
+            isStartApplication={shopApplications?.length > 0}
           />
         </div>
       </section>
@@ -47,14 +58,15 @@ export default function NoticeEmployerPage() {
             {isMyShop ? "신청자 목록" : "최근에 본 공고"}
           </h2>
           {isMyShop && (
-            <NoticeApplicationTableContainer
-              shopId={shopId}
-              noticeId={noticeId}
+            <NoticeApplicationTable
+              data={shopApplications}
+              totalCount={totalCount}
+              refetch={refetchShopApplications}
             />
           )}
 
           {!isMyShop &&
-            (recentNotices.length > 0 ? (
+            (recentNotices?.length > 0 ? (
               <PostList posts={recentNotices} />
             ) : (
               <div className="flex items-center justify-center w-full h-[20rem] text-black">

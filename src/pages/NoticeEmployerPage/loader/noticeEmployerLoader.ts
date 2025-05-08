@@ -16,7 +16,7 @@ const noticeEmployerLoader: LoaderFunction = async ({ params }) => {
     return { noticeInfo };
   }
 
-  const recentNotices = loadRecentNotices(noticeId);
+  const recentNotices = loadRecentNotices(noticeId, user?.type);
   return { noticeInfo, recentNotices };
 };
 
