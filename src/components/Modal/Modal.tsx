@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import AlertModalLayout from "./AlertModalLayout";
 import ConfirmModalLayout from "./ConfirmModalLayout";
 
@@ -5,6 +7,28 @@ import { useModalStore } from "@/store/useModalStore";
 
 export default function Modal() {
   const { isOpen, options, closeModal } = useModalStore();
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.preventDefault(); // 🔥 기본 엔터 동작 차단 (버튼 재실행 방지)
+        e.stopPropagation(); // 이벤트 버블링도 막기
+        if (options?.type === "confirm") {
+          options.onConfirm?.();
+        }
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
+
+        closeModal();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, options, closeModal]);
 
   if (!isOpen || !options) return null;
 
