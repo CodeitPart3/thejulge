@@ -17,8 +17,8 @@ function PageErrorElement() {
   };
 
   return (
-    <div className="flex-1 flex flex-col items-center gap-6 md:gap-10 mt-20 md:mt-48">
-      <h1 className="text-2xl md:text-3xl">문제가 발생했습니다.</h1>
+    <div className="flex-1 flex flex-col items-center gap-6 sm:gap-10 mt-20 sm:mt-48">
+      <h1 className="text-2xl sm:text-3xl">문제가 발생했습니다.</h1>
       <div className="flex gap-5">
         <Button
           variant="primary"
