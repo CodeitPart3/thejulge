@@ -22,7 +22,7 @@ export const getPayRateText = (
 
   const rawRate = ((hourlyPay - originalPay) / originalPay) * 100;
   const displayRate = Math.min(Math.round(rawRate), 100);
-  const rateText = `기존 시급보다 ${displayRate}%`;
+  const rateText = `기존보다 ${displayRate}%`;
 
   return { rawRate, displayRate, rateText };
 };
