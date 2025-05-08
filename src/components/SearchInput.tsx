@@ -26,7 +26,7 @@ export default function SearchInput() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative flex w-full md:max-w-[28.125rem] pl-10 rounded-[0.625rem] p-[0.625rem] bg-gray-10 border border-transparent"
+      className="relative flex w-full sm:max-w-[28.125rem] pl-10 rounded-[0.625rem] p-[0.625rem] bg-gray-10 border border-transparent"
     >
       <div className="flex items-center w-full">
         <img

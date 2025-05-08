@@ -4,7 +4,6 @@ import AlertModalLayout from "./AlertModalLayout";
 import ConfirmModalLayout from "./ConfirmModalLayout";
 
 import { useModalStore } from "@/store/useModalStore";
-
 export default function Modal() {
   const { isOpen, options, closeModal } = useModalStore();
 
@@ -13,8 +12,13 @@ export default function Modal() {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
-        e.preventDefault(); // 🔥 기본 엔터 동작 차단 (버튼 재실행 방지)
-        e.stopPropagation(); // 이벤트 버블링도 막기
+        e.preventDefault();
+        e.stopPropagation();
+
+        options?.onClose?.();
+        e.preventDefault();
+        e.stopPropagation();
+
         if (options?.type === "confirm") {
           options.onConfirm?.();
         }

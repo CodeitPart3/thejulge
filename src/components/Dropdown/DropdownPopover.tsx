@@ -65,8 +65,8 @@ const DropdownPopover = ({
   const isFilter = variant === "filter";
 
   const sizeClass = isFilter
-    ? "md:w-[24.375rem] md:h-[52.75rem]"
-    : "md:w-[23rem] md:h-[26.25rem]";
+    ? "sm:w-[24.375rem] sm:h-[52.75rem]"
+    : "sm:w-[23rem] sm:h-[26.25rem]";
 
   const colorClass = isFilter
     ? "bg-white border-gray-200"
@@ -76,7 +76,7 @@ const DropdownPopover = ({
     "z-[9999]",
     "rounded-2xl p-6 pr-5 pb-6 pl-5",
     "shadow-[0px_2px_8px_0px_#78748640]",
-    "border fixed md:absolute w-full h-full left-0 top-0",
+    "border fixed sm:absolute w-full h-full left-0 top-0",
     colorClass,
     sizeClass,
   );

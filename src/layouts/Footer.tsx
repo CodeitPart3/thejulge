@@ -43,7 +43,7 @@ export default function Footer() {
 
         <div className="flex flex-col gap-3 sm:hidden mt-4">
           <div className="flex flex-wrap gap-4 text-sm justify-between">
-            <div className="flex flex-wrap gap-4 text-sm font-normal leading-[1.375rem] text-gray-50">
+            <div className="flex flex-wrap gap-6 text-sm font-normal leading-[1.375rem] text-gray-50">
               <a href="/privacy">Privacy Policy</a>
               <a href="/faq">FAQ</a>
             </div>
@@ -72,7 +72,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="text-xs text-gray-50 leading-[1rem] font-normal">
+          <div className="text-xs text-gray-50 leading-[1rem] font-normal pt-[1rem]">
             ©codeit - 2025
           </div>
         </div>
