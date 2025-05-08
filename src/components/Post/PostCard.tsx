@@ -33,10 +33,7 @@ export default function PostCard({
   closed,
 }: PostCardProps) {
   const { rateText } = getPayRateText(hourlyPay, originalHourlyPay);
-  const isPast = isPastDate(
-    startsAt ?? Date.now().toLocaleString(),
-    workhour ?? 0,
-  );
+  const isPast = isPastDate(startsAt ?? Date.now().toLocaleString());
   const isDimmed = closed || isPast;
 
   const timeRange =
@@ -52,7 +49,7 @@ export default function PostCard({
         backgroundColor === "#ffffff" && "border border-gray-20 shadow-sm",
       )}
     >
-      <div className="relative w-full overflow-hidden rounded-xl h-auto">
+      <div className="relative w-full overflow-hidden rounded-xl h-auto max-h-[22rem]">
         <img
           src={imageUrl}
           alt={name}
@@ -107,7 +104,7 @@ export default function PostCard({
           <p
             className={cn(
               "body2-regular sm:body1-regular break-words",
-              description === "등록된 가게 정보가 없습니다."
+              description === "(등록된 가게 정보가 없습니다.)"
                 ? "text-gray-40"
                 : "text-black",
             )}

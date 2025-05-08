@@ -78,7 +78,7 @@ export default function ShopPage() {
         },
       });
     }
-  }, [user, openModal, closeModal, navigate]);
+  }, []);
 
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -137,7 +137,7 @@ export default function ShopPage() {
             description={
               shop.description && shop.description.trim() !== ""
                 ? shop.description
-                : "등록된 가게 정보가 없습니다"
+                : "(등록된 가게 정보가 없습니다.)"
             }
             isShopInfo={true}
             backgroundColor="bg-red-10"
