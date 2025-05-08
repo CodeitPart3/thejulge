@@ -14,6 +14,7 @@ interface NoticeDetailInfoCardProps {
   noticeId: string;
   user?: User | null;
   isEmployerPage?: boolean;
+  isStartApplication?: boolean;
 }
 
 function NoticeDetailInfoCard({
@@ -22,6 +23,7 @@ function NoticeDetailInfoCard({
   noticeInfo,
   user,
   isEmployerPage,
+  isStartApplication = false,
 }: NoticeDetailInfoCardProps) {
   const {
     hourlyPay,
@@ -42,7 +44,7 @@ function NoticeDetailInfoCard({
 
   const applicationId = currentUserApplication?.item.id ?? "";
   const applicationStatus = currentUserApplication?.item.status;
-  const isPast = isPastDate(startsAt, workhour);
+  const isPast = isPastDate(startsAt);
   const isDisabledNotice =
     isPast ||
     closed ||
@@ -71,9 +73,9 @@ function NoticeDetailInfoCard({
           buttons={
             isEmployerPage ? (
               <NoticeEmployerActionButton
-                userShopId={user?.shopId}
-                noticeShopId={shopId}
+                isMyShop={user?.shopId === shopId}
                 noticeId={noticeId}
+                isStartApplication={isStartApplication}
               />
             ) : (
               <NoticeEmployeeActionButton

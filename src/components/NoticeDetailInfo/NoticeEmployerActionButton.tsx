@@ -3,18 +3,17 @@ import { useNavigate } from "react-router-dom";
 import Button from "../Button";
 
 interface NoticeEmployerActionButtonProps {
-  userShopId?: string;
-  noticeShopId: string;
   noticeId: string;
+  isMyShop: boolean;
+  isStartApplication: boolean;
 }
 
 function NoticeEmployerActionButton({
-  userShopId,
-  noticeShopId,
   noticeId,
+  isMyShop,
+  isStartApplication,
 }: NoticeEmployerActionButtonProps) {
   const navigate = useNavigate();
-  const isMyShop = userShopId === noticeShopId;
 
   const moveToEditNoticePage = () => {
     navigate(`/notice/edit/${noticeId}`);
@@ -26,9 +25,12 @@ function NoticeEmployerActionButton({
       variant="white"
       className={"py-[14px]"}
       onClick={moveToEditNoticePage}
-      disabled={!isMyShop}
+      disabled={!isMyShop || isStartApplication}
     >
-      {isMyShop ? "공고 편집하기" : "다른 가게의 공고 편집 불가"}
+      {isMyShop && !isStartApplication
+        ? "공고 편집하기"
+        : "이미 지원이 시작된 공고입니다."}
+      {!isMyShop && "다른 가게의 공고 편집 불가"}
     </Button>
   );
 }

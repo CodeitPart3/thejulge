@@ -37,7 +37,7 @@ export default function NoticeEmployeePage() {
         <div className="flex flex-col gap-8 lg:w-[64rem] mx-auto mb-[3.75rem] px-3 sm:px-8 py-10 sm:py-[3.75rem]">
           <h2 className="text-[1.625rem] font-bold">최근에 본 공고</h2>
 
-          {recentNotices.length > 0 ? (
+          {recentNotices?.length > 0 ? (
             <PostList posts={recentNotices} />
           ) : (
             <div className="flex items-center justify-center w-full h-[20rem] text-black">

@@ -4,8 +4,10 @@ import { useSearchParams } from "react-router-dom";
 
 import { getShopApplications } from "@/apis/services/applicationService";
 import { ApplicationItem } from "@/types/application";
+import { UserType } from "@/types/user";
 
 interface UseShopApplicationsParams {
+  type?: UserType;
   shopId: string;
   noticeId: string;
   offset?: number;
@@ -13,6 +15,7 @@ interface UseShopApplicationsParams {
 }
 
 const useShopApplications = ({
+  type,
   shopId,
   noticeId,
   offset = 5,
@@ -45,7 +48,9 @@ const useShopApplications = ({
   };
 
   useEffect(() => {
-    fetchShopApplication();
+    if (type === "employer") {
+      fetchShopApplication();
+    }
   }, [shopId, noticeId, offset, limit, page]);
 
   return {
