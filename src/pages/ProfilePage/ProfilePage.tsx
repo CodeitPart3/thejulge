@@ -7,7 +7,6 @@ import useUserApplications from "./hooks/useUserApplications";
 
 import EmptyStateCard from "@/components/EmptyStateCard";
 import { ROUTES } from "@/constants/router";
-import { UserApplicationList } from "@/types/application";
 import { UserItem } from "@/types/user";
 
 const LIMIT = 5;
@@ -16,13 +15,16 @@ const PAGE_LIMIT = 7;
 export default function ProfilePage() {
   const { userInfo } = useLoaderData<{
     userInfo: UserItem;
-    count: number;
-    userApplications: UserApplicationList[];
   }>();
+
   const navigate = useNavigate();
   const { isLoading, totalCount, userApplications } = useUserApplications({
-    userId: userInfo.id,
+    userId: userInfo?.id,
   });
+
+  if (!userInfo) {
+    return null;
+  }
 
   return (
     <>
