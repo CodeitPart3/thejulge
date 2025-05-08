@@ -49,7 +49,7 @@ export default function PostCard({
         backgroundColor === "#ffffff" && "border border-gray-20 shadow-sm",
       )}
     >
-      <div className="relative w-full overflow-hidden rounded-xl h-auto">
+      <div className="relative w-full overflow-hidden rounded-xl h-auto max-h-[22rem]">
         <img
           src={imageUrl}
           alt={name}
