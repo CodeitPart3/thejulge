@@ -78,7 +78,7 @@ export default function ShopPage() {
         },
       });
     }
-  }, [user, openModal, closeModal, navigate]);
+  }, []);
 
   const observer = useRef<IntersectionObserver | null>(null);
 
