@@ -3,12 +3,13 @@ import { useState, useEffect } from "react";
 import { AxiosError } from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
-import Logo from "../../assets/logo/thejulge.svg?react";
+import Logo from "../../assets/landing/logo-white.svg?react";
 
 import Spinner from "./components/Spinner";
 import { useAuthForm } from "./hooks/useAuthForm";
 
 import { postAuthentication } from "@/apis/services/authenticationService";
+import LandingImage from "@/assets/landing/landing-img.webp";
 import Button from "@/components/Button";
 import TextField from "@/components/TextField";
 import { ROUTES } from "@/constants/router";
@@ -35,7 +36,8 @@ export default function SigninPage() {
     }
   }, [user, navigate]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -97,60 +99,78 @@ export default function SigninPage() {
   };
 
   return (
-    <div className="w-full pt-[8.75rem] sm:pt-0">
-      <Link to={ROUTES.NOTICE.ROOT}>
-        <Logo className="mx-auto mb-2 h-[2.375rem] sm:h-[2.8125rem] w-[13rem] sm:w-[15.5rem]" />
-      </Link>
-
-      <form
-        className="mt-[2.5rem] mx-auto flex max-w-sm flex-col gap-[1.75rem]"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (isFormValid) {
-            handleSubmit();
-          }
-        }}
-      >
-        <TextField.Input
-          id="email"
-          label="이메일"
-          type="email"
-          placeholder="입력"
-          value={formData.email}
-          onChange={handleChange("email")}
-          fullWidth
-          validateMessage={errors.email}
-        />
-
-        <TextField.Input
-          id="password"
-          label="비밀번호"
-          type="password"
-          placeholder="입력"
-          value={formData.password}
-          onChange={handleChange("password")}
-          fullWidth
-          validateMessage={errors.password}
-        />
-
-        <Button
-          type="submit"
-          fullWidth
-          className="py-[0.875rem] flex justify-center items-center gap-2"
-          onClick={handleSubmit}
-          disabled={!isFormValid || isSubmitting}
-        >
-          {isSubmitting && <Spinner />}
-          {isSubmitting ? "로그인 중..." : "로그인하기"}
-        </Button>
-      </form>
-
-      <p className="mt-[1rem] text-center text-sm">
-        회원이 아니신가요?{" "}
-        <Link to={ROUTES.AUTH.SIGNUP} className="text-[#5534DA] underline">
-          회원가입하기
+    <main className="relative w-screen h-screen bg-[#FF3C3C] overflow-hidden">
+      <div className="absolute top-10 left-10 pointer-events-auto z-50">
+        <Link to={ROUTES.NOTICE.ROOT}>
+          <Logo className="mx-auto mb-2 h-[2.375rem] sm:h-[2.8125rem] w-[13rem] sm:w-[15.5rem]" />
         </Link>
-      </p>
-    </div>
+      </div>
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        <section className="hidden lg:flex flex-col justify-center items-start w-[50%] max-w-[720px] pl-20 pr-10 z-0">
+          <h2 className="text-white font-bold text-[4rem] leading-tight mb-6">
+            <span className="text-[#fff] text-[4.5rem] mr-2">더</span> 나은
+            조건,
+            <br />
+            <span className="text-[#fff] text-[4.5rem] mr-2">더</span> 나은 선택
+          </h2>
+          <p className="text-white text-2xl mb-12">
+            당신에게{" "}
+            <span className="font-bold text-[2.25rem] text-white mr-1">더</span>
+            줄게요.
+          </p>
+          <img
+            src={LandingImage}
+            alt="LandingImage"
+            className="w-full max-w-[620px]"
+          />
+        </section>
+
+        <section className="w-full lg:w-[480px] z-10 flex justify-center">
+          <div className="h-[41.125rem] bg-white p-[2.5rem] sm:p-[3rem] rounded-2xl shadow-xl w-[90%] max-w-[420px]">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <TextField.Input
+                label="이메일"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange("email")}
+                placeholder="이메일을 입력해주세요"
+                fullWidth
+                validateMessage={errors.email}
+                className="focus:outline-none"
+              />
+              <TextField.Input
+                label="비밀번호"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange("password")}
+                placeholder="비밀번호를 입력해주세요"
+                fullWidth
+                validateMessage={errors.password}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                className="bg-[#FF3C3C] text-white py-3 text-lg font-semibold rounded"
+                disabled={!isFormValid || isSubmitting}
+              >
+                {isSubmitting ? <Spinner /> : "로그인 하기"}
+              </Button>
+            </form>
+            <p className="mt-5 text-center text-sm text-gray-500">
+              아직 계정이 없으신가요?{" "}
+              <Link
+                to={ROUTES.AUTH.SIGNUP}
+                className="underline text-[#FF3C3C]"
+              >
+                회원가입
+              </Link>
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }
