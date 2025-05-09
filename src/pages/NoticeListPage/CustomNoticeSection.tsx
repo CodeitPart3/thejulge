@@ -18,7 +18,7 @@ function CustomNoticeSection({ customNotices }: CustomNoticeSectionProps) {
       imageUrl: shop?.imageUrl ?? "",
       address1: shop?.address1 ?? "",
       description: notice.description ?? "",
-      originalHourlyPay: 0,
+      originalHourlyPay: shop?.originalHourlyPay ?? 0,
       hourlyPay: notice.hourlyPay,
       startsAt: notice.startsAt,
       workhour: notice.workhour,

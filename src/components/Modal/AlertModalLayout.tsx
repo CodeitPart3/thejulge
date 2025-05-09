@@ -43,7 +43,12 @@ export default function AlertModalLayout({
       onClick={(e) => e.stopPropagation()}
     >
       {Icon && <Icon className="w-6 h-6 mb-3.5 mx-auto shrink-0" />}{" "}
-      <p className="text-gray-900 text-base sm:text-lg mb-[1rem]">{message}</p>
+      <p
+        className="text-gray-900 text-base sm:text-lg mb-[1rem]"
+        style={{ wordBreak: "keep-all" }}
+      >
+        {message}
+      </p>
       <div
         className={
           type === "message"
