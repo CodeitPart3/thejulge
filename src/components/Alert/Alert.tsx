@@ -68,7 +68,6 @@ function Alert({ userId }: AlertProps) {
         ) : (
           <InactiveAlarmIcon className="h-6" />
         )}
-        {/* <AlarmIcon className="h-6" /> */}
       </button>
       {showDropdown && (
         <div
