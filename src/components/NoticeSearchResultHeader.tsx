@@ -77,7 +77,6 @@ export default function NoticeSearchResultHeader({
   };
 
   useEffect(() => {
-    console.log(pathname, filterPathname);
     if (pathname !== filterPathname) {
       reset();
     }
