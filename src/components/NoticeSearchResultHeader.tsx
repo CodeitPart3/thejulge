@@ -1,6 +1,6 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 import Button from "@/components/Button";
 import FilterDropdownContent from "@/components/Dropdown/FilterDropdownContent";
@@ -26,9 +26,17 @@ export default function NoticeSearchResultHeader({
   onChangeSort,
   refetch,
 }: TotalNoticeSectionProps) {
+  const { pathname } = useLocation();
+
   const [, setSearchParams] = useSearchParams();
   const [showFilter, setShowFilter] = useState<boolean>(false);
-  const { minPay, selectedAreas, startDate } = useFilterStore();
+  const {
+    pathname: filterPathname,
+    minPay,
+    selectedAreas,
+    startDate,
+    reset,
+  } = useFilterStore();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -67,6 +75,12 @@ export default function NoticeSearchResultHeader({
     refetch();
     setShowFilter(false);
   };
+
+  useEffect(() => {
+    if (pathname !== filterPathname) {
+      reset();
+    }
+  }, [pathname, filterPathname, reset]);
 
   return (
     <div>

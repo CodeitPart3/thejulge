@@ -1,6 +1,7 @@
 import { ChangeEvent, useMemo, useState } from "react";
 
 import DatePicker from "react-datepicker";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 import TextField from "../TextField";
 
@@ -23,15 +24,10 @@ function FilterDropdownContent({
   onClose,
   onClickApplyButton,
 }: FilterDropdownContentProps) {
-  const {
-    selectedAreas,
-    startDate,
-    minPay,
-    setAreas,
-    setStartDate,
-    setMinPay,
-    reset,
-  } = useFilterStore();
+  const { pathname } = useLocation();
+  const { selectedAreas, startDate, minPay, setFilters, reset } =
+    useFilterStore();
+  const [, setSearchParams] = useSearchParams();
   const [payFilter, setPayFilter] = useState(minPay);
   const [startDateFilter, setStartDateFilter] = useState(startDate);
   const [areasFilter, setAreasFilter] = useState<string[]>(selectedAreas);
@@ -66,9 +62,12 @@ function FilterDropdownContent({
   };
 
   const applyButtonHandler = () => {
-    setMinPay(payFilter);
-    setStartDate(startDateFilter);
-    setAreas(areasFilter);
+    setFilters({
+      selectedAreas: areasFilter,
+      startDate: startDateFilter,
+      minPay: payFilter,
+      pathname,
+    });
     onClickApplyButton();
   };
 
@@ -78,6 +77,10 @@ function FilterDropdownContent({
     setStartDateFilter(null);
     setAreasFilter([]);
     refetch();
+    setSearchParams((prev) => {
+      prev.set("page", "1");
+      return prev;
+    });
   };
 
   return (
